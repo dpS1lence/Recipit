@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "Register";
+}
+
+<div class="container-section">
+    <div class="logo">
+        <img class="logo-img" src="~/images/recipit-removebg-preview.png" alt="logo">
+    </div>
+    <div class="login-container">
+        <div class="container-titles">
+            <h2>Register</h2>
+            <p>More than 15,000 recipes!</p>
+        </div>
+        <form class="login-form">
+            <div class="input-container">
+                <i class="fa-solid fa-lock"></i>
+                <input type="text" placeholder="Username">
+            </div>
+            <div class="input-container">
+                <input type="text" placeholder="First Name">
+                <input type="text" placeholder="Last Name">
+            </div>
+            <div class="input-container">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" placeholder="Enter Email Address">
+            </div>
+            <div class="input-container">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" placeholder="Password">
+            </div>
+            <a class="login-btn">Register</a>
+            <a class="google-login"><img class="google-image" src="~/images/google-icon.png" alt="google-image">Continue with Google</a>
+            <a class="register-btn-span">Looking for Login?</a>
+        </form>
+    </div>
+</div>
