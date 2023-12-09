@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Recipit.Infrastructure\Recipit.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\" />
+  </ItemGroup>
+
 </Project>

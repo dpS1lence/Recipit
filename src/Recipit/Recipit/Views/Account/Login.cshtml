@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Recipit.Models.Account
+@model LoginViewModel
+@{
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
     ViewData["Title"] = "Login";
 }
@@ -12,18 +14,18 @@
             <h2>Login</h2>
             <p>More than 15,000 recipes!</p>
         </div>
-        <form class="login-form">
+        <form method="post" class="login-form" asp-area="" asp-controller="Account" asp-action="Login">
             <div class="input-container">
                 <i class="fa-solid fa-envelope"></i>
-                <input type="email" placeholder="Enter Email Address">
+                <input asp-for="@Model.Email" type="email" placeholder="Enter Email Address">
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" placeholder="Password">
+                <input asp-for="@Model.Password" type="password" placeholder="Password">
             </div>
-            <a class="login-btn">Login</a>
+            <button type="submit" class="login-btn">Login</button>
             <a class="google-login"><img class="google-image" src="~/images/google-icon.png" alt="google-image">Continue with Google</a>
-            <a class="register-btn-span">Looking for Register?</a>
+            <a class="register-btn-span" asp-area="" asp-controller="Account" asp-action="Register">Looking for Register?</a>
         </form>
     </div>
 </div>
