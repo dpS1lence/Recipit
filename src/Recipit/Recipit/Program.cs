@@ -1,29 +1,35 @@
-using Microsoft.EntityFrameworkCore;
-using Recipit.Infrastructure.Data;
-using Recipit.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Recipit.Infrastructure.Extensions;
+using Recipit.MailSending;
+using Recipit.Middlewares;
+using Serilog;
+using System.Diagnostics.CodeAnalysis;
+using ServiceCollectionExtensions = Recipit.Infrastructure.Extensions.ServiceCollectionExtensions;
 
+var appName = "Recipit";
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<RecipitDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.AddConfiguration();
+builder.AddMvc();
+builder.AddDatabase();
+builder.AddCustomHealthChecks();
+builder.AddCustomIdentity();
+builder.AddEmailSending();
+builder.Services.AddTransient<IMailSender, MailSender>();
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDefaultIdentity<RecipitUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<RecipitDbContext>();
-builder.Services.AddControllersWithViews();
+builder.Host.UseSerilog(ServiceCollectionExtensions.CreateSerilogLogger(builder.Configuration, appName));
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseExceptionHandler("/Error/Error");
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
@@ -31,11 +37,47 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+    name: "areas",
+    pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}"
+);
 
-app.Run();
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+});
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
+});
+try
+{
+    app.Logger.LogInformation("Migrating database for {ApplicationName}...", appName);
+
+    using var scope = app.Services.CreateScope();
+
+    //await DatabaseMiddleware.MigrateDatabase(scope, app.Configuration, app.Logger);
+
+    app.Logger.LogInformation("Starting web host ({ApplicationName})...", appName);
+    app.Run();
+}
+catch (Exception ex)
+{
+    app.Logger.LogCritical(ex, "Host terminated unexpectedly ({ApplicationName})...", appName);
+
+    throw;
+}
+finally
+{
+    Serilog.Log.CloseAndFlush();
+}
+
+[ExcludeFromCodeCoverage]
+public partial class Program
+{
+    public static string Namespace = typeof(Program).Assembly.GetName().Name;
+    public static string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
+}
