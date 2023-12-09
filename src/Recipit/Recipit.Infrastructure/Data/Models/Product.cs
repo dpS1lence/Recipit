@@ -30,6 +30,13 @@
         [Range(0, int.MaxValue, ErrorMessage = "Calorie count must be a non-negative number.")]
         public int Calories { get; set; }
 
+        /// <summary>
+        /// Gets or sets the photo path of the product.
+        /// Must be a valid file path format.
+        /// </summary>
+        [Required(ErrorMessage = "Photo path is required.")]
+        public string Photo { get; set; } = default!;
+
         public virtual ICollection<ProductRecipe> ProductRecipes { get; set; }
     }
 }

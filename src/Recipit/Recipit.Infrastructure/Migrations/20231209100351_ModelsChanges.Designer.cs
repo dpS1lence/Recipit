@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recipit.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Recipit.Infrastructure.Data;
 namespace Recipit.Infrastructure.Migrations
 {
     [DbContext(typeof(RecipitDbContext))]
-    partial class RecipitDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231209100351_ModelsChanges")]
+    partial class ModelsChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

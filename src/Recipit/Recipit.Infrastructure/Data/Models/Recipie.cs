@@ -61,7 +61,6 @@
         /// Must be a valid file path format.
         /// </summary>
         [Required(ErrorMessage = "Photo path is required.")]
-        // Additional validations can be added for file path format if needed
         public string Photo { get; set; } = default!;
 
         /// <summary>
