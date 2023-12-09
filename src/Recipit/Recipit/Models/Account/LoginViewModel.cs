@@ -1,4 +1,6 @@
-﻿namespace Recipit.Models.Account
+﻿using Recipit.Infrastructure.Mapping;
+
+namespace Recipit.Models.Account
 {
     public class LoginViewModel
     {

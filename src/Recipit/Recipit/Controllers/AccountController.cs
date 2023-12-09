@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Recipit.Infrastructure.Data;
@@ -11,13 +12,15 @@ namespace Recipit.Controllers
     {
         private readonly UserManager<RecipitUser> _userManager;
         private readonly SignInManager<RecipitUser> _signInManager;
+        private readonly IMapper _mapper;
         private readonly RecipitDbContext _context;
 
-        public AccountController(UserManager<RecipitUser> userManager, SignInManager<RecipitUser> signInManager, RecipitDbContext context)
+        public AccountController(UserManager<RecipitUser> userManager, SignInManager<RecipitUser> signInManager, IMapper mapper, RecipitDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -40,19 +43,13 @@ namespace Recipit.Controllers
                 return View(model);
             }
 
-            var user = new RecipitUser()
-            {
-                Email = model.Email,
-                UserName = model.Username,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
+            var user = _mapper.Map<RecipitUser>(model);
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Login", "User");
+                return RedirectToAction(nameof(Login));
             }
 
             foreach (var item in result.Errors)
