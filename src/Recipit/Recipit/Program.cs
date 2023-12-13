@@ -32,6 +32,8 @@ else
     app.UseDeveloperExceptionPage();
 }
 
+app.CreateAdministratorUser(app.Configuration);
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -42,7 +44,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
@@ -76,11 +78,4 @@ catch (Exception ex)
 finally
 {
     Serilog.Log.CloseAndFlush();
-}
-
-[ExcludeFromCodeCoverage]
-public partial class Program
-{
-    public static string Namespace = typeof(Program).Assembly.GetName().Name;
-    public static string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 }
