@@ -19,7 +19,7 @@ namespace Recipit.Infrastructure.Extensions
                 roleManager.CreateAsync(new IdentityRole("Administrator")).Wait();
             }
 
-            var adminSettings = configuration.GetSection("AdministratorUser").Get<UserSettings>();
+            var adminSettings = configuration.GetSection("UserSettings").Get<UserSettings>();
 
             var administratorUser = userManager.FindByNameAsync(adminSettings?.UserName ?? throw new ArgumentException("Invalid appsetting!")).Result;
             if (administratorUser == null)

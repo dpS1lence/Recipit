@@ -20,7 +20,7 @@ namespace Recipit.Middlewares
 
         private static AsyncPolicy CreateRetryPolicy(IConfiguration configuration, ILogger logger)
         {
-            bool.TryParse(configuration["RetryMigrations"], out bool retryMigrations);
+            _ = bool.TryParse(configuration["RetryMigrations"], out bool retryMigrations);
 
             if (retryMigrations)
             {

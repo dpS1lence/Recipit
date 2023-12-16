@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
 using Recipit.MailSending;
 using Recipit.Middlewares;
+using Recipit.Services.Followers;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
 using ServiceCollectionExtensions = Recipit.Infrastructure.Extensions.ServiceCollectionExtensions;
 
 var appName = "Recipit";
@@ -15,6 +15,7 @@ builder.AddDatabase();
 builder.AddCustomHealthChecks();
 builder.AddCustomIdentity();
 builder.AddEmailSending();
+builder.Services.AddScoped<IFollowerService, FollowerService>();
 builder.Services.AddTransient<IMailSender, MailSender>();
 builder.Services.AddHttpContextAccessor();
 

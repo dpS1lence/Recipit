@@ -1,0 +1,10 @@
+﻿@using Recipit.ViewModels.Followers
+@model IEnumerable<FollowerViewModel>
+
+@foreach(var follower in Model)
+{
+    <div>
+        <h3>@follower.Id</h3>
+        <h3>@follower.Email</h3>
+    </div>
+}
