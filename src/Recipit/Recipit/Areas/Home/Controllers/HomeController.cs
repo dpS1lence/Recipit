@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using Recipit.Models;
-using System.Diagnostics;
-
-namespace Recipit.Controllers
+namespace Recipit.Areas.Home.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Recipit.Models;
+    using System.Diagnostics;
+
+    [Area("Home")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
