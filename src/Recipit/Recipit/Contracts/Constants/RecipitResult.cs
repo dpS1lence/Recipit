@@ -1,4 +1,4 @@
-﻿namespace Recipit.Constants.Followers
+﻿namespace Recipit.Contracts.Constants
 {
     public class RecipitResult
     {

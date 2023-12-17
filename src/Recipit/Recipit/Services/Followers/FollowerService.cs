@@ -3,13 +3,17 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Recipit.Constants.Exceptions;
-    using Recipit.Constants.Followers;
+    using Recipit.Contracts.Exceptions;
+    using Recipit.Contracts.Constants;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Infrastructure.Extensions.Contracts;
     using Recipit.ViewModels.Followers;
     using System.Collections.Generic;
+    using Recipit.Pagination;
+    using System.Linq.Expressions;
+    using Recipit.Contracts.Enums;
+    using Recipit.Pagination.Contracts;
 
     public class FollowerService
         (RecipitDbContext context, UserManager<RecipitUser> userManager, ILogger<FollowerService> logger, IMapper mapper, IConfiguration configuration) 
@@ -29,16 +33,16 @@
             await Deactivate(follower);
         }
 
-        public async Task<IEnumerable<FollowerViewModel>> GetAll()
+        public async Task<IPage<FollowerViewModel>> GetAll(int pageIndex = 1, int pageSize = 50)
         {
             var all = await _context.Users.Where(user => user.Email != _settings.Email).ToListAsync();
 
-            return all.Select(_mapper.Map<FollowerViewModel>);
+            return new Page<FollowerViewModel>(all.Select(_mapper.Map<FollowerViewModel>), pageIndex + 1, pageSize, all.Count);
         }
 
         private async Task Deactivate(RecipitUser user)
         {
-            user.Email = "deleteduser@mail";
+            user.Email = "deleteduser@recipit";
             user.FirstName = "deleted";
             user.LastName = "user";
             user.UserName = "deleteduser";

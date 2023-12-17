@@ -1,10 +1,11 @@
-﻿@using Recipit.ViewModels.Followers
-@model IEnumerable<FollowerViewModel>
+﻿@using Recipit.Pagination.Contracts
+@using Recipit.ViewModels.Followers
+@model IPage<FollowerViewModel>
 
 @foreach(var follower in Model)
 {
     <div>
-        <h3>@follower.Id</h3>
         <h3>@follower.Email</h3>
+        <a id="deteleBtn" data="@follower.Id">Remove follower</a>
     </div>
 }
