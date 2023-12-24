@@ -25,11 +25,11 @@
         public const string Deleted = nameof(Comment) + " deleted: {Entity}";
     }
 
-    public static class Recipie
+    public static class Recipe
     {
-        public const string Created = nameof(Recipie) + " created: {Entity}";
-        public const string Deleted = nameof(Recipie) + " deleted: {Entity}";
-        public const string Edited = nameof(Recipie) + " edited: {Entity}";
+        public const string Created = nameof(Recipe) + " created: {Entity}";
+        public const string Deleted = nameof(Recipe) + " deleted: {Entity}";
+        public const string Edited = nameof(Recipe) + " edited: {Entity}";
     }
 
 }

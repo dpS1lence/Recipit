@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Net.Http.Headers;
-
-namespace Recipit.Services.ImageServices
+﻿namespace Recipit.Services.Images
 {
+    using Newtonsoft.Json.Linq;
+    using System.Net.Http.Headers;
+
     public static class UploadImage
     {
         public static async Task<string> ToImgur(IFormFile imageFile, HttpClient _httpClient)
