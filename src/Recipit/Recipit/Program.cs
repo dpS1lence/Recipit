@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
-using Recipit.MailSending;
-using Recipit.Middlewares;
 using Serilog;
-using System.Diagnostics.CodeAnalysis;
 using ServiceCollectionExtensions = Recipit.Infrastructure.Extensions.ServiceCollectionExtensions;
 
 var appName = "Recipit";
@@ -15,8 +12,7 @@ builder.AddDatabase();
 builder.AddCustomHealthChecks();
 builder.AddCustomIdentity();
 builder.AddEmailSending();
-builder.Services.AddTransient<IMailSender, MailSender>();
-builder.Services.AddHttpContextAccessor();
+builder.AddServices();
 
 builder.Host.UseSerilog(ServiceCollectionExtensions.CreateSerilogLogger(builder.Configuration, appName));
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

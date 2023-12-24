@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Recipit.Infrastructure.Data;
-using Recipit.Infrastructure.Data.Models;
-using Recipit.MailSending;
-using Serilog;
-
-namespace Recipit.Infrastructure.Extensions
+﻿namespace Recipit.Infrastructure.Extensions
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Diagnostics.HealthChecks;
+    using Recipit.Infrastructure.Data;
+    using Recipit.Infrastructure.Data.Models;
+    using Recipit.MailSending;
+    using Recipit.Services.Followers;
+    using Recipit.Services.Recipes;
+    using Serilog;
+
     public static class ServiceCollectionExtensions
     {
         public static void AddConfiguration(this WebApplicationBuilder builder)
@@ -27,6 +28,13 @@ namespace Recipit.Infrastructure.Extensions
 
             builder.Services.AddDbContext<RecipitDbContext>(
                 options => options.UseSqlServer(!string.IsNullOrEmpty(envConnection) ? envConnection : builder.Configuration.GetConnectionString("DefaultConnection")));
+        }
+        public static void AddServices(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<IRecipeService, RecipeService>();
+            builder.Services.AddScoped<IFollowerService, FollowerService>();
+            builder.Services.AddTransient<IMailSender, MailSender>();
+            builder.Services.AddHttpContextAccessor();
         }
         public static void AddMvc(this WebApplicationBuilder builder)
         {
@@ -63,13 +71,16 @@ namespace Recipit.Infrastructure.Extensions
 
             return loggerConfig;
         }
+
+        private static readonly string[] tags = ["IdentityDB"];
+
         public static void AddCustomHealthChecks(this WebApplicationBuilder builder)
         {
             builder.Services.AddHealthChecks()
                     .AddCheck("self", () => HealthCheckResult.Healthy())
                     .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!,
                         name: "IdentityDB-check",
-                        tags: new string[] { "IdentityDB" });
+                        tags: tags);
         }
         public static void AddEmailSending(this WebApplicationBuilder builder)
         {

@@ -20,7 +20,8 @@ namespace Recipit.Models.Account
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.Photo, 
-                cfg => cfg.MapFrom(src => "https://brightspotcdn.byu.edu/dims4/default/8325ccb/2147483647/strip/true/crop/340x340+0+0/resize/1200x1200!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2Fbd%2F7f%2Face2612141aa8c6ad180b0786739%2Fdefault-pfp.jpg"));
+                    cfg => cfg.MapFrom(src => "https://brightspotcdn.byu.edu/dims4/default/8325ccb/2147483647/strip/true/crop/340x340+0+0/resize/1200x1200!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2Fbd%2F7f%2Face2612141aa8c6ad180b0786739%2Fdefault-pfp.jpg"))
+                .ForMember(dest => dest.CreationDate, cfg => cfg.MapFrom(src => DateTime.UtcNow));
         }
     }
 }

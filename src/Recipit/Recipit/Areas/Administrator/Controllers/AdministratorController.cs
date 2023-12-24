@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Recipit.Areas.Administrator.Controllers
+﻿namespace Recipit.Areas.Administrator.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Recipit.Contracts.Constants;
+
+    [Authorize(Roles = RecipitRole.Administrator)]
+    [Area("Administrator")]
     public class AdministratorController : Controller
     { }
 }

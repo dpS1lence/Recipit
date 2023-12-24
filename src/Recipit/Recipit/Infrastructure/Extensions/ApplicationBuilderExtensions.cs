@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Recipit.Infrastructure.Data.Models;
-using Recipit.Infrastructure.Extensions.Contracts;
-
-namespace Recipit.Infrastructure.Extensions
+﻿namespace Recipit.Infrastructure.Extensions
 {
+    using AutoMapper;
+    using Microsoft.AspNetCore.Identity;
+    using Recipit.Contracts.Constants;
+    using Recipit.Infrastructure.Data.Models;
+    using Recipit.Infrastructure.Extensions.Contracts;
+
     public static class ApplicationBuilderExtensions
     {
         public static void CreateAdministratorUser(this IApplicationBuilder app, IConfiguration configuration)
@@ -12,33 +14,27 @@ namespace Recipit.Infrastructure.Extensions
 
             var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<RecipitUser>>();
             var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var mapper = serviceScope.ServiceProvider.GetRequiredService<IMapper>();
 
-            var roleExists = roleManager.RoleExistsAsync("Administrator").Result;
-            if (!roleExists)
+            if (!roleManager.RoleExistsAsync(RecipitRole.Administrator).Result)
             {
-                roleManager.CreateAsync(new IdentityRole("Administrator")).Wait();
+                roleManager.CreateAsync(new IdentityRole(RecipitRole.Administrator)).Wait();
             }
 
-            var adminSettings = configuration.GetSection("AdministratorUser").Get<UserSettings>();
+            var adminSettings = configuration.GetSection("UserSettings").Get<UserSettings>();
 
-            var administratorUser = userManager.FindByNameAsync(adminSettings?.UserName ?? throw new ArgumentException("Invalid appsetting!")).Result;
+            var administratorUser = userManager.FindByNameAsync(adminSettings?.UserName 
+                ?? throw new ArgumentException("Invalid appsettings!")).Result;
+
             if (administratorUser == null)
             {
-                var adminUser = new RecipitUser
-                {
-                    UserName = adminSettings.UserName,
-                    FirstName = adminSettings.FirstName,
-                    LastName = adminSettings.LastName,
-                    Email = adminSettings.Email,
-                    EmailConfirmed = adminSettings.EmailConfirmed,
-                    Photo = adminSettings.Photo
-                };
+                var adminUser = mapper.Map<RecipitUser>(adminSettings);
 
                 var result = userManager.CreateAsync(adminUser, adminSettings.Password).Result;
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(adminUser, "Administrator").Wait();
+                    userManager.AddToRoleAsync(adminUser, RecipitRole.Administrator).Wait();
                 }
             }
         }

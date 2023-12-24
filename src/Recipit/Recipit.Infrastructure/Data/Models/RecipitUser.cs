@@ -28,6 +28,12 @@
         public string LastName { get; set; } = default!;
 
         /// <summary>
+        /// Gets or sets the creation date of the user.
+        /// </summary>
+        [Required(ErrorMessage = "CreationDate is required.")]
+        public DateTime CreationDate { get; set; } = default!;
+
+        /// <summary>
         /// Gets or sets the photo path of the user.
         /// Must be a valid file path format.
         /// </summary>

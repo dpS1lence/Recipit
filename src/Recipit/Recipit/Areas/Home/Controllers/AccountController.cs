@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Recipit.Contracts.Constants;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Models.Account;
@@ -11,13 +12,10 @@
     [AllowAnonymous]
     [Area("Home")]
     public class AccountController
-        (
-            UserManager<RecipitUser> userManager
-            , SignInManager<RecipitUser> signInManager
-            , IMapper mapper
-            , RecipitDbContext context
-            , RoleManager<IdentityRole> roleManager
-        ) : Controller
+        (UserManager<RecipitUser> userManager, 
+        SignInManager<RecipitUser> signInManager, 
+        IMapper mapper, RecipitDbContext context, 
+        RoleManager<IdentityRole> roleManager) : Controller
     {
         private readonly UserManager<RecipitUser> _userManager = userManager;
         private readonly SignInManager<RecipitUser> _signInManager = signInManager;
@@ -49,13 +47,13 @@
                 return View(model);
             }
 
-            if (!await _roleManager.RoleExistsAsync("Follower"))
+            if (!await _roleManager.RoleExistsAsync(RecipitRole.Follower))
             {
-                var role = new IdentityRole("Follower");
+                var role = new IdentityRole(RecipitRole.Follower);
                 await _roleManager.CreateAsync(role);
             }
 
-            await _userManager.AddToRoleAsync(user, "Follower");
+            await _userManager.AddToRoleAsync(user, RecipitRole.Follower);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Login));
@@ -98,11 +96,11 @@
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                if (User.IsInRole("Administrator"))
+                if (User.IsInRole(RecipitRole.Administrator))
                 {
                     return RedirectToAction("Action", "Controller", new { Area = "Administrator" });
                 }
-                if (User.IsInRole("Follower"))
+                if (User.IsInRole(RecipitRole.Follower))
                 {
                     return RedirectToAction("Action", "Controller", new { Area = "Follower" });
                 }
