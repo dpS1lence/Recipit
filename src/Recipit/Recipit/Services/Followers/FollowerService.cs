@@ -3,17 +3,14 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Recipit.Contracts.Exceptions;
     using Recipit.Contracts.Constants;
+    using Recipit.Contracts.Exceptions;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Infrastructure.Extensions.Contracts;
-    using Recipit.ViewModels.Followers;
-    using System.Collections.Generic;
     using Recipit.Pagination;
-    using System.Linq.Expressions;
-    using Recipit.Contracts.Enums;
     using Recipit.Pagination.Contracts;
+    using Recipit.ViewModels.Followers;
 
     public class FollowerService
         (RecipitDbContext context, UserManager<RecipitUser> userManager, ILogger<FollowerService> logger, IMapper mapper, IConfiguration configuration) 

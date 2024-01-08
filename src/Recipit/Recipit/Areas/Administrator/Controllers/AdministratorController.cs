@@ -5,7 +5,7 @@
     using Recipit.Contracts.Constants;
 
     [Authorize(Roles = RecipitRole.Administrator)]
-    [Area("Administrator")]
+    [Area(RecipitRole.Administrator)]
     public class AdministratorController : Controller
     { }
 }
