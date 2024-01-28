@@ -10,5 +10,6 @@
         Task<string> Delete(int id);
         Task<string> Edit(ProductViewModel model);
         Task<ProductViewModel> GetById(int id);
+        Task<IEnumerable<ProductViewModel>> SearchProducts(string searchText);
     }
 }
