@@ -4,8 +4,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Recipit.Contracts.Constants;
 
-
-    [Authorize(Roles = RecipitRole.Follower)]
+    [Area(RecipitRole.Follower)]
+    [Authorize]
     public class FollowerController : Controller
     { }
 }
