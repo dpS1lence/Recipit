@@ -2,7 +2,7 @@
 @model RegisterViewModel
 @{
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Регистрация";
 }
 
 <div class="container-section">
@@ -11,33 +11,33 @@
     </div>
     <div class="login-container">
         <div class="container-titles">
-            <h2>Register</h2>
-            <p>More than 15,000 recipes!</p>
+            <h2>Регистрация</h2>
+            <p>Повече от 15,000 рецепти!</p>
         </div>
         <form method="post" class="login-form" asp-area="" asp-controller="Account" asp-action="Register">
             <div class="input-container">
                 <i class="fa-solid fa-user"></i>
-                <input asp-for="@Model.Username" type="text" placeholder="Username">
+                <input asp-for="@Model.Username" type="text" placeholder="Потребителско име">
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-address-book"></i>
-                <input asp-for="@Model.FirstName" type="text" placeholder="First Name">
+                <input asp-for="@Model.FirstName" type="text" placeholder="Собствено име">
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-address-book"></i>
-                <input asp-for="@Model.LastName" type="text" placeholder="Last Name">
+                <input asp-for="@Model.LastName" type="text" placeholder="Фамилно име">
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-envelope"></i>
-                <input asp-for="@Model.Email" type="email" placeholder="Email Address">
+                <input asp-for="@Model.Email" type="email" placeholder="Имейл адрес">
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-lock"></i>
-                <input asp-for="@Model.Password" type="password" placeholder="Password">
+                <input asp-for="@Model.Password" type="password" placeholder="Парола">
             </div>
-            <button type="submit" class="login-btn">Register</button>
-            <a class="google-login"><img class="google-image" src="~/images/google-icon.png" alt="google-image">Continue with Google</a>
-            <a class="register-btn-span" asp-area="" asp-controller="Account" asp-action="Login">Looking for Login?</a>
+            <button type="submit" class="login-btn">Регистрация</button>
+            <a class="google-login"><img class="google-image" src="~/images/google-icon.png" alt="google-image">Продължи с Google</a>
+            <a class="register-btn-span" asp-area="" asp-controller="Account" asp-action="Login">Търсите вход?</a>
         </form>
     </div>
 </div>

@@ -37,7 +37,7 @@
         /// The user ID of the recipe creator.
         /// </summary>
         [Required(ErrorMessage = "User ID is required.")]
-        public string UserId { get; private set; } = default!;
+        public string UserId { get; set; } = default!;
 
         /// <summary>
         /// Gets or sets the nutritional value of the recipe.

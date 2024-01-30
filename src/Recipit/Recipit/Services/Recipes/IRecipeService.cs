@@ -6,6 +6,6 @@ namespace Recipit.Services.Recipes
     {
         Task Delete(int recipeId);
         Task Edit(RecipeViewModel recipe);
-        Task Create(RecipeViewModel recipe);
+        Task<string> Create(RecipeViewModel recipe);
     }
 }

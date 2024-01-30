@@ -6,7 +6,9 @@
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.MailSending;
+    using Recipit.Services.Comments;
     using Recipit.Services.Followers;
+    using Recipit.Services.Products;
     using Recipit.Services.Recipes;
     using Serilog;
 
@@ -33,8 +35,11 @@
         {
             builder.Services.AddScoped<IRecipeService, RecipeService>();
             builder.Services.AddScoped<IFollowerService, FollowerService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddTransient<IMailSender, MailSender>();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddHttpClient();
         }
         public static void AddMvc(this WebApplicationBuilder builder)
         {
