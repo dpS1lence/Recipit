@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    display:flex;
+    display: flex;
 }
 
 .page {
@@ -72,25 +72,10 @@ ul {
     color: #bec1c3;
 }
 
-.nav-item {
-    padding-bottom: 0.5rem;
-    color: black;
-    height: 20px;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    text-align: start;
-    padding: 10px;
-    font-size: 18px;
-    margin-left: 10px;
-    margin-top: 30px;
-}
-
 .nav-title {
     color: gray;
     font-size: 13px;
     font-weight: 600;
-    padding: 24px 16px 4px 16px;
 }
 
 .oi {
@@ -108,6 +93,18 @@ ul {
     justify-content: space-between;
     align-content: space-between;
     height: 100vh;
+    padding-bottom: 50px;
+}
+
+.nav-item {
+    height: fit-content;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    text-align: start;
+    padding: 10px 20px;
+    font-size: 18px;
+    width: 100%;
 }
 
 .nav-link {
@@ -115,11 +112,30 @@ ul {
     font-weight: 500;
     transition: all 0.3s;
     text-decoration: none;
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid #fdf4ec;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-bottom: 10px;
+    padding-top: 11px;
+    color: #999;
 }
 
-    .nav-link:hover {
-        color: black;
+    .nav-link span {
+        color: #999;
     }
+
+    .nav-link:hover {
+        color: orange;
+        border: 2px solid orange;
+    }
+
+        .nav-link:hover span {
+            color: orange;
+        }
 
 .food-bg-img {
     width: 100%;
@@ -211,7 +227,25 @@ h1 {
 }
 
 .create-recipie-container {
+    display: flex;
+    justify-content: center;
 }
+
+.create-recipie-btn {
+    text-decoration: none;
+    font-size: 18px;
+    margin: 40px 0;
+    color: orange;
+    border: 2px solid orange;
+    border-radius: 25px;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+    .create-recipie-btn:hover {
+        color: orange;
+        border-radius: 10px;
+    }
 
 .img-ctnr {
     width: 250px;
@@ -244,14 +278,6 @@ h1 {
     width: 250px;
     height: 250px;
     z-index: 20;
-}
-
-.create-recipie-btn {
-    text-decoration: none;
-    font-size: 26px;
-    height: 200px;
-    color: #f68712;
-    font-weight: bold;
 }
 
 @media(max-width: 1041px) {

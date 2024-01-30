@@ -7,6 +7,9 @@
     {
         public static async Task<string> ToImgur(IFormFile imageFile, HttpClient _httpClient)
         {
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Client-ID", "41519381aee37da");
+
             using var formContent = new MultipartFormDataContent();
             using var imageStream = imageFile.OpenReadStream();
             using var streamContent = new StreamContent(imageStream);

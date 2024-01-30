@@ -39,6 +39,7 @@
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddTransient<IMailSender, MailSender>();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddHttpClient();
         }
         public static void AddMvc(this WebApplicationBuilder builder)
         {

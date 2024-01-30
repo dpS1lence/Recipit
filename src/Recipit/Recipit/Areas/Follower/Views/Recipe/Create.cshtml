@@ -2,67 +2,63 @@
 <div class="cerate-post-container">
     <section class="create-post-section">
         <div class="create-post-title-container">
-            <h1>Create a recipie</h1>
+            <h1>Публикувай рецепта</h1>
         </div>
         <div class="post-content-container">
             <div class="post-content-navigation-top">
                 <a class="naligation-item" id="btn-post">
-                    <i class="navigation-item-icon fa fa-list-ul"></i> Recipie
+                    <i class="navigation-item-icon fa fa-list-ul"></i> Рецепта
                 </a>
                 <a class="naligation-item" id="btn-image">
-                    <i class="navigation-item-icon fa fa-image"></i> Image
+                    <i class="navigation-item-icon fa fa-image"></i> Снимка
                 </a>
                 <a class="naligation-item" id="btn-preview">
-                    <i class="navigation-item-icon fa fa-magnifying-glass"></i> Finalize
+                    <i class="navigation-item-icon fa fa-magnifying-glass"></i> Преглед
                 </a>
             </div>
             <div class="post-content" id="text-content">
-                <label class="label-select-category" for="cars">Choose a category:</label>
+                <label class="label-select-category" for="cars">Избери категория:</label>
                 <select class="select-select-category" name="cars" id="cars">
-                    <option value="volvo">@Category.Appetizer</option>
-                    <option value="volvo">@Category.MainCourse</option>
-                    <option value="volvo">@Category.Salad</option>
-                    <option value="volvo">@Category.Dessert</option>
-                    <option value="volvo">@Category.Soup</option>
+                    <option value="@Category.Appetizer">Предястие</option>
+                    <option value="@Category.MainCourse">Основно ястие</option>
+                    <option value="@Category.Salad">Салата</option>
+                    <option value="@Category.Dessert">Десерт</option>
+                    <option value="@Category.Soup">Супа</option>
                 </select>
-                <input id="postTitle" class="post-content-input-title" type="text" placeholder="Post title" />
-                <textarea id="postDescription" class="post-content-input-description" rows="5"></textarea>
+                <input id="postTitle" class="post-content-input-title" type="text" placeholder="Заглавие на рецептата" />
+                <textarea id="postDescription" class="post-content-input-description" rows="5" placeholder="Описание (Пълно описание на рецептата и начинът на приготвяне!)"></textarea>
                 <div class="products-select-container">
-                    <button id="btn-add-product" class="button-add-product"><i class="fa fa-circle-plus"></i>Add product</button>
+                    <button id="btn-add-product" class="button-add-product"><i class="fa fa-circle-plus"></i>Добави продукт</button>
                     <div id="product-container" class="added-products-container">
-                        @* <div class="product">
-                        <input type="hidden" id="product-id" value="1"/>
-                        <div class="x-icon" id="remove-product"><i class="fa fa-xmark"></i></div>
-                        <h1 class="product-name">Name</h1>
-                        </div> *@
                     </div>
                 </div>
                 <div id="product-popup" class="product-popup hidden">
-                    <input type="text" class="search-products" id="searchProduct" placeholder="Search for a product">
+                    <input type="text" class="search-products" id="searchProduct" placeholder="Търси продукт">
                     <ul id="product-list" class="product-list">
                     </ul>
-                    <button class="add-new-product-btn" id="addNewProduct">Add New Product</button>
+                    <button class="add-new-product-btn" id="addNewProduct">Добави нов продукт</button>
                 </div>
                 <div class="bottom-btns-post">
-                    <a class="post-content-btn hidden">Previous</a>
-                    <a class="post-content-btn" id="text-display-image">Next</a>
+                    <a class="post-content-btn hidden">Назад</a>
+                    <a class="post-content-btn" id="text-display-image">Напред</a>
                 </div>
             </div>
             <div class="post-content hidden" id="image-content">
-                <div class="post-content-image-container">
-                    <input class="post-content-input-file" type="file" id="image" accept="image/*">
+                <div class="post-content-image-container" id="drop-area">
+                    <input class="post-content-input-file" type="file" id="image" accept="image/*" onchange="handleFiles(event)">
+                    <p id="postDescription"><label for="image">Drag & Drop or Browse</label></p>
                 </div>
                 <div class="bottom-btns-post">
-                    <a class="post-content-btn" id="display-text">Previous</a>
-                    <a class="post-content-btn" id="display-preview">Next</a>
+                    <a class="post-content-btn" id="display-text">Назад</a>
+                    <a class="post-content-btn" id="display-preview">Напред</a>
                 </div>
             </div>
             <div class="post-content hidden" id="preview-content">
                 <div class="dynamic-content" id="dynamic-content">
                 </div>
                 <div class="bottom-btns-post">
-                    <a class="post-content-btn" id="preview-display-image">Previous</a>
-                    <a class="post-content-btn" id="submitBtn">Submit</a>
+                    <a class="post-content-btn" id="preview-display-image">Назад</a>
+                    <a class="post-content-btn" id="submitBtn">Създай</a>
                 </div>
             </div>
         </div>
@@ -74,9 +70,9 @@
             </div>
             <div class="privacy-recipie-text-container">
                 <p class="text-content-privacy">
-                    When submitting a recipe for publication on our website,
-                    refrain from sharing sensitive information, and be cautious with images that may compromise privacy.
-                    By submitting a recipe, you grant us the right to publish and promote the content, respecting your privacy.
+                    При изпращане на рецепта за публикуване на нашия уебсайт,
+                    въздържайте се от споделяне на чувствителна информация и бъдете внимателни с изображения, които могат да компрометират поверителността.
+                    Изпращайки рецепта, вие ни давате правото да публикуваме и популяризираме съдържанието, като зачитаме вашата поверителност.
                 </p>
             </div>
         </div>
@@ -87,7 +83,39 @@
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('image');
+
+    fileInput.addEventListener('change', handleFiles);
+
+    function handleFiles(event) {
+        const files = event.target.files;
+
+        if (files.length > 0) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = new Image();
+
+                img.onload = function () {
+                    dropArea.style.backgroundImage = `url(${e.target.result})`;
+                    dropArea.style.backgroundSize = 'contain';
+                    dropArea.style.backgroundPosition = 'center';
+                    dropArea.style.backgroundRepeat = 'no-repeat';
+                    dropArea.style.backgroundColor = '#e6f7ff';
+                };
+
+                img.src = e.target.result;
+            };
+
+            reader.readAsDataURL(files[0]);
+        }
+    }
+
+</script>
+<script>
     $(document).ready(function () {
+        var searchTimeout;
         var productPopup = $('#product-popup');
         var productList = $('#product-list');
         var productContainer = $('#product-container');
@@ -97,8 +125,17 @@
         });
 
         $('#searchProduct').on('input', function () {
-            var searchTerm = $(this).val();
-            populateProductList(searchTerm);
+            var searchTerm = $(this).val().trim();
+
+            clearTimeout(searchTimeout);
+
+            searchTimeout = setTimeout(function () {
+                if (searchTerm.length > 2) {
+                    populateProductList(searchTerm);
+                } else {
+                    productList.empty();
+                }
+            }, 1000);
         });
 
         $('#addNewProduct').click(function () {
@@ -106,10 +143,8 @@
         });
 
         function populateProductList(searchTerm) {
-            // Clear the existing list
             productList.empty();
             console.log(searchTerm);
-            // Make an AJAX request to the server for product search
             $.ajax({
                 url: '/follower/product/search',
                 type: 'GET',
@@ -117,13 +152,11 @@
                 data: { searchTerm: searchTerm },
                 success: function (data) {
                     console.log(data);
-                    // Handle the response data and populate the list
                     for (var i = 0; i < data.length; i++) {
                         var currentProduct = data[i];
                         var listItem = $('<li>').text(currentProduct.name);
                         productList.append(listItem);
 
-                        // Attach the click event outside the loop
                         attachClickEvent(listItem, currentProduct.name);
                     }
                     function attachClickEvent(item, productName) {
@@ -141,31 +174,35 @@
         }
 
 
-        // Function to add a product to the product container
         function addProductToContainer(productName) {
-            var productItem = $('<div class="product">');
-            productItem.append('<input type="hidden" class="product-id" value="1"/>');
-            productItem.append('<div class="x-icon" onclick="removeProduct(this)"><i class="fa fa-trash-can"></i></div>');
-            productItem.append('<h1 class="product-name">' + productName + '</h1>');
+            if (!isProductAlreadyAdded(productName)) {
+                var productItem = $('<div class="product">');
+                productItem.append('<div class="x-icon" onclick="removeProduct(this)"><i class="fa fa-trash-can"></i></div>');
+                productItem.append('<h1 class="product-name">' + productName + '</h1>');
+            }
 
             productContainer.append(productItem);
         }
+        function isProductAlreadyAdded(productName) {
+            var existingProducts = productContainer.find('.product-name').map(function () {
+                return $(this).text().trim().toLowerCase();
+            }).get();
 
-        // Function to remove a product from the product container
+            return existingProducts.includes(productName.trim().toLowerCase());
+        }
+
         window.removeProduct = function (element) {
             $(element).closest('.product').remove();
         };
 
-        // Function to show the new product form in the popup
         function showNewProductForm() {
             fillFormForCreate();
 
             $('#submitNewProduct').click(function () {
                 var newProductName = $('#newProductName').val();
-                var newProductPhoto = $('#newProductPhoto').val(); // Assuming this is a string
+                var newProductPhoto = $('#newProductPhoto').val();
                 var newProductCalories = $('#newProductCalories').val();
 
-                // Use AJAX to submit the new product data
                 $.ajax({
                     url: '/follower/product/create',
                     type: 'POST',
@@ -179,31 +216,30 @@
                         fillFormForSearch();
                     },
                     error: function (error) {
-                        // Handle error
-                        console.log(error);
+                        fillFormForExists();
                     }
                 });
-                console.log('success');
-                fillFormForSearch();
-            });
-
-
-
-            $('#cancelNewProduct').click(function () {
-                fillFormForSearch();
             });
         }
 
         function fillFormForSearch() {
             productPopup.empty();
-            productPopup.append('<input type="text" class="search-products" id="searchProduct" placeholder="Search for a product">');
+            productPopup.append('<input type="text" class="search-products" id="searchProduct" placeholder="Търси продукт">');
             productPopup.append('<ul id="product-list" class="product-list">');
             productPopup.append('</ul>');
-            productPopup.append('<button class="add-new-product-btn" id="addNewProduct">Add New Product</button>');
+            productPopup.append('<button class="add-new-product-btn" id="addNewProduct">Добави нов продукт</button>');
             $('#searchProduct').on('input', function () {
-                var searchTerm = $(this).val();
-                console.log('searchProduct');
-                populateProductList(searchTerm);
+                var searchTerm = $(this).val().trim();
+
+                clearTimeout(searchTimeout);
+
+                searchTimeout = setTimeout(function () {
+                    if (searchTerm.length > 2) {
+                        populateProductList(searchTerm);
+                    } else {
+                        productList.empty();
+                    }
+                }, 1000);
             });
 
             $('#addNewProduct').click(function () {
@@ -214,17 +250,24 @@
         }
         function fillFormForCreate() {
             productPopup.empty();
-            productPopup.append('<input class="search-products" type="text" id="newProductName" placeholder="Product Name">');
-            productPopup.append('<input class="search-products" type="text" id="newProductPhoto" placeholder="Product Photo Url">');
-            productPopup.append('<input class="search-products" type="number" id="newProductCalories" placeholder="Calories">');
-            productPopup.append('<button class="add-new-product-btn" id="submitNewProduct">Submit</button>');
-            productPopup.append('<button class="add-new-product-btn" id="cancelNewProduct">Cancel</button>');
+            productPopup.append('<input class="search-products" type="text" id="newProductName" placeholder="Име на продукта">');
+            productPopup.append('<input class="search-products" type="text" id="newProductPhoto" placeholder="Снимка (линк)">');
+            productPopup.append('<input class="search-products" type="number" id="newProductCalories" placeholder="Калории">');
+            productPopup.append('<button class="add-new-product-btn" id="submitNewProduct">Създай</button>');
+            productPopup.append('<button class="add-new-product-btn" id="cancelNewProduct">Откажи</button>');
+            $('#cancelNewProduct').click(function () {
+                fillFormForSearch();
+            });
+        }
+        function fillFormForExists() {
+            productPopup.empty();
+            productPopup.append('<h1 class="exists-product" id="exists-product">Продуктът вече съществува!</h1>');
+            searchTimeout = setTimeout(function () {
+                showNewProductForm();
+            }, 3000);
         }
     });
 </script>
-
-
-
 <script>
     $(document).ready(function () {
         $('#submitBtn').click(function () {
@@ -232,27 +275,30 @@
             var description = document.getElementById('postDescription').value;
             var category = document.getElementById('cars').value;
 
-            // Retrieve the list of product IDs
-            var productIds = [];
-            $('#product-container .product').each(function () {
-                productIds.push($(this).find('#product-id').val());
+            var productNames = [];
+            $('#product-container .product .product-name').each(function () {
+                var productName = $(this).text().trim();
+                productNames.push(productName);
             });
 
             var imageData = document.getElementById('image').files[0];
 
             var formData = new FormData();
-            formData.append('Title', title);
+            formData.append('Name', title);
             formData.append('Description', description);
             formData.append('Category', category);
-            formData.append('ProductIds', productIds.join(',')); // Convert to comma-separated string
-            formData.append('Image', imageData);
+            formData.append('ProductNames', productNames);
+            formData.append('Photo', imageData);
+
+            console.log(formData);
 
             $.ajax({
-                url: '/posts/create',
+                url: '/follower/recipe/create',
                 type: 'POST',
                 processData: false,
                 contentType: false,
                 data: formData,
+                enctype: 'multipart/form-data',
                 success: function (data) {
                     console.log(data);
                 },
@@ -263,7 +309,6 @@
         });
     });
 </script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var textContent = document.getElementById('text-content');
@@ -333,7 +378,7 @@
         }
     }
 
-            var displayPreview = document.getElementById('display-preview');
+                            var displayPreview = document.getElementById('display-preview');
     var btnPreview = document.getElementById('btn-preview');
 
     var imageUrl = '';
@@ -371,38 +416,38 @@
     function updatePreview() {
         let cont = document.getElementById('dynamic-content');
         let previewHtml = `
-                                <div class="post-container">
-                               <header class="post-header">
-                                   <div class="post-header-info">
-                                       <div class="post-header-image">
-                                           <img class="header-img-data" src="@imgUrl" />
-                                               <h1 class="header-img-text">@username</h1>
-                                       </div>
-                                       <div class="post-header-hour">
-                                           <h1><strong>‧</strong></h1>
-                                       </div>
-                                   </div>
-                                   <div class="post-header-buttons">
-                                       <a class="follow-btn">1 minute ago</a>
-                                   </div>
-                               </header>
-                               <div class="post-content">
-                                   <div class="post-content-bg"></div>
-                                       <h1 class="content-title">${titleData}</h1>
-                                           <img class="uploaded-image-file" src="${imageUrl}" alt="Uploaded Image" />
-                                   <p class="content-text-container">
-                                           ${descriptionData}
-                                   </p>
-                               </div>
-                               <div class="post-footer">
-                                   <div class="footer-buttons">
-                                       <a class="footer-btn-action" href="#"><i class="fa fa-heart"></i> 0</a>
-                                       <a class="footer-btn-action" href="#"><i class="fa fa-comment"></i> 0</a>
-                                       <a class="footer-btn-action" href="#"><i class="fa fa-share"></i> Share</a>
-                                   </div>
-                               </div>
-                           </div>
-                                `;
+                                                <div class="post-container">
+                                               <header class="post-header">
+                                                   <div class="post-header-info">
+                                                       <div class="post-header-image">
+                                                           <img class="header-img-data" src="@imgUrl" />
+                                                               <h1 class="header-img-text">@username</h1>
+                                                       </div>
+                                                       <div class="post-header-hour">
+                                                           <h1><strong>‧</strong></h1>
+                                                       </div>
+                                                   </div>
+                                                   <div class="post-header-buttons">
+                                                       <a class="follow-btn">1 minute ago</a>
+                                                   </div>
+                                               </header>
+                                               <div class="post-content">
+                                                   <div class="post-content-bg"></div>
+                                                       <h1 class="content-title">${titleData}</h1>
+                                                           <img class="uploaded-image-file" src="${imageUrl}" alt="Uploaded Image" />
+                                                   <p class="content-text-container">
+                                                           ${descriptionData}
+                                                   </p>
+                                               </div>
+                                               <div class="post-footer">
+                                                   <div class="footer-buttons">
+                                                       <a class="footer-btn-action" href="#"><i class="fa fa-heart"></i> 0</a>
+                                                       <a class="footer-btn-action" href="#"><i class="fa fa-comment"></i> 0</a>
+                                                       <a class="footer-btn-action" href="#"><i class="fa fa-share"></i> Share</a>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                                `;
 
         cont.innerHTML = previewHtml;
     }
