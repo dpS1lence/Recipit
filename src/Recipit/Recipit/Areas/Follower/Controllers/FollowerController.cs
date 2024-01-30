@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Recipit.Areas.Follower.Controllers
+﻿namespace Recipit.Areas.Follower.Controllers
 {
-    [Authorize(Roles = "Follower")]
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Recipit.Contracts.Constants;
+
+    [Area(RecipitRole.Follower)]
+    [Authorize]
     public class FollowerController : Controller
     { }
 }

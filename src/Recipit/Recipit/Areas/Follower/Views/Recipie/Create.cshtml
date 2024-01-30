@@ -1,0 +1,409 @@
+﻿@using Recipit.Infrastructure.Data.Models.Contracts
+<div class="cerate-post-container">
+    <section class="create-post-section">
+        <div class="create-post-title-container">
+            <h1>Create a recipie</h1>
+        </div>
+        <div class="post-content-container">
+            <div class="post-content-navigation-top">
+                <a class="naligation-item" id="btn-post">
+                    <i class="navigation-item-icon fa fa-list-ul"></i> Recipie
+                </a>
+                <a class="naligation-item" id="btn-image">
+                    <i class="navigation-item-icon fa fa-image"></i> Image
+                </a>
+                <a class="naligation-item" id="btn-preview">
+                    <i class="navigation-item-icon fa fa-magnifying-glass"></i> Finalize
+                </a>
+            </div>
+            <div class="post-content" id="text-content">
+                <label class="label-select-category" for="cars">Choose a category:</label>
+                <select class="select-select-category" name="cars" id="cars">
+                    <option value="volvo">@Category.Appetizer</option>
+                    <option value="volvo">@Category.MainCourse</option>
+                    <option value="volvo">@Category.Salad</option>
+                    <option value="volvo">@Category.Dessert</option>
+                    <option value="volvo">@Category.Soup</option>
+                </select>
+                <input id="postTitle" class="post-content-input-title" type="text" placeholder="Post title" />
+                <textarea id="postDescription" class="post-content-input-description" rows="5"></textarea>
+                <div class="products-select-container">
+                    <button id="btn-add-product" class="button-add-product"><i class="fa fa-circle-plus"></i>Add product</button>
+                    <div id="product-container" class="added-products-container">
+                        @* <div class="product">
+                        <input type="hidden" id="product-id" value="1"/>
+                        <div class="x-icon" id="remove-product"><i class="fa fa-xmark"></i></div>
+                        <h1 class="product-name">Name</h1>
+                        </div> *@
+                    </div>
+                </div>
+                <div id="product-popup" class="product-popup hidden">
+                    <input type="text" class="search-products" id="searchProduct" placeholder="Search for a product">
+                    <ul id="product-list" class="product-list">
+                    </ul>
+                    <button class="add-new-product-btn" id="addNewProduct">Add New Product</button>
+                </div>
+                <div class="bottom-btns-post">
+                    <a class="post-content-btn hidden">Previous</a>
+                    <a class="post-content-btn" id="text-display-image">Next</a>
+                </div>
+            </div>
+            <div class="post-content hidden" id="image-content">
+                <div class="post-content-image-container">
+                    <input class="post-content-input-file" type="file" id="image" accept="image/*">
+                </div>
+                <div class="bottom-btns-post">
+                    <a class="post-content-btn" id="display-text">Previous</a>
+                    <a class="post-content-btn" id="display-preview">Next</a>
+                </div>
+            </div>
+            <div class="post-content hidden" id="preview-content">
+                <div class="dynamic-content" id="dynamic-content">
+                </div>
+                <div class="bottom-btns-post">
+                    <a class="post-content-btn" id="preview-display-image">Previous</a>
+                    <a class="post-content-btn" id="submitBtn">Submit</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="create-post-profile-display-section">
+        <div class="profile-display-section-top">
+            <div class="image-container-recipit-shit">
+                <img class="img-pfp-head" src="~/images/recipcho-removebg-preview.png" alt="Image here." />
+            </div>
+            <div class="privacy-recipie-text-container">
+                <p class="text-content-privacy">
+                    When submitting a recipe for publication on our website,
+                    refrain from sharing sensitive information, and be cautious with images that may compromise privacy.
+                    By submitting a recipe, you grant us the right to publish and promote the content, respecting your privacy.
+                </p>
+            </div>
+        </div>
+        <div class="profile-display-section-bottom">
+        </div>
+    </section>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var productPopup = $('#product-popup');
+        var productList = $('#product-list');
+        var productContainer = $('#product-container');
+
+        $('#btn-add-product').click(function () {
+            productPopup.toggleClass('hidden');
+        });
+
+        $('#searchProduct').on('input', function () {
+            var searchTerm = $(this).val();
+            populateProductList(searchTerm);
+        });
+
+        $('#addNewProduct').click(function () {
+            showNewProductForm();
+        });
+
+        function populateProductList(searchTerm) {
+            // Clear the existing list
+            productList.empty();
+            console.log(searchTerm);
+            // Make an AJAX request to the server for product search
+            $.ajax({
+                url: '/follower/product/search',
+                type: 'GET',
+                contentType: 'application/json',
+                data: { searchTerm: searchTerm },
+                success: function (data) {
+                    console.log(data);
+                    // Handle the response data and populate the list
+                    for (var i = 0; i < data.length; i++) {
+                        var currentProduct = data[i];
+                        var listItem = $('<li>').text(currentProduct.name);
+                        productList.append(listItem);
+
+                        // Attach the click event outside the loop
+                        attachClickEvent(listItem, currentProduct.name);
+                    }
+                    function attachClickEvent(item, productName) {
+                        item.click(function () {
+                            var selectedProduct = productName;
+                            addProductToContainer(selectedProduct);
+                            productPopup.addClass('hidden');
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+        // Function to add a product to the product container
+        function addProductToContainer(productName) {
+            var productItem = $('<div class="product">');
+            productItem.append('<input type="hidden" class="product-id" value="1"/>');
+            productItem.append('<div class="x-icon" onclick="removeProduct(this)"><i class="fa fa-trash-can"></i></div>');
+            productItem.append('<h1 class="product-name">' + productName + '</h1>');
+
+            productContainer.append(productItem);
+        }
+
+        // Function to remove a product from the product container
+        window.removeProduct = function (element) {
+            $(element).closest('.product').remove();
+        };
+
+        // Function to show the new product form in the popup
+        function showNewProductForm() {
+            fillFormForCreate();
+
+            $('#submitNewProduct').click(function () {
+                var newProductName = $('#newProductName').val();
+                var newProductPhoto = $('#newProductPhoto').val(); // Assuming this is a string
+                var newProductCalories = $('#newProductCalories').val();
+
+                // Use AJAX to submit the new product data
+                $.ajax({
+                    url: '/follower/product/create',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        Name: newProductName,
+                        Photo: newProductPhoto,
+                        Calories: newProductCalories
+                    }),
+                    success: function (data) {
+                        fillFormForSearch();
+                    },
+                    error: function (error) {
+                        // Handle error
+                        console.log(error);
+                    }
+                });
+                console.log('success');
+                fillFormForSearch();
+            });
+
+
+
+            $('#cancelNewProduct').click(function () {
+                fillFormForSearch();
+            });
+        }
+
+        function fillFormForSearch() {
+            productPopup.empty();
+            productPopup.append('<input type="text" class="search-products" id="searchProduct" placeholder="Search for a product">');
+            productPopup.append('<ul id="product-list" class="product-list">');
+            productPopup.append('</ul>');
+            productPopup.append('<button class="add-new-product-btn" id="addNewProduct">Add New Product</button>');
+            $('#searchProduct').on('input', function () {
+                var searchTerm = $(this).val();
+                console.log('searchProduct');
+                populateProductList(searchTerm);
+            });
+
+            $('#addNewProduct').click(function () {
+                showNewProductForm();
+                console.log('addNewProduct');
+            });
+            productList = $('#product-list');
+        }
+        function fillFormForCreate() {
+            productPopup.empty();
+            productPopup.append('<input class="search-products" type="text" id="newProductName" placeholder="Product Name">');
+            productPopup.append('<input class="search-products" type="text" id="newProductPhoto" placeholder="Product Photo Url">');
+            productPopup.append('<input class="search-products" type="number" id="newProductCalories" placeholder="Calories">');
+            productPopup.append('<button class="add-new-product-btn" id="submitNewProduct">Submit</button>');
+            productPopup.append('<button class="add-new-product-btn" id="cancelNewProduct">Cancel</button>');
+        }
+    });
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#submitBtn').click(function () {
+            var title = document.getElementById('postTitle').value;
+            var description = document.getElementById('postDescription').value;
+            var category = document.getElementById('cars').value;
+
+            // Retrieve the list of product IDs
+            var productIds = [];
+            $('#product-container .product').each(function () {
+                productIds.push($(this).find('#product-id').val());
+            });
+
+            var imageData = document.getElementById('image').files[0];
+
+            var formData = new FormData();
+            formData.append('Title', title);
+            formData.append('Description', description);
+            formData.append('Category', category);
+            formData.append('ProductIds', productIds.join(',')); // Convert to comma-separated string
+            formData.append('Image', imageData);
+
+            $.ajax({
+                url: '/posts/create',
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var textContent = document.getElementById('text-content');
+        var imageContent = document.getElementById('image-content');
+        var previewContent = document.getElementById('preview-content');
+
+        var btnPost = document.getElementById('btn-post');
+        var btnImage = document.getElementById('btn-image');
+        var btnPreview = document.getElementById('btn-preview');
+        var btnSubmit = document.getElementById('submit');
+
+        var textDisplayImage = document.getElementById('text-display-image');
+        var displayText = document.getElementById('display-text');
+        var displayPreview = document.getElementById('display-preview');
+        var previewDisplayImage = document.getElementById('preview-display-image');
+
+        function showContent(content) {
+            textContent.classList.add('hidden');
+            imageContent.classList.add('hidden');
+            previewContent.classList.add('hidden');
+
+            content.classList.remove('hidden');
+        }
+
+        showContent(textContent);
+
+        btnPost.addEventListener('click', function () {
+            showContent(textContent);
+        });
+
+        btnImage.addEventListener('click', function () {
+            showContent(imageContent);
+        });
+
+        btnPreview.addEventListener('click', function () {
+            showContent(previewContent);
+        });
+
+        textDisplayImage.addEventListener('click', function () {
+            showContent(imageContent);
+        });
+
+        displayText.addEventListener('click', function () {
+            showContent(textContent);
+        });
+
+        displayPreview.addEventListener('click', function () {
+            showContent(previewContent);
+        });
+
+        previewDisplayImage.addEventListener('click', function () {
+            showContent(imageContent);
+        });
+    });
+</script>
+<script>
+    @{
+        var imgUrl = "";
+        var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+        if (User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value != null)
+        {
+            imgUrl = User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value;
+        }
+        else
+        {
+            imgUrl = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+        }
+    }
+
+            var displayPreview = document.getElementById('display-preview');
+    var btnPreview = document.getElementById('btn-preview');
+
+    var imageUrl = '';
+    var titleData = '';
+    var descriptionData = '';
+
+    document.getElementById('image').addEventListener('change', function (event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                imageUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            updatePreview();
+        }
+    });
+
+    document.getElementById('postTitle').addEventListener('change', function (event) {
+        titleData = event.target.value;
+    });
+
+    document.getElementById('postDescription').addEventListener('change', function (event) {
+        descriptionData = event.target.value;
+    });
+
+    displayPreview.addEventListener('click', function () {
+        updatePreview();
+    });
+
+    btnPreview.addEventListener('click', function () {
+        updatePreview();
+    });
+
+    function updatePreview() {
+        let cont = document.getElementById('dynamic-content');
+        let previewHtml = `
+                                <div class="post-container">
+                               <header class="post-header">
+                                   <div class="post-header-info">
+                                       <div class="post-header-image">
+                                           <img class="header-img-data" src="@imgUrl" />
+                                               <h1 class="header-img-text">@username</h1>
+                                       </div>
+                                       <div class="post-header-hour">
+                                           <h1><strong>‧</strong></h1>
+                                       </div>
+                                   </div>
+                                   <div class="post-header-buttons">
+                                       <a class="follow-btn">1 minute ago</a>
+                                   </div>
+                               </header>
+                               <div class="post-content">
+                                   <div class="post-content-bg"></div>
+                                       <h1 class="content-title">${titleData}</h1>
+                                           <img class="uploaded-image-file" src="${imageUrl}" alt="Uploaded Image" />
+                                   <p class="content-text-container">
+                                           ${descriptionData}
+                                   </p>
+                               </div>
+                               <div class="post-footer">
+                                   <div class="footer-buttons">
+                                       <a class="footer-btn-action" href="#"><i class="fa fa-heart"></i> 0</a>
+                                       <a class="footer-btn-action" href="#"><i class="fa fa-comment"></i> 0</a>
+                                       <a class="footer-btn-action" href="#"><i class="fa fa-share"></i> Share</a>
+                                   </div>
+                               </div>
+                           </div>
+                                `;
+
+        cont.innerHTML = previewHtml;
+    }
+</script>
