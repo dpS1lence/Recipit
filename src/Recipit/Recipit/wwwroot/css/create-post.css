@@ -1,6 +1,4 @@
-﻿
-/* General container styles */
-.label-select-category {
+﻿.label-select-category {
     color: #929292;
     font-size: 20px;
     margin: 10px 0;
@@ -34,6 +32,10 @@
         border: 2px solid orange;
     }
 
+    .button-add-product i {
+        margin-right: 5px;
+    }
+
 .added-products-container {
     display: flex;
     flex-direction: row;
@@ -53,7 +55,7 @@
     margin: 0px 5px;
     align-items: center;
     text-align: center;
-    margin: 5px;
+    margin: 0 5px;
 }
 
 .product-img {
@@ -62,7 +64,7 @@
 }
 
 .x-icon {
-    padding: 0px 5px;
+    padding-right: 5px;
     color: #333;
     transition: all 0.3s;
     cursor: pointer;
@@ -78,7 +80,14 @@
     font-size: 17px;
     font-weight: 300;
 }
-/* Add this to your CSS */
+
+.exists-product {
+    color: orange;
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+}
+
 .product-popup {
     position: absolute;
     width: 250px;
@@ -106,27 +115,30 @@
     margin: 20px;
 }
 
-/* Main post creation section */
 .create-post-section {
     width: 60%;
     margin: 10px;
 }
 
 .create-post-title-container {
-    color: #333; /* Changed for better readability */
-    padding: 20px; /* Increased padding */
+    color: #333;
+    padding: 10px;
     border-radius: 10px;
-    border-bottom: 2px solid #eaeaea; /* Subtle border */
-    background-color: #f9f9f9; /* Light background */
-    font-size: 28px; /* Larger font */
-    font-weight: 500; /* Semi-bold */
+    background-color: #f9f9f9;
+    font-size: 28px;
+    font-weight: 500;
+    text-align: center;
 }
+
+    .create-post-title-container h1 {
+        margin: 0;
+    }
 
 .post-content-container {
     margin-top: 20px;
     background-color: white;
     border-radius: 10px;
-    padding: 20px; /* Added padding for spacing */
+    padding: 20px;
 }
 
 .post-content-navigation-top {
@@ -134,7 +146,6 @@
     flex-direction: row;
 }
 
-/* Navigation items */
 .naligation-item {
     text-decoration: none;
     color: #333;
@@ -145,13 +156,13 @@
     text-align: center;
     transition: all 0.3s;
     cursor: pointer;
-    padding: 15px 0; /* Increased padding */
+    padding: 15px 0;
 }
 
     .naligation-item:hover {
-        background-color: #f0f0f0; /* Subtle hover effect */
+        background-color: #f0f0f0;
         border-radius: 10px;
-        color: #000; /* Darken text on hover */
+        color: #000;
     }
 
 .search-products {
@@ -191,28 +202,26 @@
 .add-new-product-btn {
     padding: 5px 5px;
     text-decoration: none;
-    background-color: orange; /* Primary button color */
+    background-color: orange;
     color: #fff;
     cursor: pointer;
-    border: none; /* Remove border */
+    border: none;
     border-radius: 5px;
-    transition: all 0.3s; /* Smooth transition */
+    transition: all 0.3s;
     border: 2px solid orange;
     width: 100%;
 }
 
     .add-new-product-btn:hover {
         border: 2px solid orange;
-        background-color: #fdf4ec; /* Darken on hover */
+        background-color: #fdf4ec;
         color: gray;
     }
 
-/* Icons */
 .navigation-item-icon {
     margin-right: 5px;
 }
 
-/* Content styling */
 .post-content {
     padding: 15px;
 }
@@ -221,50 +230,95 @@
 .post-content-input-description {
     width: 100%;
     margin-bottom: 10px;
-    padding: 10px; /* Increased padding */
-    border: 1px solid #ddd; /* Subtle border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Larger font size */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-/* Image upload container */
 .post-content-image-container {
     margin-bottom: 10px;
     height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px dashed #ddd; /* Dashed border for upload area */
+    border: 1px dashed #ddd;
     border-radius: 10px;
-    background-color: #fafafa; /* Light background */
+    background-color: #fafafa;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Buttons */
+.post-content-input-file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+#drop-area p {
+    margin: 0;
+    font-size: 16px;
+    z-index: 1;
+    background-color: #fafafa;
+    opacity: 0.5;
+    border-radius: 20px;
+    padding: 5px;
+    color: #444;
+    transition: all 0.3s;
+}
+
+    #drop-area p:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+#drop-area {
+    transition: all 0.3s;
+    border: 2px dashed white;
+}
+
+    #drop-area:hover {
+        border: 2px dashed #333;
+    }
+
+        #drop-area:hover p {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+    #drop-area.dragging {
+        border: 2px dashed #33adff;
+        background-color: #e6f7ff;
+    }
+
+
 .bottom-btns-post {
     display: flex;
-    justify-content: flex-end; /* Align buttons to right */
-    gap: 10px; /* Space between buttons */
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .post-content-btn {
     padding: 5px 20px;
     text-decoration: none;
-    background-color: orange; /* Primary button color */
+    background-color: orange;
     color: #fff;
     cursor: pointer;
-    border: none; /* Remove border */
+    border: none;
     border-radius: 20px;
-    transition: all 0.3s; /* Smooth transition */
+    transition: all 0.3s;
     border: 2px solid orange;
 }
 
     .post-content-btn:hover {
         border: 2px solid orange;
-        background-color: #fdf4ec; /* Darken on hover */
+        background-color: #fdf4ec;
         color: gray;
     }
 
-/* Profile display section */
 .create-post-profile-display-section {
     width: 35%;
     margin: 10px;
@@ -304,7 +358,11 @@
 
 @media(max-width:1300px) {
     .create-post-profile-display-section {
-        display: none;
+        width: 100%;
+    }
+
+    .cerate-post-container {
+        flex-direction: column;
     }
 
     .create-post-section {
@@ -391,12 +449,13 @@
                 text-align: center;
                 border-radius: 30px;
                 padding: 10px;
-                background-color: #C864F7;
+                background-color: orange;
                 color: white;
                 width: 140px;
                 height: 30px;
                 cursor: pointer;
                 margin: 2px;
+                text-decoration: none;
             }
 
             .post-container .post-header .post-header-buttons .report-btn {
@@ -405,7 +464,7 @@
                 align-items: center;
                 text-align: center;
                 border-radius: 30px;
-                pad: 10px;
+                padding: 10px;
                 background-color: #C864F7;
                 color: white;
                 width: 30px;
@@ -445,7 +504,7 @@
                 align-items: center;
                 text-align: center;
                 border-radius: 30px;
-                pad: 10px;
+                padding: 10px;
                 color: white;
                 width: 70px;
                 height: 30px;
@@ -453,8 +512,9 @@
                 margin: 2px;
                 color: #808080;
                 transition: all 0.3s;
+                text-decoration: none;
             }
 
                 .post-container .post-footer .footer-buttons .footer-btn-action:hover {
-                    color: #C864F7;
+                    color: orange;
                 }

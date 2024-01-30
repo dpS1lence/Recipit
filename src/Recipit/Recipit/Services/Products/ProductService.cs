@@ -10,11 +10,9 @@
     using Recipit.ViewModels.Product;
     using System.Linq;
 
-    public class ProductService(RecipitDbContext context, UserManager<RecipitUser> userManager, ILogger<ProductService> logger, IMapper mapper) : IProductService
+    public class ProductService(RecipitDbContext context, IMapper mapper) : IProductService
     {
         private readonly RecipitDbContext _context = context;
-        private readonly UserManager<RecipitUser> _userManager = userManager;
-        private readonly ILogger _logger = logger;
         private readonly IMapper _mapper = mapper;
 
         public async Task<IPage<ProductViewModel>> All()
@@ -26,20 +24,21 @@
 
         public async Task<IEnumerable<ProductViewModel>> SearchProducts(string searchText)
         {
-            if (searchText != null && searchText.Length > 1)
-            {
-                var products = await _context.Products.AsNoTracking().ToListAsync();
-                products = products.Where(a => a.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
+            var products = await _context.Products.AsNoTracking().ToListAsync();
+            products = products.Where(a => a.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                return products.Select(_mapper.Map<ProductViewModel>);
-            }
-
-            return new List<ProductViewModel>();
+            return products.Select(_mapper.Map<ProductViewModel>);
         }
 
         public async Task<ProductViewModel> Create(ProductViewModel model)
         {
             var product = _mapper.Map<Product>(model);
+
+            if(await _context.Products.AnyAsync(a => a.Name == product.Name))
+            {
+                throw new ArgumentException("Product already exists!");
+            }
+
             _context.Products.Add(product);
 
             await _context.SaveChangesAsync();

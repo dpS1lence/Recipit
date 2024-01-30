@@ -4,6 +4,7 @@
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Infrastructure.Mapping;
     using Recipit.ViewModels.Followers;
+    using Recipit.ViewModels.Product;
 
     public class RecipeViewModel : IMapFrom<RecipitUser>
     {
@@ -13,9 +14,10 @@
         public string UserId { get; private set; } = default!;
         public int NutritionalValue { get; set; }
         public DateTime PublishDate { get; set; }
-        public string Photo { get; set; } = default!;
+        public IFormFile Photo { get; set; } = default!;
         public decimal AverageRating { get; set; }
         public string Category { get; set; } = default!;
+        public List<string>? ProductNames { get; set; }
 
         public void Mapping(Profile map)
         {
@@ -25,8 +27,8 @@
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.NutritionalValue, opt => opt.MapFrom(src => src.NutritionalValue))
-                .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate))
-                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Photo))
+                .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => string.Empty))
                 .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.AverageRating))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category)).ReverseMap();
         }
