@@ -15,6 +15,9 @@
         public IActionResult All() => View();
 
         [HttpGet]
+        public async Task<IActionResult> ViewRecipe(int id) => View(await _recipeService.ById(id));
+
+        [HttpGet]
         public async Task<IActionResult> Recipes(int currentPage, int pageSize)
         {
             var pageOfRecipes = await _recipeService.All(currentPage, pageSize);

@@ -1,0 +1,119 @@
+﻿/* Recipe Container */
+.recipe-container {
+    background-color: #fff;
+    margin: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    transition: all 0.3s;
+    width: 400px;
+}
+
+    .recipe-container:hover {
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, orange 0px 0px 0px 1px;
+    }
+
+/* Recipe Title */
+.recipe-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Recipe Photo */
+.recipe-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+/* Recipe Description */
+.recipe-description {
+    /* Similar styling as recipe title, but with smaller font */
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Recipe Metadata */
+.recipe-category, .recipe-nutritional, .recipe-date {
+    font-size: 14px;
+    color: #808080;
+    margin: 5px 0;
+}
+
+/* Recipe Rating */
+.recipe-rating .fa-star {
+    color: gold;
+}
+
+/* Comments Container */
+.comments-container {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    margin: 20px;
+    padding: 15px;
+}
+
+/* Individual Comment */
+.comment {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+}
+
+    .comment:last-child {
+        border-bottom: none;
+    }
+
+.comment-user, .comment-text, .comment-date {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+/* Comment Rating */
+.comment-rating .fa-star {
+    color: gold;
+}
+
+/* Add Comment Container */
+.add-comment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
+}
+
+/* Comment Textarea */
+.comment-textarea {
+    width: 80%;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+/* Submit Comment Button */
+.submit-comment-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: orange;
+    color: white;
+    cursor: pointer;
+    border: 2px solid orange;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 40px;
+}
+
+    .submit-comment-btn:hover {
+        background-color: white;
+        color: orange;
+    }

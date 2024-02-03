@@ -185,7 +185,7 @@
                     <div class="ingridients-container">${ingredientsHtml}</div>
                 </div>
                 <div class="recipe-buttons">
-                    <button class="view-recipe-btn"><i class="fa fa-eye"></i>Виж рецептата</button>
+                    <button class="view-recipe-btn" data-recipe-id="${recipe.id}"><i class="fa fa-eye"></i>Виж рецептата</button>
                     <h2 class="recipe-calories"><i class="fa fa-fire"></i>${recipe.nutritionalValue} Калории</h2>
                 </div>
             </div>`;
@@ -205,6 +205,12 @@
             }
             return starsHtml;
         }
+
+        $(document).on('click', '.view-recipe-btn', function () {
+            var recipeId = $(this).data('recipe-id');
+            window.location.href = `/follower/recipe/viewrecipe/${recipeId}`;
+        });
+
     });
 
 </script>

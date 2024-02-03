@@ -2,6 +2,7 @@
 using Recipit.Infrastructure.Data.Models;
 using Recipit.Infrastructure.Mapping;
 using Recipit.ViewModels.Account;
+using Recipit.ViewModels.Comments;
 using Recipit.ViewModels.Product;
 using RecipeDb = Recipit.Infrastructure.Data.Models.Recipe;
 
@@ -9,7 +10,11 @@ namespace Recipit.ViewModels.Recipe
 {
     public class RecipeDisplayModel : IMapFrom<RecipeDb>
     {
-        public RecipeDisplayModel() => Products = new HashSet<ProductViewModel>();
+        public RecipeDisplayModel()
+        {
+            Products = new HashSet<ProductViewModel>();
+            Comments = new HashSet<CommentViewModel>();
+        }
 
         public int Id { get; set; }
 
@@ -32,6 +37,7 @@ namespace Recipit.ViewModels.Recipe
         public string Category { get; set; } = default!;
 
         public IEnumerable<ProductViewModel> Products { get; set; }
+        public IEnumerable<CommentViewModel>? Comments { get; set; }
 
         public void Mapping(Profile map)
         {
@@ -42,6 +48,15 @@ namespace Recipit.ViewModels.Recipe
                     Calories = pr.Product.Calories,
                     Id = pr.Product.Id,
                     Name = pr.Product.Name
+                })))
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments.Select(pr => new CommentViewModel
+                {
+                    DatePosted = pr.DatePosted,
+                    Id = pr.Id,
+                    Rating = pr.Rating,
+                    RecipeId = pr.Id,
+                    Text = pr.Text,
+                    User = pr.User
                 })))
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserViewModel
                 {

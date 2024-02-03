@@ -108,6 +108,7 @@
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
                 .Include(a => a.User)
+                .Include(a => a.Comments)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -125,6 +126,7 @@
             var filteredRecipes = await _context.Recipes
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
+                .Include(a => a.Comments)
                 .Include(a => a.User)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
@@ -158,6 +160,19 @@
             var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(filteredRecipes);
 
             return new Page<RecipeDisplayModel>(recipeViewModels, currentPage, pageSize, totalPages);
+        }
+
+        public async Task<RecipeDisplayModel> ById(int id)
+        {
+            var recipe = await _context.Recipes
+                .Where(a => a.Id == id)
+                .Include(a => a.User)
+                .Include(a => a.Comments)
+                .Include(a => a.ProductRecipes)
+                .ThenInclude(a => a.Product)
+                .FirstOrDefaultAsync();
+
+            return _mapper.Map<RecipeDisplayModel>(recipe);
         }
     }
 }

@@ -1,0 +1,51 @@
+﻿@using Recipit.ViewModels.Recipe
+@model RecipeDisplayModel
+
+@{
+    ViewBag.Title = "Recipe Details";
+}
+<link href="~/css/viewrecipe.css" rel="stylesheet" />
+
+<!-- Recipe Details -->
+<div class="recipe-container">
+    <h2 class="recipe-title">@Model.Name</h2>
+    <img class="recipe-photo" src="@Model.Photo" alt="@Model.Name">
+    <p class="recipe-description">@Model.Description</p>
+    <p class="recipe-category">Category: @Model.Category</p>
+    <p class="recipe-nutritional">Nutritional Value: @Model.NutritionalValue</p>
+    <p class="recipe-date">Published on: @Model.PublishDate.ToShortDateString()</p>
+    <div class="recipe-rating">
+        <p>Average Rating: @Model.AverageRating</p>
+        @for (int i = 0; i < 5; i++)
+        {
+            <i class="@(i < Model.AverageRating ? "fa-solid" : "fa-regular") fa-star"></i>
+        }
+    </div>
+</div>
+
+<!-- Comments Section -->
+<div class="comments-container">
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="comment">
+            <p class="comment-user">@comment.User.UserName</p>
+            <p class="comment-text">@comment.Text</p>
+            <p class="comment-date">@comment.DatePosted.ToShortDateString()</p>
+            <div class="comment-rating">
+                @for (int i = 0; i < 5; i++)
+                {
+                    <i class="@(i < comment.Rating ? "fa-solid" : "fa-regular") fa-star"></i>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Add Comment Section -->
+<div class="add-comment-container">
+    <h3>Add a Comment</h3>
+    <form method="post">
+        <textarea class="comment-textarea" name="commentText"></textarea>
+        <input type="submit" value="Post Comment" class="submit-comment-btn">
+    </form>
+</div>
