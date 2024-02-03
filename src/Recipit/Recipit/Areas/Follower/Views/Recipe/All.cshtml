@@ -1,59 +1,210 @@
-﻿@using Recipit.ViewModels.Recipe
+﻿@using Recipit.Infrastructure.Data.Models.Contracts
+@using Recipit.ViewModels.Recipe
 @model IEnumerable<RecipeDisplayModel>
+<link href="~/css/recipesall.css" rel="stylesheet" />
 
-<form id="recipeFilterForm">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name">
-
-    <label for="category">Category:</label>
-    <input type="text" id="category" name="category">
-
-    <label for="author">Author:</label>
-    <input type="text" id="author" name="author">
-
-    <label for="averageRating">Average Rating:</label>
-    <input type="number" id="averageRating" name="averageRating">
-
-    <label for="nutritionalValue">Nutritional Value:</label>
-    <input type="number" id="nutritionalValue" name="nutritionalValue">
-
-    <button type="submit">Filter</button>
+<form class="search-products-form" id="recipeFilterForm">
+    <input class="search-input" type="text" id="name" name="name" placeholder="Име">
+    <select class="select-category" name="categories" id="category">
+        <option value="@string.Empty">Всички категории</option>
+        <option value="@Category.Appetizer">Предястие</option>
+        <option value="@Category.MainCourse">Основно ястие</option>
+        <option value="@Category.Salad">Салата</option>
+        <option value="@Category.Dessert">Десерт</option>
+        <option value="@Category.Soup">Супа</option>
+    </select>
+    <input class="search-input" type="text" id="author" name="author" placeholder="Автор">
+    <input class="search-input" type="number" id="averageRating" name="averageRating" placeholder="Оценка">
+    <input class="search-input" type="number" id="nutritionalValue" name="nutritionalValue" placeholder="Калории">
+    <button class="search-btn" type="submit">Филтрирай</button>
 </form>
 
-<div id="recipeDisplay">
-    <!-- Display the filtered recipes here -->
+<div class="recipes-container"id="recipeDisplay">
+@*     <div class="recipe-container">
+        <div class="recipe-data">
+            <img class="recipe-image" src="~/images/bg-photo.png" alt="image"/>
+            <div class="recipe-title-and-rating">
+                <h1 class="recipe-title">Title</h1>
+                <div class="stars-container">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                </div>
+            </div>
+        </div>
+        <div class="recipe-products">
+            <h1 class="recipe-ingridients-title">Ingridients</h1>
+            <div class="ingridients-container">
+                <div class="ingridient">
+                    <img class="ingridient-image" src="~/images/bg-photo.png" alt="image" />
+                    <h1 class="ingridient-title">Title</h1>
+                </div>
+                <div class="ingridient">
+                    <img class="ingridient-image" src="~/images/bg-photo.png" alt="image" />
+                    <h1 class="ingridient-title">Title</h1>
+                </div>
+                <div class="ingridient">
+                    <img class="ingridient-image" src="~/images/bg-photo.png" alt="image" />
+                    <h1 class="ingridient-title">Title</h1>
+                </div>
+                <div class="ingridient">
+                    <img class="ingridient-image" src="~/images/bg-photo.png" alt="image" />
+                    <h1 class="ingridient-title">Title</h1>
+                </div>
+                <div class="ingridient">
+                    <img class="ingridient-image" src="~/images/bg-photo.png" alt="image" />
+                    <h1 class="ingridient-title">Title</h1>
+                </div>
+                <div class="ingridient">
+                    <h1 class="ingridient-more">+3 More</h1>
+                </div>
+            </div>
+        </div>
+        <div class="recipe-buttons">
+            <button class="view-recipe-btn"><i class="fa fa-eye"></i>View Recipe</button>
+            <h2 class="recipe-calories"><i class="fa fa-fire"></i>230 calories</h2>
+        </div>
+    </div> *@
+</div>
+<div id="pagination">
+    <button id="prevPage">Previous</button>
+    <span id="currentPage">1</span>
+    <button id="nextPage">Next</button>
 </div>
 
-<!-- Your jQuery code can interact with these IDs -->
-<script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+ <script>
     $(document).ready(function () {
-        $('#recipeFilterForm').submit(function (event) {
-            event.preventDefault();
+        var currentPage = 1;
+        var pageSize = 4; // Adjust this as needed
+        var totalPages; // Variable to store total pages
+        var currentFilterData = {}; // Object to hold the current filter data
 
-            // Retrieve values from form inputs
-            var name = $('#name').val();
-            var category = $('#category').val();
-            var author = $('#author').val();
-            var averageRating = $('#averageRating').val();
-            var nutritionalValue = $('#nutritionalValue').val();
+        function loadRecipes(page, filterData) {
+            var url = '/follower/recipe/recipes';
+            var data = { currentPage: page, pageSize: pageSize };
 
-            // AJAX request to filter recipes
+            if (filterData) { // If there is filter data, change URL and append data
+                url = '/follower/recipe/filter';
+                data = { ...filterData, currentPage: page, pageSize: pageSize };
+            }
+
             $.ajax({
-                type: 'POST',
-                url: '/YourController/Filter',
-                data: {
-                    name: name,
-                    category: category,
-                    author: author,
-                    averageRating: averageRating,
-                    nutritionalValue: nutritionalValue
-                },
+                type: 'GET',
+                url: url,
+                data: data,
                 success: function (response) {
-                    // Handle the response and update the page components
-                    $('#recipeDisplay').html(response);
+                    displayRecipes(response.recipes);
+                    totalPages = response.totalPages;
+                    console.log(response.recipes);
+                    console.log("Total Pages:", totalPages);
+                    updatePagination(page);
+                },
+                error: function (error) {
+                    console.log(error);
                 }
             });
-        });
-    });
-</script>
+        }
 
+        // Initial load
+        loadRecipes(currentPage);
+
+        $('#prevPage').click(function () {
+            console.log("prevPage Current Page before increment:", currentPage);
+            if (currentPage > 1) {
+                currentPage--;
+                loadRecipes(currentPage, currentFilterData);
+                console.log("prevPage Current Page after increment:", currentPage);
+            }
+        });
+
+        $('#nextPage').click(function () {
+            console.log(" nextPageCurrent Page before increment:", currentPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                console.log(" nextPageCurrent Page after increment:", currentPage);
+                loadRecipes(currentPage, currentFilterData);
+            }
+        });
+
+        function updatePagination(page) {
+            $('#currentPage').text(page);
+            $('#prevPage').prop('disabled', page === 1);
+            $('#nextPage').prop('disabled', page === totalPages);
+        }
+
+        $('#recipeFilterForm').submit(function (event) {
+            event.preventDefault();
+            currentPage = 1; // Reset to first page on new filter
+
+            currentFilterData = {
+                Name: $('#name').val(),
+                Category: $('#category').val(),
+                Author: $('#author').val(),
+                AverageRating: $('#averageRating').val(),
+                NutritionalValue: $('#nutritionalValue').val()
+            };
+
+            loadRecipes(currentPage, currentFilterData);
+        });
+
+        function displayRecipes(recipes) {
+            var html = '';
+            recipes.forEach(function (recipe) {
+                // Function to generate star ratings
+                var stars = generateStarRating(recipe.averageRating);
+
+                // Building the ingredients HTML
+                var ingredientsHtml = '';
+                for (var i = 0; i < recipe.products.length && i < 5; i++) {
+                    ingredientsHtml += `<div class="ingridient">
+                    <img class="ingridient-image" src="${recipe.products[i].photo}" alt="image" />
+                    <h1 class="ingridient-title">${recipe.products[i].name}</h1>
+                </div>`;
+                }
+                if (recipe.products.length > 5) {
+                    ingredientsHtml += `<div class="ingridient">
+                    <h1 class="ingridient-more">+${recipe.products.length - 5} Други</h1>
+                </div>`;
+                }
+
+                // Building the entire recipe HTML
+                html += `<div class="recipe-container">
+                <div class="recipe-data">
+                    <img class="recipe-image" src="${recipe.photo}" alt="image"/>
+                    <div class="recipe-title-and-rating">
+                        <h1 class="recipe-title">${recipe.name}</h1>
+                        <div class="stars-container">${stars}</div>
+                    </div>
+                </div>
+                <div class="recipe-products">
+                    <h1 class="recipe-ingridients-title">Продукти</h1>
+                    <div class="ingridients-container">${ingredientsHtml}</div>
+                </div>
+                <div class="recipe-buttons">
+                    <button class="view-recipe-btn"><i class="fa fa-eye"></i>Виж рецептата</button>
+                    <h2 class="recipe-calories"><i class="fa fa-fire"></i>${recipe.nutritionalValue} Калории</h2>
+                </div>
+            </div>`;
+            });
+            $('#recipeDisplay').html(html);
+        }
+
+        // Function to generate star ratings
+        function generateStarRating(averageRating) {
+            var starsHtml = '';
+            for (var i = 1; i <= 5; i++) {
+                if (i <= averageRating) {
+                    starsHtml += '<i class="fa-solid fa-star"></i>';
+                } else {
+                    starsHtml += '<i class="fa-regular fa-star"></i>';
+                }
+            }
+            return starsHtml;
+        }
+    });
+
+</script>

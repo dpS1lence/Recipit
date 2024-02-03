@@ -1,4 +1,5 @@
-﻿using Recipit.ViewModels.Recipe;
+﻿using Recipit.Pagination.Contracts;
+using Recipit.ViewModels.Recipe;
 
 namespace Recipit.Services.Recipes
 {
@@ -6,8 +7,8 @@ namespace Recipit.Services.Recipes
     {
         Task Delete(int recipeId);
         Task Edit(RecipeViewModel recipe);
-        Task<IEnumerable<RecipeDisplayModel>> All();
-        Task<IEnumerable<RecipeDisplayModel>> Filter(RecipeFilterModel model);
+        Task<IPage<RecipeDisplayModel>> All(int currentPage, int pageSize);
+        Task<IPage<RecipeDisplayModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize);
         Task<string> Create(RecipeViewModel recipe);
     }
 }

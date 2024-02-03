@@ -10,11 +10,14 @@
     using Recipit.Contracts.Helpers;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
+    using Recipit.Pagination;
+    using Recipit.Pagination.Contracts;
     using Recipit.Services.Images;
     using Recipit.ViewModels.Recipe;
     using System.Collections.Generic;
     using System.Net.Http.Headers;
     using System.Security.Claims;
+    using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
     public class RecipeService
         (RecipitDbContext context, UserManager<RecipitUser> userManager, HttpClient httpClient, ILogger<RecipeService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
@@ -96,56 +99,65 @@
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<RecipeDisplayModel>> All()
+        public async Task<IPage<RecipeDisplayModel>> All(int currentPage, int pageSize)
         {
+            var totalRecipesCount = await _context.Recipes.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalRecipesCount / (double)pageSize);
+
             var allRecipes = await _context.Recipes
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
                 .Include(a => a.User)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(allRecipes);
 
-            return recipeViewModels;
+            return new Page<RecipeDisplayModel>(recipeViewModels, currentPage, pageSize, totalPages);
         }
 
-        public async Task<IEnumerable<RecipeDisplayModel>> Filter(RecipeFilterModel model)
+        public async Task<IPage<RecipeDisplayModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize)
         {
-            var query = _context.Recipes
-                    .Include(a => a.ProductRecipes)
-                    .ThenInclude(a => a.Product)
-                    .Include(a => a.User)
-                    .AsQueryable();
+            var totalFilteredCount = await _context.Recipes.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalFilteredCount / (double)pageSize);
+
+            var filteredRecipes = await _context.Recipes
+                .Include(a => a.ProductRecipes)
+                .ThenInclude(a => a.Product)
+                .Include(a => a.User)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             if (!string.IsNullOrEmpty(model.Name))
             {
-                query = query.Where(r => r.Name.Contains(model.Name, StringComparison.OrdinalIgnoreCase));
+                filteredRecipes = filteredRecipes.Where(r => r.Name.Contains(model.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(model.Category))
             {
-                query = query.Where(r => r.Category.Equals(model.Category, StringComparison.OrdinalIgnoreCase));
+                filteredRecipes = filteredRecipes.Where(r => r.Category.Contains(model.Category, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(model.Author))
             {
-                query = query.Where(r => r.User.UserName.Contains(model.Author, StringComparison.OrdinalIgnoreCase));
+                filteredRecipes = filteredRecipes.Where(r => r.User.UserName.Contains(model.Author, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
             if (model.AverageRating.HasValue)
             {
-                query = query.Where(r => r.AverageRating >= model.AverageRating.Value);
+                filteredRecipes = filteredRecipes.Where(r => r.AverageRating >= model.AverageRating.Value).ToList();
             }
 
             if (model.NutritionalValue.HasValue)
             {
-                query = query.Where(r => r.NutritionalValue >= model.NutritionalValue.Value);
+                filteredRecipes = filteredRecipes.Where(r => r.NutritionalValue >= model.NutritionalValue.Value).ToList();
             }
 
-            var filteredRecipes = await query.ToListAsync();
             var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(filteredRecipes);
 
-            return recipeViewModels;
+            return new Page<RecipeDisplayModel>(recipeViewModels, currentPage, pageSize, totalPages);
         }
     }
 }
