@@ -1,0 +1,59 @@
+﻿@using Recipit.ViewModels.Recipe
+@model IEnumerable<RecipeDisplayModel>
+
+<form id="recipeFilterForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category">
+
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author">
+
+    <label for="averageRating">Average Rating:</label>
+    <input type="number" id="averageRating" name="averageRating">
+
+    <label for="nutritionalValue">Nutritional Value:</label>
+    <input type="number" id="nutritionalValue" name="nutritionalValue">
+
+    <button type="submit">Filter</button>
+</form>
+
+<div id="recipeDisplay">
+    <!-- Display the filtered recipes here -->
+</div>
+
+<!-- Your jQuery code can interact with these IDs -->
+<script>
+    $(document).ready(function () {
+        $('#recipeFilterForm').submit(function (event) {
+            event.preventDefault();
+
+            // Retrieve values from form inputs
+            var name = $('#name').val();
+            var category = $('#category').val();
+            var author = $('#author').val();
+            var averageRating = $('#averageRating').val();
+            var nutritionalValue = $('#nutritionalValue').val();
+
+            // AJAX request to filter recipes
+            $.ajax({
+                type: 'POST',
+                url: '/YourController/Filter',
+                data: {
+                    name: name,
+                    category: category,
+                    author: author,
+                    averageRating: averageRating,
+                    nutritionalValue: nutritionalValue
+                },
+                success: function (response) {
+                    // Handle the response and update the page components
+                    $('#recipeDisplay').html(response);
+                }
+            });
+        });
+    });
+</script>
+

@@ -25,30 +25,30 @@
                         <a class="create-recipie-btn" asp-area="@RecipitRole.Follower" asp-controller="Recipe" asp-action="Create">Публикувай рецепта</a>
                     </div>
                     <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-action="Dashboard" asp-controller="FinancialData">
+                        <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Index" asp-controller="Home">
                             <span class="oi fa-solid fa-border-all" aria-hidden="true"></span> Начало
                         </a>
                     </div>
                     <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-action="AllCurrencies" asp-controller="FinancialData">
+                        <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="All" asp-controller="Recipe">
                             <span class="oi fa-solid fa-file-lines" aria-hidden="true"></span> Рецепти
                         </a>
-                    </div>
+                    </div>@* 
                     <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-action="News" asp-controller="News">
+                        <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Filter" asp-controller="Recipe">
                             <span class="oi fa-solid fa-filter" aria-hidden="true"></span> Търси
                         </a>
-                    </div>
+                    </div> *@
                 </section>
                 <section>
                     <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-action="Feed" asp-controller="Posts">
+                        <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Saved" asp-controller="Recipe">
                             <span class="oi fa-solid fa-heart" aria-hidden="true"></span> Любими
                         </a>
                     </div>
                     <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" href="#">
-                            <span class="oi fa-solid fa-gear" aria-hidden="true"></span> Настройки
+                        <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Profile" asp-controller="Account">
+                            <span class="oi fa-solid fa-gear" aria-hidden="true"></span> Профил
                         </a>
                     </div>
                 </section>

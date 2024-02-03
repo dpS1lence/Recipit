@@ -3,10 +3,8 @@
     using AutoMapper;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Infrastructure.Mapping;
-    using Recipit.ViewModels.Followers;
-    using Recipit.ViewModels.Product;
 
-    public class RecipeViewModel : IMapFrom<RecipitUser>
+    public class RecipeViewModel : IMapFrom<Recipe>
     {
         public int Id { get; set; } = default!;
         public string Name { get; set; } = default!;
@@ -17,7 +15,7 @@
         public IFormFile Photo { get; set; } = default!;
         public decimal AverageRating { get; set; }
         public string Category { get; set; } = default!;
-        public List<string>? ProductNames { get; set; }
+        public string? ProductNames { get; set; }
 
         public void Mapping(Profile map)
         {

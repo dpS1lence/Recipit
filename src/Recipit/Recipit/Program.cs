@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
+using Recipit.Middlewares;
 using Serilog;
 using ServiceCollectionExtensions = Recipit.Infrastructure.Extensions.ServiceCollectionExtensions;
 
@@ -27,8 +28,6 @@ else
 {
     app.UseDeveloperExceptionPage();
 }
-
-app.CreateAdministratorUser(app.Configuration);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -61,6 +60,8 @@ try
     using var scope = app.Services.CreateScope();
 
     //await DatabaseMiddleware.MigrateDatabase(scope, app.Configuration, app.Logger);
+    //
+    //app.CreateAdministratorUser(app.Configuration);
 
     app.Logger.LogInformation("Starting web host ({ApplicationName})...", appName);
     app.Run();

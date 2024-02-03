@@ -2,13 +2,17 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc.ApplicationModels;
     using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json;
     using Recipit.Contracts;
     using Recipit.Contracts.Exceptions;
+    using Recipit.Contracts.Helpers;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Services.Images;
     using Recipit.ViewModels.Recipe;
+    using System.Collections.Generic;
     using System.Net.Http.Headers;
     using System.Security.Claims;
 
@@ -27,22 +31,26 @@
         {
             Validate.Entity(model, _logger);
 
-            var userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userManager.FindByIdAsync(userId ?? throw new ArgumentException("User not found!"));
+            if (model.ProductNames == null)
+                throw new ArgumentException("No products selected!");
+            else if (model?.ProductNames?.Split(',').ToList() == null)
+                throw new ArgumentException("No products selected!");
+
+            var user = await GetUserData.ById(_userManager, _httpContextAccessor);
 
             var recipe = _mapper.Map<Recipe>(model);
-            recipe.User = user ?? throw new ArgumentException("No products selected!");
-            recipe.UserId = userId;
+            recipe.User = user;
+            recipe.UserId = user.Id;
             recipe.Photo = await UploadImage.ToImgur(model.Photo, _httpClient);
 
             _context.Recipes.Add(recipe);
             await _context.SaveChangesAsync();
 
-            foreach (var item in model?.ProductNames ?? throw new ArgumentException("No products selected!"))
+            foreach (var item in model.ProductNames.Split(',').ToList())
             {
                 var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == item);
 
-                if (product == null) 
+                if (product == null)
                     throw new ProductNotFoundException(nameof(product));
 
                 recipe.NutritionalValue += product.Calories;
@@ -86,6 +94,58 @@
             _context.Comments.RemoveRange(comments);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<RecipeDisplayModel>> All()
+        {
+            var allRecipes = await _context.Recipes
+                .Include(a => a.ProductRecipes)
+                .ThenInclude(a => a.Product)
+                .Include(a => a.User)
+                .ToListAsync();
+
+            var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(allRecipes);
+
+            return recipeViewModels;
+        }
+
+        public async Task<IEnumerable<RecipeDisplayModel>> Filter(RecipeFilterModel model)
+        {
+            var query = _context.Recipes
+                    .Include(a => a.ProductRecipes)
+                    .ThenInclude(a => a.Product)
+                    .Include(a => a.User)
+                    .AsQueryable();
+
+            if (!string.IsNullOrEmpty(model.Name))
+            {
+                query = query.Where(r => r.Name.Contains(model.Name, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(model.Category))
+            {
+                query = query.Where(r => r.Category.Equals(model.Category, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(model.Author))
+            {
+                query = query.Where(r => r.User.UserName.Contains(model.Author, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (model.AverageRating.HasValue)
+            {
+                query = query.Where(r => r.AverageRating >= model.AverageRating.Value);
+            }
+
+            if (model.NutritionalValue.HasValue)
+            {
+                query = query.Where(r => r.NutritionalValue >= model.NutritionalValue.Value);
+            }
+
+            var filteredRecipes = await query.ToListAsync();
+            var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(filteredRecipes);
+
+            return recipeViewModels;
         }
     }
 }

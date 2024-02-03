@@ -11,6 +11,12 @@
         [HttpGet]
         public IActionResult Create() => View();
 
+        [HttpGet]
+        public async Task<IActionResult> All() => View(await _recipeService.All());
+
+        [HttpGet]
+        public async Task<IActionResult> Filter([FromForm] RecipeFilterModel model) => Json(await _recipeService.Filter(model));
+
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] RecipeViewModel model) => Json(await _recipeService.Create(model));
     }
