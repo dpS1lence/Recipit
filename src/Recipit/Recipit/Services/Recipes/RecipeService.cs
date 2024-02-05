@@ -32,7 +32,7 @@
 
         public async Task<string> Create(RecipeViewModel model)
         {
-            Validate.Entity(model, _logger);
+            Validate.Model(model, _logger);
 
             if (model.ProductNames == null)
                 throw new ArgumentException("No products selected!");
@@ -76,10 +76,10 @@
 
         public async Task Edit(RecipeViewModel recipe)
         {
-            Validate.Entity(recipe, _logger);
+            Validate.Model(recipe, _logger);
 
             var recipeDbo = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == recipe.Id);
-            Validate.Entity(recipeDbo, _logger);
+            Validate.Model(recipeDbo, _logger);
 
             _context.Entry(recipeDbo!).CurrentValues.SetValues(recipe);
 
@@ -89,7 +89,7 @@
         public async Task Delete(int recipeId)
         {
             var recipeDbo = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == recipeId);
-            Validate.Entity(recipeDbo, _logger);
+            Validate.Model(recipeDbo, _logger);
 
             var comments = await _context.Comments.Where(a => a.RecipeId == recipeId).ToListAsync();
 

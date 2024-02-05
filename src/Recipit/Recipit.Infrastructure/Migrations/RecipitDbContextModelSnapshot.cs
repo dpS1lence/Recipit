@@ -409,7 +409,7 @@ namespace Recipit.Infrastructure.Migrations
 
             modelBuilder.Entity("Recipit.Infrastructure.Data.Models.Comment", b =>
                 {
-                    b.HasOne("Recipit.Infrastructure.Data.Models.Recipe", "Recipe")
+                    b.HasOne("Recipit.Infrastructure.Data.Models.Recipe", null)
                         .WithMany("Comments")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -420,8 +420,6 @@ namespace Recipit.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Recipe");
 
                     b.Navigation("User");
                 });

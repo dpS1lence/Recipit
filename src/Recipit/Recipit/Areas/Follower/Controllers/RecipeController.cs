@@ -20,9 +20,17 @@
         [HttpGet]
         public async Task<IActionResult> Recipes(int currentPage, int pageSize)
         {
-            var pageOfRecipes = await _recipeService.All(currentPage, pageSize);
+            try
+            {
 
-            return Json(new { recipes = pageOfRecipes, totalPages = pageOfRecipes.TotalCount });
+                var pageOfRecipes = await _recipeService.All(currentPage, pageSize);
+
+                return Json(new { recipes = pageOfRecipes, totalPages = pageOfRecipes.TotalCount });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpGet]

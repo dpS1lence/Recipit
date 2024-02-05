@@ -10,6 +10,6 @@ namespace Recipit.ViewModels.Comments
         public string Text { get; set; } = default!;
         public DateTime DatePosted { get; set; }
         public decimal Rating { get; set; }
-        public virtual RecipitUser User { get; set; } = default!;
+        public virtual RecipitUser? User { get; set; } = default!;
     }
 }

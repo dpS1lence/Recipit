@@ -6,7 +6,7 @@
     {
         private const string ModelNullOrEmptyErrorMessage = "{ModelType} is null or empty.";
 
-        public static void Entity<T>(T model, ILogger logger)
+        public static void Model<T>(T model, ILogger logger)
         {
             if (model == null)
             {

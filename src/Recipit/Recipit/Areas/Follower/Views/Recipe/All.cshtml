@@ -97,11 +97,14 @@
                 url: url,
                 data: data,
                 success: function (response) {
-                    displayRecipes(response.recipes);
+                    console.log(response);
+                    if (response.recipes) {
+                        displayRecipes(response.recipes); // Pass the 'recipes' object
+                    } else {
+                        console.error('No recipes found in response');
+                    }
                     totalPages = response.totalPages;
-                    console.log(response.recipes);
-                    console.log("Total Pages:", totalPages);
-                    updatePagination(page);
+                    updatePagination(currentPage);
                 },
                 error: function (error) {
                     console.log(error);
@@ -151,23 +154,31 @@
             loadRecipes(currentPage, currentFilterData);
         });
 
-        function displayRecipes(recipes) {
+        function displayRecipes(data) {
+            if (!data || !data.$values || !Array.isArray(data.$values)) {
+                console.error('Invalid data structure:', data);
+                return; // Exit the function if data is not as expected
+            }
+
+            var recipes = data.$values; // Access the array from $values property
             var html = '';
+
             recipes.forEach(function (recipe) {
-                // Function to generate star ratings
+
                 var stars = generateStarRating(recipe.averageRating);
 
-                // Building the ingredients HTML
+                var products = recipe.products && recipe.products.$values ? recipe.products.$values : [];
+
                 var ingredientsHtml = '';
-                for (var i = 0; i < recipe.products.length && i < 5; i++) {
+                for (var i = 0; i < products.length && i < 5; i++) {
                     ingredientsHtml += `<div class="ingridient">
-                    <img class="ingridient-image" src="${recipe.products[i].photo}" alt="image" />
-                    <h1 class="ingridient-title">${recipe.products[i].name}</h1>
+                    <img class="ingridient-image" src="${products[i].photo}" alt="image" />
+                    <h1 class="ingridient-title">${products[i].name}</h1>
                 </div>`;
                 }
-                if (recipe.products.length > 5) {
+                if (products.length > 5) {
                     ingredientsHtml += `<div class="ingridient">
-                    <h1 class="ingridient-more">+${recipe.products.length - 5} Други</h1>
+                    <h1 class="ingridient-more">+${products.length - 5} Други</h1>
                 </div>`;
                 }
 
@@ -190,11 +201,13 @@
                 </div>
             </div>`;
             });
+            console.log(html);
             $('#recipeDisplay').html(html);
         }
 
         // Function to generate star ratings
         function generateStarRating(averageRating) {
+            console.log(averageRating);
             var starsHtml = '';
             for (var i = 1; i <= 5; i++) {
                 if (i <= averageRating) {
@@ -203,6 +216,7 @@
                     starsHtml += '<i class="fa-regular fa-star"></i>';
                 }
             }
+            console.log(starsHtml);
             return starsHtml;
         }
 
