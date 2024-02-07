@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
     using Recipit.Contracts;
     using Recipit.Contracts.Helpers;
     using Recipit.Infrastructure.Data;
@@ -23,8 +22,9 @@
             Validate.Model(model, _logger);
 
             var comment = _mapper.Map<Comment>(model);
-            comment.UserId = GetUserData.Id(_httpContextAccessor);
-            comment.User = await GetUserData.ById(_userManager, _httpContextAccessor);
+            comment.DatePosted = DateTime.UtcNow;
+            comment.UserId = GetUser.Id(_httpContextAccessor);
+            comment.User = await GetUser.ById(_userManager, _httpContextAccessor);
 
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();

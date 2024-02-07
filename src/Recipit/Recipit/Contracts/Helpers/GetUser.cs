@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace Recipit.Contracts.Helpers
 {
-    public static class GetUserData
+    public static class GetUser
     {
         public static async Task<RecipitUser> ById(UserManager<RecipitUser> userManager, IHttpContextAccessor httpContextAccessor)
         {

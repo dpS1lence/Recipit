@@ -39,7 +39,7 @@
             else if (model?.ProductNames?.Split(',').ToList() == null)
                 throw new ArgumentException("No products selected!");
 
-            var user = await GetUserData.ById(_userManager, _httpContextAccessor);
+            var user = await GetUser.ById(_userManager, _httpContextAccessor);
 
             var recipe = _mapper.Map<Recipe>(model);
             recipe.User = user;
