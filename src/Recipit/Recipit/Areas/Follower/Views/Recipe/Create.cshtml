@@ -130,7 +130,7 @@
             clearTimeout(searchTimeout);
 
             searchTimeout = setTimeout(function () {
-                if (searchTerm.length > 2) {
+                if (searchTerm.length > 0) {
                     populateProductList(searchTerm);
                 } else {
                     productList.empty();
@@ -144,7 +144,6 @@
 
         function populateProductList(searchTerm) {
             productList.empty();
-            console.log(searchTerm);
             $.ajax({
                 url: '/follower/product/search',
                 type: 'GET',
@@ -152,11 +151,11 @@
                 data: { searchTerm: searchTerm },
                 success: function (data) {
                     console.log(data);
-                    for (var i = 0; i < data.length; i++) {
-                        var currentProduct = data[i];
+                    var products = data.$values;
+                    for (var i = 0; i < products.length; i++) {
+                        var currentProduct = products[i];
                         var listItem = $('<li>').text(currentProduct.name);
                         productList.append(listItem);
-
                         attachClickEvent(listItem, currentProduct.name);
                     }
                     function attachClickEvent(item, productName) {

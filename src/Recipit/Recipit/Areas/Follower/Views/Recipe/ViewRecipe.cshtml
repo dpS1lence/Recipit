@@ -18,6 +18,18 @@
         <p>Оценка: @Model.AverageRating</p>
     </div>
 </div>
+<div class="recipe-products">
+    <h1 class="recipe-ingridients-title">Съставки</h1>
+    <div class="ingridients-container">
+        @foreach (var item in Model.Products)
+        {
+            <div class="ingridient">
+                <img class="ingridient-image" src="@item.Photo" alt="image" />
+                <h1 class="ingridient-title">@item.Name</h1>
+            </div>
+        }
+    </div>
+</div>
 <div class="add-comment-container">
     <h3>Публикувай коментар</h3>
     <form method="post" id="commentForm">
@@ -40,7 +52,10 @@
     @foreach (var comment in Model.Comments)
     {
         <div class="comment">
-            <p class="comment-user">@comment.User.UserName</p>
+            <div class="profile-image-text-ctr">
+                <img class="comment-image" src="@comment.User.Photo" alt="image" />
+                <p class="comment-user">@comment.User.UserName</p>
+            </div>
             <p class="comment-text">@comment.Text</p>
             <p class="comment-date">@comment.DatePosted.ToShortDateString()</p>
             <div class="comment-rating">
@@ -94,7 +109,7 @@
                     Rating: parseInt(rating)
                 }),
                 success: function (response) {
-                    // Handle the response from the server
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
                     // Handle errors

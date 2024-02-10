@@ -1,7 +1,48 @@
-﻿/* Recipe Container */
-.recipe-container {
+﻿.recipe-products {
+    padding: 15px;
 }
 
+    .recipe-products .recipe-ingridients-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+.ingridients-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+    .ingridients-container .ingridient {
+        margin: 5px;
+        display: flex;
+        flex-direction: column;
+        background-color: #fef5ec;
+        width: 100px;
+        height: 100px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+    }
+
+        .ingridients-container .ingridient .ingridient-more {
+            font-size: 15px;
+            color: orange;
+            font-weight: bold;
+        }
+
+        .ingridients-container .ingridient .ingridient-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .ingridients-container .ingridient .ingridient-title {
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 0;
+            margin-top: 5px;
+        }
 
 /* Recipe Title */
 .recipe-title {
@@ -27,6 +68,7 @@
     /* Similar styling as recipe title, but with smaller font */
     font-size: 14px;
     margin-bottom: 10px;
+    max-width: 900px;
 }
 
 /* Recipe Metadata */
@@ -45,16 +87,19 @@
 .comments-container {
     background-color: #fff;
     border-radius: 20px;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     margin: 20px;
     padding: 15px;
-    width: fit-content;
+    width: 700px;
 }
 
 /* Individual Comment */
 .comment {
-    border-bottom: 1px solid #ccc;
-    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 20px;
+    min-width: 400px;
+    width: fit-content;
 }
 
     .comment:last-child {
@@ -104,6 +149,23 @@
     border-radius: 5px;
     padding: 8px;
     width: 600px;
+}
+
+.profile-image-text-ctr {
+    display: flex;
+    flex-direction: row;
+}
+
+.comment-image {
+    width: 40px;
+}
+
+.comment-user {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
 }
 
 .comment-submit-ctr {
