@@ -34,9 +34,13 @@
         {
             Validate.Model(model, _logger);
 
-            if (model.ProductNames == null)
+            var dict = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(model.Products))
+                dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.Products);
+            if (dict == null)
                 throw new ArgumentException("No products selected!");
-            else if (model?.ProductNames?.Split(',').ToList() == null)
+            else if (dict.Count == 0)
                 throw new ArgumentException("No products selected!");
 
             var user = await GetUser.ById(_userManager, _httpContextAccessor);
@@ -49,9 +53,9 @@
             _context.Recipes.Add(recipe);
             await _context.SaveChangesAsync();
 
-            foreach (var item in model.ProductNames.Split(',').ToList())
+            foreach (var item in dict)
             {
-                var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == item);
+                var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == item.Key);
 
                 if (product == null)
                     throw new ProductNotFoundException(nameof(product));
@@ -62,6 +66,7 @@
                 {
                     Product = product,
                     ProductId = product.Id,
+                    QuantityDetails = item.Value,
                     Recipe = recipe,
                     RecipeId = recipe.Id
                 };

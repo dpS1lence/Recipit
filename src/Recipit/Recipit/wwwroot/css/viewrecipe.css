@@ -13,40 +13,53 @@
     justify-content: center;
 }
 
-    .ingridients-container .ingridient {
-        margin: 5px;
-        display: flex;
-        flex-direction: column;
-        background-color: #fef5ec;
-        width: 100px;
-        height: 100px;
-        justify-content: center;
-        align-items: center;
-        border-radius: 15px;
+.quantity-details {
+    font-size: 13px;
+    margin: 0px;
+    padding: 5px;
+    color: orange;
+    font-weight: bold;
+}
+
+.ingridients-container .ingridient {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fef5ec;
+    min-width: 120px;
+    width: fit-content;
+    height: 120px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+    .ingridients-container .ingridient .ingridient-more {
+        font-size: 15px;
+        color: orange;
+        font-weight: bold;
     }
 
-        .ingridients-container .ingridient .ingridient-more {
-            font-size: 15px;
-            color: orange;
-            font-weight: bold;
-        }
+    .ingridients-container .ingridient .ingridient-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
 
-        .ingridients-container .ingridient .ingridient-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-
-        .ingridients-container .ingridient .ingridient-title {
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 0;
-            margin-top: 5px;
-        }
+    .ingridients-container .ingridient .ingridient-title {
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 0;
+        margin-top: 5px;
+    }
 
 /* Recipe Title */
 .recipe-title {
     font-weight: bold;
+    margin-bottom: 5px;
+}
+.recipe-user {
+    font-size:18px;
     margin-bottom: 5px;
 }
 

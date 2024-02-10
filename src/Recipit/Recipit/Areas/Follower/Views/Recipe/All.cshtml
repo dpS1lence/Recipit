@@ -216,6 +216,15 @@
                 </div>`;
                 }
 
+                var nutritionalValue = recipe.nutritionalValue;
+                // Create the element as a string since you're concatenating it into HTML
+                var caloriesColorClass = nutritionalValue < 250 ? 'recipe-calories-green' :
+                    nutritionalValue >= 250 && nutritionalValue <= 450 ? 'recipe-calories-orange' : 'recipe-calories-red';
+
+                // Directly integrate the class determination into your HTML string
+                var caloriesHTML = `<h2 class="recipe-calories ${caloriesColorClass}"><i class="fa fa-fire fire-icon"></i>${nutritionalValue} Калории</h2>`;
+
+
                 // Building the entire recipe HTML
                 html += `<div class="recipe-container">
                 <div class="recipe-data">
@@ -231,7 +240,7 @@
                 </div>
                 <div class="recipe-buttons">
                     <button class="view-recipe-btn" data-recipe-id="${recipe.id}"><i class="fa fa-eye"></i>Виж рецептата</button>
-                    <h2 class="recipe-calories"><i class="fa fa-fire"></i>${recipe.nutritionalValue} Калории</h2>
+                            ${caloriesHTML}
                 </div>
             </div>`;
             });

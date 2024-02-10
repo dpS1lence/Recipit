@@ -15,7 +15,7 @@
         public IFormFile Photo { get; set; } = default!;
         public decimal AverageRating { get; set; }
         public string Category { get; set; } = default!;
-        public string? ProductNames { get; set; }
+        public string? Products { get; set; }
 
         public void Mapping(Profile map)
         {

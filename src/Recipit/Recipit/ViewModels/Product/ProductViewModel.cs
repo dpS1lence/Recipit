@@ -10,6 +10,7 @@
         public string Name { get; set; } = default!;
         public int Calories { get; set; }
         public string? Photo { get; set; }
+        public string? QuantityDetails { get; set; }
         public void Mapping(Profile map)
         {
             map.CreateMap<ProductViewModel, ProductDbo>()

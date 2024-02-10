@@ -9,6 +9,7 @@
 <!-- Recipe Details -->
 <div class="recipe-container">
     <h2 class="recipe-title">@Model.Name</h2>
+    <h2 class="recipe-user">Публикувана от @Model.User.UserName</h2>
     <img class="recipe-photo" src="@Model.Photo" alt="@Model.Name">
     <p class="recipe-description">@Model.Description</p>
     <p class="recipe-category">Категория: @Model.Category</p>
@@ -26,6 +27,7 @@
             <div class="ingridient">
                 <img class="ingridient-image" src="@item.Photo" alt="image" />
                 <h1 class="ingridient-title">@item.Name</h1>
+                <h1 class="quantity-details">@item.QuantityDetails</h1>
             </div>
         }
     </div>

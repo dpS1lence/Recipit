@@ -19,6 +19,16 @@
     align-items: center;
 }
 
+.product-input-for-quantity {
+    width: 110px;
+    margin: 0 10px;
+    padding: 0 10px;
+    background-color: transparent;
+    border: none;
+    border-right: 2px solid orange;
+    border-left: 2px solid orange;
+}
+
 .button-add-product {
     border: 2px solid #fdf4ec;
     border-radius: 20px;
@@ -26,6 +36,7 @@
     background-color: #fdf4ec;
     transition: all 0.3s;
     height: 40px;
+    margin: 5px 0;
 }
 
     .button-add-product:hover {
@@ -51,11 +62,10 @@
     transition: all 0.3s;
     height: 40px;
     display: flex;
+    margin: 5px 5px;
     width: fit-content;
-    margin: 0px 5px;
     align-items: center;
     text-align: center;
-    margin: 0 5px;
 }
 
 .product-img {

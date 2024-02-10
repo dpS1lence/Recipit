@@ -11,10 +11,10 @@
         /// </summary>
         public int ProductId { get; set; }
 
-       /* /// <summary>
+        /// <summary>
         /// Gets or sets the quantity details for the associated Product.
         /// </summary>
-        public string QuantityDetails { get; set; } = default!;*/
+        public string QuantityDetails { get; set; } = default!;
 
         /// <summary>
         /// Navigation property for the associated Product.

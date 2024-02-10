@@ -46,6 +46,7 @@ namespace Recipit.ViewModels.Recipe
                 {
                     Photo = pr.Product.Photo,
                     Calories = pr.Product.Calories,
+                    QuantityDetails = pr.QuantityDetails,
                     Id = pr.Product.Id,
                     Name = pr.Product.Name
                 })))
@@ -68,6 +69,7 @@ namespace Recipit.ViewModels.Recipe
             map.CreateMap<ProductRecipe, ProductViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Product.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(dest => dest.QuantityDetails, opt => opt.MapFrom(src => src.QuantityDetails))
                 .ForMember(dest => dest.Calories, opt => opt.MapFrom(src => src.Product.Calories))
                 .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Product.Photo));
 

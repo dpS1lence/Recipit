@@ -273,13 +273,43 @@
                 }
 
             .recipes-container .recipe-container .recipe-buttons .recipe-calories {
-                color: #808080;
                 font-weight: bold;
                 font-size: 25px;
                 margin: 0;
             }
 
                 .recipes-container .recipe-container .recipe-buttons .recipe-calories i {
-                    color: orange;
                     margin-right: 5px;
                 }
+
+.recipe-calories-green i,
+.recipe-calories-green {
+    color: green;
+}
+
+.recipe-calories-orange i,
+.recipe-calories-orange {
+    color: orange;
+}
+
+.recipe-calories-red i,
+.recipe-calories-red {
+    color: red;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.fire-icon {
+    /*animation: pulse 1s infinite alternate;*/ /* Make the animation pulse */
+}
