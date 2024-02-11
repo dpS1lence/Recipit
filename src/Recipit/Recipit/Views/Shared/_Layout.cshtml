@@ -19,7 +19,7 @@
             <nav class="space-between">
                 <section>
                     <div class="d-flex justify-content-center align-items-center">
-                        <img class="logo-img-navbar" src="~/images/Copy_of_Yellow_Advertising_Marketing_Agency_Business_Logo2png_1_-removebg-preview.png" alt="kos" />
+                        <img class="logo-img-navbar" src="~/images/recipitasdasdasd-removebg-preview.png" alt="kos" />
                     </div>
                     <div class="create-recipie-container">
                         <a class="create-recipie-btn" asp-area="@RecipitRole.Follower" asp-controller="Recipe" asp-action="Create">Публикувай рецепта</a>
@@ -30,15 +30,23 @@
                         </a>
                     </div>
                     <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="All" asp-controller="Recipe">
+                        <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="All" asp-controller="Recipe">
                             <span class="oi fa-solid fa-file-lines" aria-hidden="true"></span> Рецепти
                         </a>
-                    </div>@* 
-                    <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Filter" asp-controller="Recipe">
-                            <span class="oi fa-solid fa-filter" aria-hidden="true"></span> Търси
-                        </a>
-                    </div> *@
+                    </div>
+                    @if (User.IsInRole(RecipitRole.Administrator))
+                    {
+                        <div class="nav-item hover">
+                            <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="All" asp-controller="Recipe">
+                                <span class="oi fa-solid fa-tag" aria-hidden="true"></span> Продукти
+                            </a>
+                        </div>
+                        <div class="nav-item hover">
+                            <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="All" asp-controller="Recipe">
+                                <span class="oi fa-solid fa-users" aria-hidden="true"></span> Последователи
+                            </a>
+                        </div>
+                    }
                 </section>
                 <section>
                     <div class="nav-item hover">
@@ -48,7 +56,7 @@
                     </div>
                     <div class="nav-item hover">
                         <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Profile" asp-controller="Account">
-                            <span class="oi fa-solid fa-gear" aria-hidden="true"></span> Профил
+                            <span class="oi fa-solid fa-user" aria-hidden="true"></span> Профил
                         </a>
                     </div>
                 </section>
@@ -58,10 +66,13 @@
     <div class="page" id="page">
         <header id="header">
             <div class="header-main-container">
+                <div class="search-bar">
+                    <input class="searchbar" placeholder="Търси рецепта"/>
+                </div>
                 @if (User?.Identity?.IsAuthenticated ?? false)
                 {
                     <div class="profile-button-container">
-                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Logout">Изход (@User?.FindFirst(ClaimTypes.Name)?.Value)</a>
+                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Logout"><span class="oi fa-solid fa-right-from-bracket" aria-hidden="true"></span> Изход (@User?.FindFirst(ClaimTypes.Name)?.Value)</a>
                     </div>
                     <div class="profile-pic-button">
                         <img src="~/images/recipcho.png" alt="Profile Picture" class="profile-picture" id="profilePicture">
@@ -70,10 +81,10 @@
                 else
                 {
                     <div class="profile-button-container">
-                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Login">Вход</a>
+                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Login"><span class="oi fa-solid fa-right-to-bracket" aria-hidden="true"></span> Вход</a>
                     </div>
                     <div class="profile-button-container">
-                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Register">Регистрация</a>
+                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Register"><span class="oi fa-solid fa-user-plus" aria-hidden="true"></span> Регистрация</a>
                     </div>
                 }
             </div>

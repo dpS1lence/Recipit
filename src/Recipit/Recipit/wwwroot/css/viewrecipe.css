@@ -54,13 +54,19 @@
     }
 
 /* Recipe Title */
+.recipe-container {
+    padding: 20px;
+}
+
 .recipe-title {
     font-weight: bold;
     margin-bottom: 5px;
 }
+
 .recipe-user {
-    font-size:18px;
+    font-size: 18px;
     margin-bottom: 5px;
+    color: orange;
 }
 
 /* Recipe Photo */
@@ -68,12 +74,12 @@
     width: 400px;
     border-radius: 10px;
     margin: 15px 0;
-    border: 2px solid white;
     transition: all 0.3s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
     .recipe-photo:hover {
-        border: 2px solid orange;
+        box-shadow: none;
     }
 
 /* Recipe Description */

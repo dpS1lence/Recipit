@@ -101,7 +101,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
-    border: 1px solid gray;
+    border: 1px solid orange;
     display: flex;
     flex-direction: row;
     justify-content: center;

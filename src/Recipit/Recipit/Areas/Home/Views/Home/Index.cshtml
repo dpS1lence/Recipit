@@ -6,3 +6,14 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const returnUrl = localStorage.getItem('returnUrl');
+        console.log(returnUrl);
+        if (returnUrl) {
+            localStorage.removeItem('returnUrl');
+            window.location.href = returnUrl;
+        }
+    });
+</script>

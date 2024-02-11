@@ -73,6 +73,34 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
+        const pendingComment = localStorage.getItem('pendingComment');
+        if (pendingComment) {
+            const commentDetails = JSON.parse(pendingComment);
+
+            $.ajax({
+                url: '/follower/comment/create',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    RecipeId: parseInt(commentDetails.RecipeId),
+                    Text: commentDetails.Text,
+                    Rating: parseInt(commentDetails.Rating)
+                }),
+                success: function (response) {
+                    alert('Коментарът ви беше споделен успешно!');
+                    localStorage.removeItem('pendingComment');
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error submitting the pending comment:', error);
+                }
+            });
+        }
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
         // Star click logic for new comment rating
         $('.add-comment-container .fa-star').click(function () {
             const rating = $(this).data('rating');
@@ -114,7 +142,19 @@
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    // Handle errors
+                    if (xhr.status === 401) {
+                        localStorage.setItem('returnUrl', window.location.href);
+
+                        localStorage.setItem('pendingComment', JSON.stringify({
+                            RecipeId: recipeId,
+                            Text: commentText,
+                            Rating: rating
+                        }));
+
+                        window.location.href = '/login';
+                    } else {
+                        console.error(error);
+                    }
                 }
             });
         });

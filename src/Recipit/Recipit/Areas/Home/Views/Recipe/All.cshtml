@@ -114,11 +114,11 @@
             $('#recipeSkeleton').show();
             $('#recipeDisplay').hide();
 
-            var url = '/follower/recipe/recipes';
+            var url = '/home/recipe/recipes';
             var data = { currentPage: page, pageSize: pageSize };
 
             if (filterData) { // If there is filter data, change URL and append data
-                url = '/follower/recipe/filter';
+                url = '/home/recipe/filter';
                 data = { ...filterData, currentPage: page, pageSize: pageSize };
             }
 
@@ -265,7 +265,7 @@
 
         $(document).on('click', '.view-recipe-btn', function () {
             var recipeId = $(this).data('recipe-id');
-            window.location.href = `/follower/recipe/viewrecipe/${recipeId}`;
+            window.location.href = `/home/recipe/viewrecipe/${recipeId}`;
         });
 
     });

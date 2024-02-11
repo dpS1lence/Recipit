@@ -11,36 +11,6 @@
         [HttpGet]
         public IActionResult Create() => View();
 
-        [HttpGet]
-        public IActionResult All() => View();
-
-        [HttpGet]
-        public async Task<IActionResult> ViewRecipe(int id) => View(await _recipeService.ById(id));
-
-        [HttpGet]
-        public async Task<IActionResult> Recipes(int currentPage, int pageSize)
-        {
-            try
-            {
-
-                var pageOfRecipes = await _recipeService.All(currentPage, pageSize);
-
-                return Json(new { recipes = pageOfRecipes, totalPages = pageOfRecipes.TotalCount });
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Filter([FromQuery] RecipeFilterModel model, int currentPage, int pageSize)
-        {
-            var pageOfRecipes = await _recipeService.Filter(model, currentPage, pageSize);
-
-            return Json(new { recipes = pageOfRecipes, totalPages = pageOfRecipes.TotalCount });
-        }
-
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] RecipeViewModel model) => Json(await _recipeService.Create(model));
     }

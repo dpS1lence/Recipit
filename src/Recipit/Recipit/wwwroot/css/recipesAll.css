@@ -154,7 +154,8 @@
         margin: 20px;
         border-radius: 20px;
         overflow: hidden;
-        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        border: 5px solid transparent;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         transition: all 0.3s;
         width: 400px;
         display: flex;
@@ -163,7 +164,7 @@
     }
 
         .recipes-container .recipe-container:hover {
-            box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, orange 0px 0px 0px 1px;
+            border: 5px solid #fef5ec;
         }
 
         .recipes-container .recipe-container .recipe-data {
@@ -249,7 +250,7 @@
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            padding: 15px;
+            padding: 10px;
         }
 
             .recipes-container .recipe-container .recipe-buttons .view-recipe-btn {
@@ -296,6 +297,7 @@
 .recipe-calories-red {
     color: red;
 }
+
 @keyframes pulse {
     0% {
         transform: scale(1);

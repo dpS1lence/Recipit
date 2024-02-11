@@ -145,7 +145,7 @@
         function populateProductList(searchTerm) {
             productList.empty();
             $.ajax({
-                url: '/follower/product/search',
+                url: '/home/product/search',
                 type: 'GET',
                 contentType: 'application/json',
                 data: { searchTerm: searchTerm },

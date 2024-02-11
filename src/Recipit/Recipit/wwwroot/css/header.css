@@ -7,14 +7,34 @@
     border-bottom: 1px solid white;
 }
 
+.search-bar {
+    position: absolute;
+    width: calc(100% - 270px);
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+}
+
+.searchbar {
+    text-decoration: none;
+    color: orange;
+    font-weight: bold;
+    border: 2px solid orange;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: 500px;
+}
+
 .header-main-container {
+    position: fixed;
     color: #fff;
-    padding: 10px;
+    padding: 20px 20px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
     display: flex;
     justify-content: flex-end;
     flex-direction: row;
     width: 100%;
-    height: 100%;
+    background-color: white;
 }
 
 .profile-button-container {
@@ -23,11 +43,13 @@
     align-items: center;
     text-align: center;
     margin: 0 5px;
+    z-index: 15;
 }
 
 .profile-button {
     text-decoration: none;
-    color: gray;
+    color: orange;
+    font-weight: bold;
     border: 2px solid orange;
     border-radius: 20px;
     padding: 5px 10px;
@@ -38,7 +60,13 @@
         background-color: orange;
         color: white;
     }
-
+    .profile-button .oi {
+        color: orange;
+        transition: all 0.3s;
+    }
+    .profile-button:hover .oi {
+        color: white;
+    }
 .profile-pic-button {
     margin-left: 5px;
 }
