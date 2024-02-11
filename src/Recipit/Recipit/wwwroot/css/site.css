@@ -1,3 +1,10 @@
+:root {
+    --primary-color: #ff7f50; /* coral */
+    --secondary-color: #f3f3f3; /* off-white */
+    --accent-color: #ffa500; /* bright orange */
+    --text-color: #333; /* dark gray for text */
+}
+
 * {
     font-family: 'Comfortaa', sans-serif;
 }
@@ -21,17 +28,17 @@ body {
 .header {
     display: flex;
     flex-direction: row;
-    background-color: white;
+    background-color: var(--secondary-color);
     width: inherit;
     position: fixed;
     z-index: 100;
     padding-left: 10px;
     padding-right: 10px;
     border-bottom-width: 1px;
-    border-color: rgba(0,0,0,.1);
+    border-color: var(--primary-color);
     height: 70px;
     transition: background-color 0.3s ease;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid var(--secondary-color);
 }
 
 .navbar {
@@ -72,11 +79,11 @@ ul {
     width: 2rem;
     font-size: 1.1rem;
     top: -3px;
-    color: #bec1c3;
+    color: var(--text-color);
 }
 
 .nav-title {
-    color: gray;
+    color: var(--text-color);
     font-size: 13px;
     font-weight: 600;
 }
@@ -95,7 +102,7 @@ ul {
     flex-direction: column;
     height: calc(100vh - 40px);
     padding-bottom: 50px;
-    background-image: linear-gradient(62deg, #f5f5f5 0%, #fdf4ec 100%);
+    background-color: var(--secondary-color);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
 }
 
@@ -111,7 +118,6 @@ ul {
 }
 
 .nav-link {
-    color: #bec1c3;
     font-weight: 500;
     transition: all 0.3s;
     text-decoration: none;
@@ -124,21 +130,21 @@ ul {
     align-items: center;
     padding-bottom: 10px;
     padding-top: 11px;
-    color: orange;
+    color: var(--text-color);
     font-weight: bold;
 }
 
     .nav-link span {
-        color: orange;
+        color: var(--text-color);
     }
 
     .nav-link:hover {
-        color: orange;
-        border: 2px solid orange;
+        color: var(--text-color);
+        background-color: var(--accent-color);
     }
 
         .nav-link:hover span {
-            color: orange;
+            color: var(--text-color);
         }
 
 .food-bg-img {
@@ -156,27 +162,6 @@ ul {
     width: 80%;
     padding: 10px;
 }
-
-.btn-hide {
-    z-index: 400 !important;
-    width: 40px !important;
-    height: 40px !important;
-    justify-content: center !important;
-    align-items: center !important;
-    display: flex;
-    position: relative !important;
-    left: 270px !important;
-    font-size: 30px !important;
-    top: -47% !important;
-    color: #202123 !important;
-    cursor: pointer !important;
-    border-radius: 50% !important;
-    background-color: white !important;
-}
-
-    .btn-hide:hover {
-        background-color: #d9d9e3;
-    }
 
 .fixed-nav {
     position: fixed !important;
@@ -197,7 +182,7 @@ ul {
 }
 
     .circle-bg:hover {
-        background-color: #d9d9e3;
+        background-color: var(--secondary-color);
     }
 
 .navbar-brand {
@@ -208,7 +193,7 @@ ul {
 .pf-view-pg {
     width: 400px;
     padding: 20px;
-    background-color: #e9eef6;
+    background-color: var(--secondary-color);
     border-radius: 45px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
@@ -229,7 +214,7 @@ h3 {
 
 h1 {
     font-size: 22px;
-    color: gray;
+    color: var(--text-color);
 }
 
 .create-recipie-container {
@@ -239,10 +224,15 @@ h1 {
 
 .create-recipie-btn {
     text-decoration: none;
-    font-size: 18px;
-    margin: 40px 0;
-    color: orange;
-    border: 2px solid orange;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 30px 0;
+    color: var(--text-color);
+    border: 2px solid var(--accent-color);
+    background-color: var(--secondary-color);
     border-radius: 25px;
     padding: 5px 10px;
     transition: all 0.3s;
@@ -250,8 +240,12 @@ h1 {
 }
 
     .create-recipie-btn:hover {
-        color: orange;
-        border-radius: 10px;
+        background-color: var(--accent-color);
+        color: var(--text-color);
+    }
+
+    .create-recipie-btn span {
+        margin-right: 5px;
     }
 
 .img-ctnr {
@@ -267,9 +261,6 @@ h1 {
     .img-ctnr:hover {
         filter: saturate(1);
     }
-
-.food-bg-img {
-}
 
 .sth-centerd {
     position: absolute;

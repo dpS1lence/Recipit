@@ -22,7 +22,7 @@
                         <img class="logo-img-navbar" src="~/images/recipitasdasdasd-removebg-preview.png" alt="kos" />
                     </div>
                     <div class="create-recipie-container">
-                        <a class="create-recipie-btn" asp-area="@RecipitRole.Follower" asp-controller="Recipe" asp-action="Create">Публикувай рецепта</a>
+                        <a class="create-recipie-btn" asp-area="@RecipitRole.Follower" asp-controller="Recipe" asp-action="Create"><span class="fa-solid fa-circle-plus" aria-hidden="true"></span>Публикувай рецепта</a>
                     </div>
                     <div class="nav-item hover">
                         <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Index" asp-controller="Home">
@@ -72,7 +72,7 @@
                 @if (User?.Identity?.IsAuthenticated ?? false)
                 {
                     <div class="profile-button-container">
-                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Logout"><span class="oi fa-solid fa-right-from-bracket" aria-hidden="true"></span> Изход (@User?.FindFirst(ClaimTypes.Name)?.Value)</a>
+                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Logout"><span class="fa-solid fa-right-from-bracket" aria-hidden="true"></span> Изход (@User?.FindFirst(ClaimTypes.Name)?.Value)</a>
                     </div>
                     <div class="profile-pic-button">
                         <img src="~/images/recipcho.png" alt="Profile Picture" class="profile-picture" id="profilePicture">
@@ -81,10 +81,10 @@
                 else
                 {
                     <div class="profile-button-container">
-                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Login"><span class="oi fa-solid fa-right-to-bracket" aria-hidden="true"></span> Вход</a>
+                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Login"><span class="fa-solid fa-right-to-bracket" aria-hidden="true"></span> Вход</a>
                     </div>
                     <div class="profile-button-container">
-                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Register"><span class="oi fa-solid fa-user-plus" aria-hidden="true"></span> Регистрация</a>
+                        <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Register"><span class="fa-solid fa-user-plus" aria-hidden="true"></span> Регистрация</a>
                     </div>
                 }
             </div>

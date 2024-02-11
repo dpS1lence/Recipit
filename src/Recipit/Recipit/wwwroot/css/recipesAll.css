@@ -1,4 +1,10 @@
-﻿.skeleton-box {
+﻿:root {
+    --primary-color: #ff7f50; /* coral */
+    --secondary-color: #f3f3f3; /* off-white */
+    --accent-color: #ffa500; /* bright orange */
+    --text-color: #333; /* dark gray for text */
+}
+.skeleton-box {
     background-color: #e0e0e0;
     border-radius: 4px;
     width: 100%;
@@ -74,7 +80,9 @@
         padding: 8px;
         margin-bottom: 10px;
         border-radius: 5px;
-        border: 1px solid #ccc;
+        font-weight: bold;
+        color: var(--text-color);
+        border: 1px solid var(--secondary-color);
         background-color: white;
         height: 40px;
         width: 160px;
@@ -85,31 +93,34 @@
         padding: 8px;
         margin-bottom: 10px;
         border-radius: 5px;
-        border: 1px solid #ccc;
+        border: 1px solid var(--secondary-color);
         height: 40px;
         width: 160px;
         margin: 5px;
+        font-weight: bold;
+        color: var(--text-color);
     }
 
     .search-products-form .search-btn {
         padding: 10px 20px;
         border-radius: 10px;
-        background-color: orange;
-        color: white;
+        background-color: white;
+        color: var(--text-color);
         cursor: pointer;
         border: none;
         width: 160px;
         height: 40px;
-        border: 2px solid orange;
+        border: 2px solid var(--accent-color);
         transition: all 0.3s;
         display: flex;
         justify-content: center;
         align-items: center;
+        font-weight: bold;
     }
 
         .search-products-form .search-btn:hover {
-            color: orange;
-            background-color: white;
+            color: var(--text-color);
+            background-color: var(--accent-color);
         }
 
 #pagination {
@@ -119,24 +130,25 @@
 }
 
     #pagination button {
-        background-color: orange;
-        color: white;
+        background-color: white;
+        color: var(--text-color);
         border-radius: 10px;
         padding: 2px 20px;
         cursor: pointer;
         border: none;
-        border: 2px solid orange;
+        font-weight: bold;
+        border: 2px solid var(--accent-color);
         transition: all 0.3s;
     }
 
         #pagination button:hover {
-            color: orange;
-            background-color: white;
+            color: var(--text-color);
+            background-color: var(--accent-color);
         }
 
     #pagination span {
-        color: orange;
-        border: 2px solid orange;
+        color: var(--text-color);
+        border: 2px solid var(--accent-color);
         border-radius: 50px;
         padding: 5px 13px;
     }
@@ -164,7 +176,7 @@
     }
 
         .recipes-container .recipe-container:hover {
-            border: 5px solid #fef5ec;
+            border: 5px solid var(--secondary-color);
         }
 
         .recipes-container .recipe-container .recipe-data {
@@ -196,7 +208,7 @@
                 }
 
                     .recipes-container .recipe-container .recipe-data .recipe-title-and-rating .stars-container i {
-                        color: gold;
+                        color: var(--primary-color);
                     }
 
         .recipes-container .recipe-container .recipe-products {
@@ -218,7 +230,7 @@
                     margin: 5px;
                     display: flex;
                     flex-direction: column;
-                    background-color: #fef5ec;
+                    background-color: var(--secondary-color);
                     width: 100px;
                     height: 100px;
                     justify-content: center;
@@ -228,7 +240,7 @@
 
                     .recipes-container .recipe-container .recipe-products .ingridients-container .ingridient .ingridient-more {
                         font-size: 15px;
-                        color: orange;
+                        color: var(--text-color);
                         font-weight: bold;
                     }
 
@@ -254,19 +266,20 @@
         }
 
             .recipes-container .recipe-container .recipe-buttons .view-recipe-btn {
-                background-color: orange;
-                color: white;
+                background-color: white;
+                color: var(--text-color);
                 border-radius: 10px;
                 padding: 10px 20px;
                 cursor: pointer;
                 border: none;
-                border: 2px solid orange;
+                font-weight: bold;
+                border: 2px solid var(--accent-color);
                 transition: all 0.3s;
             }
 
                 .recipes-container .recipe-container .recipe-buttons .view-recipe-btn:hover {
-                    background-color: white;
-                    color: orange;
+                    background-color: var(--accent-color);
+                    color: var(--text-color);
                 }
 
                 .recipes-container .recipe-container .recipe-buttons .view-recipe-btn i {
@@ -275,7 +288,7 @@
 
             .recipes-container .recipe-container .recipe-buttons .recipe-calories {
                 font-weight: bold;
-                font-size: 25px;
+                font-size: 22px;
                 margin: 0;
             }
 
@@ -285,17 +298,17 @@
 
 .recipe-calories-green i,
 .recipe-calories-green {
-    color: green;
+    color: rgb(76, 177, 76);
 }
 
 .recipe-calories-orange i,
 .recipe-calories-orange {
-    color: orange;
+    color: var(--primary-color);
 }
 
 .recipe-calories-red i,
 .recipe-calories-red {
-    color: red;
+    color: rgb(192, 73, 73);
 }
 
 @keyframes pulse {
@@ -312,6 +325,6 @@
     }
 }
 
-.fire-icon {
-    /*animation: pulse 1s infinite alternate;*/ /* Make the animation pulse */
-}
+/*.fire-icon {
+    animation: pulse 1s infinite alternate; 
+}*/

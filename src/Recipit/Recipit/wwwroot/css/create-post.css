@@ -1,5 +1,40 @@
-﻿.label-select-category {
-    color: #929292;
+﻿:root {
+    --primary-color: #ff7f50; /* coral */
+    --secondary-color: #f3f3f3; /* off-white */
+    --accent-color: #ffa500; /* bright orange */
+    --text-color: #333; /* dark gray for text */
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: var(--secondary-color);
+    }
+
+    50% {
+        background-color: #cacaca;
+    }
+
+    100% {
+        background-color: var(--secondary-color);
+    }
+}
+.li-skeleton{
+    height: fit-content!important;
+    width: 100%!important;
+    margin: 0!important;
+    padding: 0!important;
+}
+.li-skeleton:hover{
+    background-color: transparent!important;
+}
+.skeleton-element{
+    height: 30px;
+    margin: 5px;
+    border-radius: 25px;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+}
+.label-select-category {
+    color: var(--text-color);
     font-size: 20px;
     margin: 10px 0;
 }
@@ -7,7 +42,7 @@
 .select-select-category {
     border: none;
     background-color: white;
-    color: #929292;
+    color: var(--text-color);
 }
 
 .products-select-container {
@@ -25,22 +60,22 @@
     padding: 0 10px;
     background-color: transparent;
     border: none;
-    border-right: 2px solid orange;
-    border-left: 2px solid orange;
+    border-right: 2px solid var(--accent-color);
+    border-left: 2px solid var(--accent-color);
 }
 
 .button-add-product {
-    border: 2px solid orange;
+    border: 2px solid var(--accent-color);
     border-radius: 20px;
     padding: 5px 10px;
-    background-color: orange;
+    background-color: var(--secondary-color);
     transition: all 0.3s;
     height: 40px;
     margin: 5px 0;
 }
 
     .button-add-product:hover {
-        border: 2px solid orange;
+        background-color: var(--accent-color);
     }
 
     .button-add-product i {
@@ -55,10 +90,10 @@
 }
 
 .product {
-    border: 2px solid orange;
+    border: 2px solid var(--accent-color);
     border-radius: 20px;
     padding: 5px 10px;
-    background-color: #fdf4ec;
+    background-color: var(--secondary-color);
     transition: all 0.3s;
     height: 40px;
     display: flex;
@@ -75,24 +110,24 @@
 
 .x-icon {
     padding-right: 5px;
-    color: #333;
+    color: var(--text-color);
     transition: all 0.3s;
     cursor: pointer;
 }
 
     .x-icon:hover {
-        color: orange;
+        color: var(--primary-color);
     }
 
 .product-name {
-    color: #3e3e3e;
+    color: var(--text-color);
     margin: 0;
     font-size: 17px;
     font-weight: 300;
 }
 
 .exists-product {
-    color: orange;
+    color: var(--text-color);
     text-align: center;
     font-size: 20px;
     margin: 0;
@@ -105,8 +140,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
-    border: 2px solid orange;
+    background-color: var(--secondary-color);
+    border: 2px solid var(--accent-color);
     border-radius: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 10px;
@@ -147,7 +182,6 @@
 
 .post-content-container {
     margin-top: 20px;
-    background-color: white;
     border-radius: 10px;
     padding: 20px;
 }
@@ -159,7 +193,7 @@
 
 .naligation-item {
     text-decoration: none;
-    color: #333;
+    color: var(--text-color);
     display: flex;
     width: 33.3%;
     align-items: center;
@@ -171,16 +205,16 @@
 }
 
     .naligation-item:hover {
-        background-color: #f0f0f0;
+        background-color: var(--secondary-color);
         border-radius: 10px;
-        color: #000;
+        color: var(--text-color);
     }
 
 .search-products {
     width: 100%;
     margin-bottom: 10px;
     padding: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--secondary-color);
     border-radius: 5px;
     font-size: 16px;
 }
@@ -193,40 +227,42 @@
     align-items: center;
     text-align: center;
     width: 100%;
+    margin-bottom: 5px;
 }
 
     .product-list li {
-        background-color: #fdf4ec;
+        background-color: var(--secondary-color);
         width: 100%;
         border-radius: 5px;
         margin: 3px;
-        border: 2px solid #fdf4ec;
         transition: all 0.3s;
         font-size: 18px;
         cursor: pointer;
     }
 
         .product-list li:hover {
-            border: 2px solid orange;
+            background-color: var(--accent-color);
         }
 
 .add-new-product-btn {
     padding: 5px 5px;
+    margin: 5px 0px;
+    font-weight: bold;
     text-decoration: none;
-    background-color: orange;
-    color: #fff;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     transition: all 0.3s;
-    border: 2px solid orange;
+    border: 2px solid var(--accent-color);
     width: 100%;
 }
 
     .add-new-product-btn:hover {
-        border: 2px solid orange;
-        background-color: #fdf4ec;
-        color: orange;
+        border: 2px solid var(--accent-color);
+        background-color: var(--accent-color);
+        color: var(--text-color);
     }
 
 .navigation-item-icon {
@@ -242,7 +278,7 @@
     width: 100%;
     margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--secondary-color);
     border-radius: 5px;
     font-size: 16px;
 }
@@ -253,9 +289,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px dashed #ddd;
+    border: 1px dashed var(--secondary-color);
     border-radius: 10px;
-    background-color: #fafafa;
+    background-color: var(--secondary-color);
     position: relative;
     overflow: hidden;
 }
@@ -273,11 +309,11 @@
     margin: 0;
     font-size: 16px;
     z-index: 1;
-    background-color: #fafafa;
+    background-color: var(--secondary-color);
     opacity: 0.5;
     border-radius: 20px;
     padding: 5px;
-    color: #444;
+    color: var(--text-color);
     transition: all 0.3s;
 }
 
@@ -288,11 +324,11 @@
 
 #drop-area {
     transition: all 0.3s;
-    border: 2px dashed white;
+    border: 2px dashed var(--secondary-color);
 }
 
     #drop-area:hover {
-        border: 2px dashed #333;
+        border: 2px dashed var(--text-color);
     }
 
         #drop-area:hover p {
@@ -302,7 +338,7 @@
 
     #drop-area.dragging {
         border: 2px dashed #33adff;
-        background-color: #e6f7ff;
+        background-color: var(--secondary-color);
     }
 
 
@@ -315,19 +351,19 @@
 .post-content-btn {
     padding: 5px 20px;
     text-decoration: none;
-    background-color: orange;
-    color: #fff;
+    background-color: var(--accent-color);
+    color: var(--text-color);
     cursor: pointer;
     border: none;
     border-radius: 20px;
     transition: all 0.3s;
-    border: 2px solid orange;
+    border: 2px solid var(--accent-color);
 }
 
     .post-content-btn:hover {
-        border: 2px solid orange;
-        background-color: #fdf4ec;
-        color: orange;
+        border: 2px solid var(--accent-color);
+        background-color: var(--secondary-color);
+        color: var(--text-color);
     }
 
 .create-post-profile-display-section {
@@ -339,7 +375,6 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-    background-color: white;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
@@ -357,14 +392,11 @@
 }
 
 .privacy-recipie-text-container {
-    border: 2px solid orange;
+    border: 2px solid var(--accent-color);
     border-radius: 20px;
     padding: 15px;
     padding-bottom: 0;
-    color: orange;
-}
-
-.text-content-privacy {
+    color: var(--text-color);
 }
 
 @media(max-width:1300px) {
@@ -398,13 +430,13 @@
     border-radius: 30px;
     transition: all 0.3s;
     padding: 30px;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid var(--secondary-color);
 }
 
     .post-container:hover {
-        background-color: rgb(248, 247, 247);
+        background-color: var(--secondary-color);
         cursor: pointer;
-        border-bottom: 1px solid rgb(248, 247, 247);
+        border-bottom: 1px solid var(--secondary-color);
     }
 
     .post-container .post-header {
@@ -460,8 +492,8 @@
                 text-align: center;
                 border-radius: 30px;
                 padding: 10px;
-                background-color: orange;
-                color: white;
+                background-color: var(--accent-color);
+                color: var(--text-color);
                 width: 140px;
                 height: 30px;
                 cursor: pointer;
@@ -476,8 +508,8 @@
                 text-align: center;
                 border-radius: 30px;
                 padding: 10px;
-                background-color: #C864F7;
-                color: white;
+                background-color: var(--secondary-color);
+                color: var(--text-color);
                 width: 30px;
                 height: 30px;
                 cursor: pointer;
@@ -495,7 +527,7 @@
 
         .post-container .post-content .content-text-container {
             overflow: hidden;
-            color: #808080;
+            color: var(--text-color);
             font-weight: 500;
         }
 
@@ -516,16 +548,16 @@
                 text-align: center;
                 border-radius: 30px;
                 padding: 10px;
-                color: white;
+                color: var(--secondary-color);
                 width: 70px;
                 height: 30px;
                 cursor: pointer;
                 margin: 2px;
-                color: #808080;
+                color: var(--text-color);
                 transition: all 0.3s;
                 text-decoration: none;
             }
 
                 .post-container .post-footer .footer-buttons .footer-btn-action:hover {
-                    color: orange;
+                    color: var(--text-color);
                 }

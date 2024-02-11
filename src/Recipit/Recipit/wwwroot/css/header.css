@@ -1,4 +1,10 @@
-﻿header {
+﻿:root {
+    --primary-color: #ff7f50; /* coral */
+    --secondary-color: #f3f3f3; /* off-white */
+    --accent-color: #ffa500; /* bright orange */
+    --text-color: #333; /* dark gray for text */
+}
+header {
     display: flex;
     justify-content: flex-end;
     flex-direction: row;
@@ -17,9 +23,9 @@
 
 .searchbar {
     text-decoration: none;
-    color: orange;
+    color: var(--text-color);
     font-weight: bold;
-    border: 2px solid orange;
+    border: 2px solid var(--accent-color);
     border-radius: 20px;
     padding: 5px 10px;
     width: 500px;
@@ -27,7 +33,7 @@
 
 .header-main-container {
     position: fixed;
-    color: #fff;
+    color: var(--text-color);
     padding: 20px 20px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
     display: flex;
@@ -48,24 +54,24 @@
 
 .profile-button {
     text-decoration: none;
-    color: orange;
+    color: var(--text-color);
     font-weight: bold;
-    border: 2px solid orange;
+    border: 2px solid var(--accent-color);
     border-radius: 20px;
     padding: 5px 10px;
     transition: all 0.3s;
 }
 
     .profile-button:hover {
-        background-color: orange;
-        color: white;
+        background-color: var(--accent-color);
+        color: var(--text-color);
     }
     .profile-button .oi {
-        color: orange;
+        color: var(--accent-color);
         transition: all 0.3s;
     }
     .profile-button:hover .oi {
-        color: white;
+        color: var(--text-color);
     }
 .profile-pic-button {
     margin-left: 5px;
@@ -76,7 +82,7 @@
     height: 40px;
     border-radius: 50%;
     cursor: pointer;
-    border: 3px solid orange;
+    border: 3px solid var(--accent-color);
 }
 
 .dropdown {
@@ -84,8 +90,8 @@
 }
 
 .dropbtn {
-    background-color: #333;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     padding: 8px 16px;
     border: none;
     cursor: pointer;
@@ -95,7 +101,7 @@
 .dropdown-content {
     display: none;
     position: fixed;
-    background-color: #f9f9f9;
+    background-color: var(--accent-color);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -109,7 +115,7 @@
     }
 
         .dropdown-content a:hover {
-            background-color: #ddd;
+            background-color: var(--accent-color);
         }
 
 .dropdown:hover .dropdown-content {
@@ -117,5 +123,5 @@
 }
 
 .dropdown:hover .dropbtn {
-    background-color: #555;
+    background-color: var(--accent-color);
 }

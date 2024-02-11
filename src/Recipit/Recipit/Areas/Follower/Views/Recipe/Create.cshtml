@@ -34,6 +34,14 @@
                 </div>
                 <div id="product-popup" class="product-popup hidden">
                     <input type="text" class="search-products" id="searchProduct" placeholder="Търси продукт">
+                    <ul id="li-skeleton" class="product-list">
+                        <li  class="li-skeleton">
+                            <div class="skeleton-element"></div>
+                            <div class="skeleton-element"></div>
+                            <div class="skeleton-element"></div>
+                            <div class="skeleton-element"></div>
+                        </li>
+                    </ul>
                     <ul id="product-list" class="product-list">
                     </ul>
                     <button class="add-new-product-btn" id="addNewProduct">Добави нов продукт</button>
@@ -115,6 +123,7 @@
 </script>
 <script>
     $(document).ready(function () {
+        $('#li-skeleton').hide();
         var searchTimeout;
         var productPopup = $('#product-popup');
         var productList = $('#product-list');
@@ -143,6 +152,7 @@
         });
 
         function populateProductList(searchTerm) {
+            $('#li-skeleton').show();
             productList.empty();
             $.ajax({
                 url: '/home/product/search',
@@ -150,6 +160,7 @@
                 contentType: 'application/json',
                 data: { searchTerm: searchTerm },
                 success: function (data) {
+                    $('#li-skeleton').hide();
                     console.log(data);
                     var products = data.$values;
                     for (var i = 0; i < products.length; i++) {
@@ -167,6 +178,7 @@
                     }
                 },
                 error: function (error) {
+                    $('#li-skeleton').hide();
                     console.log(error);
                 }
             });
