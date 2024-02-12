@@ -1,0 +1,75 @@
+﻿@using Recipit.ViewModels.Recipe
+@model RecipeDisplayModel
+
+@{
+    ViewBag.Title = "Recipe Details";
+}
+<link href="~/css/viewrecipe.css" rel="stylesheet" />
+
+<!-- Recipe Details -->
+<div class="recipe-container">
+    <h2 class="recipe-title">@Model.Name</h2>
+    <h2 class="recipe-user">Публикувана от @Model.User.UserName</h2>
+    <img class="recipe-photo" src="@Model.Photo" alt="@Model.Name">
+    <p class="recipe-description">@Model.Description</p>
+    <p class="recipe-category">Категория: @Model.Category</p>
+    <p class="recipe-nutritional">Хранителна стойност: @Model.NutritionalValue</p>
+    <p class="recipe-date">Публикувана на: @Model.PublishDate.ToShortDateString()</p>
+    <div class="recipe-rating">
+        <p>Оценка: @Model.AverageRating</p>
+    </div>
+</div>
+<div class="recipe-products">
+    <h1 class="recipe-ingridients-title">Съставки</h1>
+    <div class="ingridients-container">
+        @foreach (var item in Model.Products)
+        {
+            <div class="ingridient">
+                <img class="ingridient-image" src="@item.Photo" alt="image" />
+                <h1 class="ingridient-title">@item.Name</h1>
+                <h1 class="quantity-details">@item.QuantityDetails</h1>
+            </div>
+        }
+    </div>
+</div>
+<div class="add-comment-container">
+    <h3>Публикувай коментар</h3>
+    <form method="post" id="commentForm">
+        <textarea class="comment-textarea" name="commentText" placeholder="Текст на коментара"></textarea>
+        <div class="comment-submit-ctr">
+            <div class="comment-rating">
+                <i class="fa-regular fa-star" data-rating="1"></i>
+                <i class="fa-regular fa-star" data-rating="2"></i>
+                <i class="fa-regular fa-star" data-rating="3"></i>
+                <i class="fa-regular fa-star" data-rating="4"></i>
+                <i class="fa-regular fa-star" data-rating="5"></i>
+            </div>
+            <input type="hidden" id="newCommentRating" name="rating" value="0">
+            <input type="submit" value="Коментирай" class="submit-comment-btn">
+        </div>
+    </form>
+</div>
+<!-- Comments Section -->
+<div class="comments-container">
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="comment">
+            <div class="profile-image-text-ctr">
+                <img class="comment-image" src="@comment.User.Photo" alt="image" />
+                <p class="comment-user">@comment.User.UserName</p>
+            </div>
+            <p class="comment-text">@comment.Text</p>
+            <p class="comment-date">@comment.DatePosted.ToShortDateString()</p>
+            <div class="comment-rating">
+                @for (int i = 0; i < 5; i++)
+                {
+                    <i class="@(i < comment.Rating ? "fa-solid" : "fa-regular") fa-star"></i>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="~/js/home/comments.js"></script>
+<script src="~/js/home/postcomment.js"></script>

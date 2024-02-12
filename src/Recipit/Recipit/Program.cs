@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
 using Serilog;
@@ -28,8 +29,6 @@ else
     app.UseDeveloperExceptionPage();
 }
 
-app.CreateAdministratorUser(app.Configuration);
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -41,10 +40,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHealthChecks("/hc", new HealthCheckOptions()
 {
@@ -61,6 +56,8 @@ try
     using var scope = app.Services.CreateScope();
 
     //await DatabaseMiddleware.MigrateDatabase(scope, app.Configuration, app.Logger);
+    //
+    //app.CreateAdministratorUser(app.Configuration);
 
     app.Logger.LogInformation("Starting web host ({ApplicationName})...", appName);
     app.Run();

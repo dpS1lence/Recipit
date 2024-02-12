@@ -1,0 +1,39 @@
+﻿@using Recipit.Pagination.Contracts
+@using Recipit.ViewModels.Followers
+@using Recipit.ViewModels.Product
+@model IPage<ProductViewModel>
+<link href="~/css/products.css" rel="stylesheet" />
+<div class="recipes-container">
+    @foreach (var item in Model)
+    {
+        <div class="recipe-container product-item" data-product-id="@item.Id">
+            <div class="recipe-data">
+                <!-- View Mode -->
+                <div class="view-mode">
+                    <img src="@item.Photo" alt="@item.Name" class="recipe-image" />
+                    <div class="recipe-title-and-rating">
+                        <h3 class="recipe-title">@item.Name</h3>
+                        <p class="recipe-calories">@item.Calories кал</p>
+                    </div>
+                    <div class="recipe-buttons">
+                        <button class="edit-btn">Редактирай</button>
+                        <button class="delete-btn">Изтрий</button>
+                    </div>
+                </div>
+                <!-- Edit Mode -->
+                <div class="edit-mode" style="display:none;">
+                    <input type="text" class="edit-name" value="@item.Name" />
+                    <input type="text" class="edit-calories" value="@item.Calories" />
+                    <input type="text" class="edit-image" value="@item.Photo" />
+                    <div class="recipe-buttons">
+                        <button class="save-btn">Запази</button>
+                        <button class="cancel-btn">Откажи</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="~/js/admin/products.js"></script>

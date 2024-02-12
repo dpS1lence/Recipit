@@ -10,7 +10,7 @@
 
         [HttpGet]
         [Route("manage")]
-        public async Task<IActionResult> All(int pageIndex, int pageSize) => View(await _followerService.GetAll(pageIndex, pageSize));
+        public async Task<IActionResult> All(int pageIndex = 1, int pageSize = 1) => View(await _followerService.GetAll(pageIndex, pageSize));
 
         [HttpPost]
         public async Task Delete([FromBody] string followerId) => await _followerService.Delete(followerId);

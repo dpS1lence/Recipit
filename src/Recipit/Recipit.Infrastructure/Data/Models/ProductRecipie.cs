@@ -12,6 +12,11 @@
         public int ProductId { get; set; }
 
         /// <summary>
+        /// Gets or sets the quantity details for the associated Product.
+        /// </summary>
+        public string QuantityDetails { get; set; } = default!;
+
+        /// <summary>
         /// Navigation property for the associated Product.
         /// </summary>
         public virtual Product Product { get; set; } = default!;

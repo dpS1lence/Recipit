@@ -1,0 +1,228 @@
+﻿:root {
+    --primary-color: #ff7f50; /* coral */
+    --secondary-color: #f3f3f3; /* off-white */
+    --accent-color: #ffa500; /* bright orange */
+    --text-color: #333; /* dark gray for text */
+}
+.recipe-products {
+    padding: 15px;
+}
+
+    .recipe-products .recipe-ingridients-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+.ingridients-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.quantity-details {
+    font-size: 13px;
+    margin: 0px;
+    padding: 5px;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.ingridients-container .ingridient {
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secondary-color);
+    min-width: 120px;
+    width: fit-content;
+    height: 120px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+    .ingridients-container .ingridient .ingridient-more {
+        font-size: 15px;
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    .ingridients-container .ingridient .ingridient-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .ingridients-container .ingridient .ingridient-title {
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 0;
+        margin-top: 5px;
+    }
+
+/* Recipe Title */
+.recipe-container {
+    padding: 20px;
+}
+
+.recipe-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.recipe-user {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+/* Recipe Photo */
+.recipe-photo {
+    width: 400px;
+    border-radius: 10px;
+    margin: 15px 0;
+    transition: all 0.3s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+    .recipe-photo:hover {
+        box-shadow: none;
+    }
+
+/* Recipe Description */
+.recipe-description {
+    /* Similar styling as recipe title, but with smaller font */
+    font-size: 14px;
+    margin-bottom: 10px;
+    max-width: 900px;
+    color: var(--text-color);
+}
+
+/* Recipe Metadata */
+.recipe-category, .recipe-nutritional, .recipe-date {
+    font-size: 14px;
+    color: var(--text-color);
+    font-weight: bold;
+    margin: 5px 0;
+}
+.recipe-rating p{
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* Recipe Rating */
+.recipe-rating .fa-star {
+    color: var(--primary-color);
+}
+
+/* Comments Container */
+.comments-container {
+    background-color: white;
+    border-radius: 20px;
+    margin: 20px;
+    padding: 15px;
+    width: 700px;
+}
+
+/* Individual Comment */
+.comment {
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 20px;
+    min-width: 400px;
+    width: fit-content;
+}
+
+    .comment:last-child {
+        border-bottom: none;
+    }
+
+.comment-user {
+    font-size: 14px;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.comment-text {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.comment-date {
+    font-size: 12px;
+    margin: 0;
+    color: gray;
+}
+
+/* Comment Rating */
+.comment-rating .fa-star {
+    color: var(--primary-color);
+}
+
+/* Add Comment Container */
+.add-comment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px;
+}
+
+.comment-rating {
+    display: flex;
+    flex-direction: row;
+}
+/* Comment Textarea */
+.comment-textarea {
+    margin-bottom: 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    padding: 8px;
+    width: 600px;
+}
+
+.profile-image-text-ctr {
+    display: flex;
+    flex-direction: row;
+}
+
+.comment-image {
+    width: 40px;
+}
+
+.comment-user {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.comment-submit-ctr {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+/* Submit Comment Button */
+.submit-comment-btn {
+    border-radius: 10px;
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    cursor: pointer;
+    font-weight: bold;
+    border: 2px solid var(--accent-color);
+    transition: all 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 40px;
+}
+
+    .submit-comment-btn:hover {
+        background-color: white;
+        color: var(--text-color);
+    }

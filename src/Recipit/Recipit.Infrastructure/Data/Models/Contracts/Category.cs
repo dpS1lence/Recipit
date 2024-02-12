@@ -2,10 +2,10 @@
 {
     public static class Category
     {
-        public const string Appetizer = "Appetizer";
-        public const string Salad = "Salad";
-        public const string Soup = "Soup";
-        public const string MainCourse = "Main Course";
-        public const string Dessert = "Dessert";
+        public const string Appetizer = "Предястие";
+        public const string Salad = "Салата";
+        public const string Soup = "Супа";
+        public const string MainCourse = "Основно ястие";
+        public const string Dessert = "Десерт";
     }
 }
