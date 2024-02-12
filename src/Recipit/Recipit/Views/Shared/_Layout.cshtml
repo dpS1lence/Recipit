@@ -22,7 +22,7 @@
                         <img class="logo-img-navbar" src="~/images/recipitasdasdasd-removebg-preview.png" alt="kos" />
                     </div>
                     <div class="create-recipie-container">
-                        <a class="create-recipie-btn" asp-area="@RecipitRole.Follower" asp-controller="Recipe" asp-action="Create"><span class="fa-solid fa-circle-plus" aria-hidden="true"></span>Публикувай рецепта</a>
+                        <a class="create-recipie-btn" asp-area="Follower" asp-controller="Recipe" asp-action="Create"><span class="fa-solid fa-circle-plus" aria-hidden="true"></span>Публикувай рецепта</a>
                     </div>
                     <div class="nav-item hover">
                         <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Index" asp-controller="Home">
@@ -37,23 +37,23 @@
                     @if (User.IsInRole(RecipitRole.Administrator))
                     {
                         <div class="nav-item hover">
-                            <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="All" asp-controller="Recipe">
+                            <a class="nav-link fs-6 px-2" asp-area="Administrator" asp-action="All" asp-controller="Product">
                                 <span class="oi fa-solid fa-tag" aria-hidden="true"></span> Продукти
                             </a>
                         </div>
                         <div class="nav-item hover">
-                            <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="All" asp-controller="Recipe">
+                            <a class="nav-link fs-6 px-2" asp-area="Administrator" asp-action="All" asp-controller="Follower">
                                 <span class="oi fa-solid fa-users" aria-hidden="true"></span> Последователи
                             </a>
                         </div>
                     }
                 </section>
                 <section>
-                    <div class="nav-item hover">
+                    @* <div class="nav-item hover">
                         <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Saved" asp-controller="Recipe">
                             <span class="oi fa-solid fa-heart" aria-hidden="true"></span> Любими
                         </a>
-                    </div>
+                    </div> *@
                     <div class="nav-item hover">
                         <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Profile" asp-controller="Account">
                             <span class="oi fa-solid fa-user" aria-hidden="true"></span> Профил

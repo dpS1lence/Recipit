@@ -53,15 +53,22 @@
         }
         public static void AddCustomIdentity(this WebApplicationBuilder builder)
         {
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+            });
             builder.Services.ConfigureApplicationCookie(cfg =>
             {
-                cfg.LoginPath = "/login";
+                cfg.LoginPath = "/Home/Account/Login";
+                cfg.AccessDeniedPath = "/Home/Acoount/AccessDenied";
             });
             builder.Services.AddIdentity<RecipitUser, IdentityRole>(cfg =>
             {
                 cfg.Password.RequireUppercase = false;
                 cfg.User.RequireUniqueEmail = true;
-                cfg.SignIn.RequireConfirmedEmail = true;
+                cfg.SignIn.RequireConfirmedEmail = false;
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<RecipitDbContext>()
@@ -87,7 +94,7 @@
             builder.Services.AddHealthChecks()
                     .AddCheck("self", () => HealthCheckResult.Healthy())
                     .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!,
-                        name: "IdentityDB-check",
+                        name: "RecipitDB-check",
                         tags: tags);
         }
         public static void AddEmailSending(this WebApplicationBuilder builder)

@@ -46,14 +46,46 @@
             return _mapper.Map<ProductViewModel>(product);
         }
 
-        public Task<string> Delete(int id)
+        public async Task<string> Delete(int id)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == id);
+
+            if(product != null)
+            {
+                var isInRecipe = await _context.Recipes.AnyAsync(b => b.Id == product.Id);
+
+                if(!isInRecipe)
+                {
+                    _context.Products.Remove(product);
+                    await _context.SaveChangesAsync();
+                    return product.Name;
+                }
+            }
+
+            throw new ArgumentException("not deleted");
         }
 
-        public Task<string> Edit(ProductViewModel model)
+        public async Task<string> Edit(ProductViewModel model)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == model.Id);
+
+            if (product != null)
+            {
+                var isInRecipe = await _context.Recipes.AnyAsync(b => b.Id == product.Id);
+
+                if (!isInRecipe)
+                {
+                    product.Name = model.Name;
+                    product.Photo = model.Photo;
+                    product.Calories = model.Calories;
+
+                    _context.Products.Update(product);
+                    await _context.SaveChangesAsync();
+                    return product.Name;
+                }
+            }
+
+            throw new ArgumentException("not updated");
         }
 
         public Task<ProductViewModel> GetById(int id)

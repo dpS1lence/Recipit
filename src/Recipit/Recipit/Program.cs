@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
-using Recipit.Middlewares;
 using Serilog;
 using ServiceCollectionExtensions = Recipit.Infrastructure.Extensions.ServiceCollectionExtensions;
 
@@ -40,10 +40,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHealthChecks("/hc", new HealthCheckOptions()
 {

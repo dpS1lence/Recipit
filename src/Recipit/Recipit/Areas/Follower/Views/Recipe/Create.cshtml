@@ -1,4 +1,17 @@
 ﻿@using Recipit.Infrastructure.Data.Models.Contracts
+@{
+    var imgUrl = "";
+    var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+    if (User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value != null)
+    {
+        imgUrl = User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value;
+    }
+    else
+    {
+        imgUrl = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+    }
+}
+
 <div class="cerate-post-container">
     <section class="create-post-section">
         <div class="create-post-title-container">
@@ -35,7 +48,7 @@
                 <div id="product-popup" class="product-popup hidden">
                     <input type="text" class="search-products" id="searchProduct" placeholder="Търси продукт">
                     <ul id="li-skeleton" class="product-list">
-                        <li  class="li-skeleton">
+                        <li class="li-skeleton">
                             <div class="skeleton-element"></div>
                             <div class="skeleton-element"></div>
                             <div class="skeleton-element"></div>
@@ -90,395 +103,17 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    const dropArea = document.getElementById('drop-area');
-    const fileInput = document.getElementById('image');
-
-    fileInput.addEventListener('change', handleFiles);
-
-    function handleFiles(event) {
-        const files = event.target.files;
-
-        if (files.length > 0) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const img = new Image();
-
-                img.onload = function () {
-                    dropArea.style.backgroundImage = `url(${e.target.result})`;
-                    dropArea.style.backgroundSize = 'contain';
-                    dropArea.style.backgroundPosition = 'center';
-                    dropArea.style.backgroundRepeat = 'no-repeat';
-                    dropArea.style.backgroundColor = '#e6f7ff';
-                };
-
-                img.src = e.target.result;
-            };
-
-            reader.readAsDataURL(files[0]);
-        }
-    }
-
-</script>
+<script src="~/js/follower/image-box.js"></script>
+<script src="~/js/follower/products.js"></script>
+<script src="~/js/follower/create-recipe.js"></script>
+<script src="~/js/follower/create-post-page-actions.js"></script>
+<script src="~/js/follower/recipe-preview.js"></script>
 <script>
     $(document).ready(function () {
-        $('#li-skeleton').hide();
-        var searchTimeout;
-        var productPopup = $('#product-popup');
-        var productList = $('#product-list');
-        var productContainer = $('#product-container');
-
-        $('#btn-add-product').click(function () {
-            productPopup.toggleClass('hidden');
-        });
-
-        $('#searchProduct').on('input', function () {
-            var searchTerm = $(this).val().trim();
-
-            clearTimeout(searchTimeout);
-
-            searchTimeout = setTimeout(function () {
-                if (searchTerm.length > 0) {
-                    populateProductList(searchTerm);
-                } else {
-                    productList.empty();
-                }
-            }, 1000);
-        });
-
-        $('#addNewProduct').click(function () {
-            showNewProductForm();
-        });
-
-        function populateProductList(searchTerm) {
-            $('#li-skeleton').show();
-            productList.empty();
-            $.ajax({
-                url: '/home/product/search',
-                type: 'GET',
-                contentType: 'application/json',
-                data: { searchTerm: searchTerm },
-                success: function (data) {
-                    $('#li-skeleton').hide();
-                    console.log(data);
-                    var products = data.$values;
-                    for (var i = 0; i < products.length; i++) {
-                        var currentProduct = products[i];
-                        var listItem = $('<li>').text(currentProduct.name);
-                        productList.append(listItem);
-                        attachClickEvent(listItem, currentProduct.name);
-                    }
-                    function attachClickEvent(item, productName) {
-                        item.click(function () {
-                            var selectedProduct = productName;
-                            addProductToContainer(selectedProduct);
-                            productPopup.addClass('hidden');
-                        });
-                    }
-                },
-                error: function (error) {
-                    $('#li-skeleton').hide();
-                    console.log(error);
-                }
-            });
-        }
-
-        function addProductToContainer(productName) {
-            if (!isProductAlreadyAdded(productName)) {
-                var productItem = $('<div class="product">');
-                productItem.append('<div class="x-icon" onclick="removeProduct(this)"><i class="fa fa-trash-can"></i></div>');
-                productItem.append('<h1 class="product-name">' + productName + '</h1>');
-                productItem.append('<input class="product-input-for-quantity" type="text" placeholder="Количество" />');
-            }
-
-            productContainer.append(productItem);
-        }
-        function isProductAlreadyAdded(productName) {
-            var existingProducts = productContainer.find('.product-name').map(function () {
-                return $(this).text().trim().toLowerCase();
-            }).get();
-
-            return existingProducts.includes(productName.trim().toLowerCase());
-        }
-
-        window.removeProduct = function (element) {
-            $(element).closest('.product').remove();
-        };
-
-        function showNewProductForm() {
-            fillFormForCreate();
-
-            $('#submitNewProduct').click(function () {
-                var newProductName = $('#newProductName').val();
-                var newProductPhoto = $('#newProductPhoto').val();
-                var newProductCalories = $('#newProductCalories').val();
-
-                $.ajax({
-                    url: '/follower/product/create',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        Name: newProductName,
-                        Photo: newProductPhoto,
-                        Calories: newProductCalories
-                    }),
-                    success: function (data) {
-                        fillFormForSearch();
-                    },
-                    error: function (error) {
-                        fillFormForExists();
-                    }
-                });
-            });
-        }
-
-        function fillFormForSearch() {
-            productPopup.empty();
-            productPopup.append('<input type="text" class="search-products" id="searchProduct" placeholder="Търси продукт">');
-            productPopup.append('<ul id="product-list" class="product-list">');
-            productPopup.append('</ul>');
-            productPopup.append('<button class="add-new-product-btn" id="addNewProduct">Добави нов продукт</button>');
-            $('#searchProduct').on('input', function () {
-                var searchTerm = $(this).val().trim();
-
-                clearTimeout(searchTimeout);
-
-                searchTimeout = setTimeout(function () {
-                    if (searchTerm.length > 2) {
-                        populateProductList(searchTerm);
-                    } else {
-                        productList.empty();
-                    }
-                }, 200);
-            });
-
-            $('#addNewProduct').click(function () {
-                showNewProductForm();
-                console.log('addNewProduct');
-            });
-            productList = $('#product-list');
-        }
-        function fillFormForCreate() {
-            productPopup.empty();
-            productPopup.append('<input class="search-products" type="text" id="newProductName" placeholder="Име на продукта">');
-            productPopup.append('<input class="search-products" type="text" id="newProductPhoto" placeholder="Снимка (линк)">');
-            productPopup.append('<input class="search-products" type="number" id="newProductCalories" placeholder="Калории">');
-            productPopup.append('<button class="add-new-product-btn" id="submitNewProduct">Създай</button>');
-            productPopup.append('<button class="add-new-product-btn" id="cancelNewProduct">Откажи</button>');
-            $('#cancelNewProduct').click(function () {
-                fillFormForSearch();
-            });
-        }
-        function fillFormForExists() {
-            productPopup.empty();
-            productPopup.append('<h1 class="exists-product" id="exists-product">Продуктът вече съществува!</h1>');
-            searchTimeout = setTimeout(function () {
-                showNewProductForm();
-            }, 3000);
-        }
+        var imgUrl = "@Html.Raw(imgUrl)";
+        var username = "@Html.Raw(username)";
+        generatePreview(imgUrl, username);
+        console.log('in da jungle ' + imgUrl);
+        console.log('in da jungle ' + username);
     });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#submitBtn').click(function () {
-            var title = document.getElementById('postTitle').value;
-            var description = document.getElementById('postDescription').value;
-            var category = document.getElementById('cars').value;
-            var btn = document.getElementById('submitBtn');
-
-            var productsWithQuantities = {};
-            $('#product-container .product').each(function () {
-                var productName = $(this).find('.product-name').text().trim();
-                var quantity = $(this).find('.product-input-for-quantity').val();
-                productsWithQuantities[productName] = quantity;
-                console.log('productName ' + productName);
-                console.log('quantity ' + quantity);
-            });
-
-            var imageData = document.getElementById('image').files[0];
-
-            var formData = new FormData();
-            formData.append('Name', title);
-            formData.append('Description', description);
-            formData.append('Category', category);
-            formData.append('Products', JSON.stringify(productsWithQuantities));
-            formData.append('Photo', imageData);
-
-            console.log('formData ' + formData);
-            console.log('productsWithQuantities ' + productsWithQuantities);
-            console.log('JSON.stringify productsWithQuantities ' + JSON.stringify(productsWithQuantities));
-
-            console.log(formData);
-            btn.style.cursor = 'wait';
-            btn.style.pointerEvents = 'none';
-            $.ajax({
-                url: '/follower/recipe/create',
-                type: 'POST',
-                processData: false,
-                contentType: false,
-                data: formData,
-                enctype: 'multipart/form-data',
-                success: function (data) {
-                    // Clear input fields
-                    document.getElementById('postTitle').value = '';
-                    document.getElementById('postDescription').value = '';
-                    document.getElementById('cars').value = '';
-
-                    // Reset the file input
-                    $('#image').val('');
-
-                    $('#product-container').empty();
-                    location.reload();
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        });
-    });
-
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var textContent = document.getElementById('text-content');
-        var imageContent = document.getElementById('image-content');
-        var previewContent = document.getElementById('preview-content');
-
-        var btnPost = document.getElementById('btn-post');
-        var btnImage = document.getElementById('btn-image');
-        var btnPreview = document.getElementById('btn-preview');
-        var btnSubmit = document.getElementById('submit');
-
-        var textDisplayImage = document.getElementById('text-display-image');
-        var displayText = document.getElementById('display-text');
-        var displayPreview = document.getElementById('display-preview');
-        var previewDisplayImage = document.getElementById('preview-display-image');
-
-        function showContent(content) {
-            textContent.classList.add('hidden');
-            imageContent.classList.add('hidden');
-            previewContent.classList.add('hidden');
-
-            content.classList.remove('hidden');
-        }
-
-        showContent(textContent);
-
-        btnPost.addEventListener('click', function () {
-            showContent(textContent);
-        });
-
-        btnImage.addEventListener('click', function () {
-            showContent(imageContent);
-        });
-
-        btnPreview.addEventListener('click', function () {
-            showContent(previewContent);
-        });
-
-        textDisplayImage.addEventListener('click', function () {
-            showContent(imageContent);
-        });
-
-        displayText.addEventListener('click', function () {
-            showContent(textContent);
-        });
-
-        displayPreview.addEventListener('click', function () {
-            showContent(previewContent);
-        });
-
-        previewDisplayImage.addEventListener('click', function () {
-            showContent(imageContent);
-        });
-    });
-</script>
-<script>
-    @{
-        var imgUrl = "";
-        var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
-        if (User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value != null)
-        {
-            imgUrl = User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value;
-        }
-        else
-        {
-            imgUrl = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
-        }
-    }
-
-                                var displayPreview = document.getElementById('display-preview');
-    var btnPreview = document.getElementById('btn-preview');
-
-    var imageUrl = '';
-    var titleData = '';
-    var descriptionData = '';
-
-    document.getElementById('image').addEventListener('change', function (event) {
-        var file = event.target.files[0];
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                imageUrl = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            updatePreview();
-        }
-    });
-
-    document.getElementById('postTitle').addEventListener('change', function (event) {
-        titleData = event.target.value;
-    });
-
-    document.getElementById('postDescription').addEventListener('change', function (event) {
-        descriptionData = event.target.value;
-    });
-
-    displayPreview.addEventListener('click', function () {
-        updatePreview();
-    });
-
-    btnPreview.addEventListener('click', function () {
-        updatePreview();
-    });
-
-    function updatePreview() {
-        let cont = document.getElementById('dynamic-content');
-        let previewHtml = `
-                                                    <div class="post-container">
-                                                   <header class="post-header">
-                                                       <div class="post-header-info">
-                                                           <div class="post-header-image">
-                                                               <img class="header-img-data" src="@imgUrl" />
-                                                                   <h1 class="header-img-text">@username</h1>
-                                                           </div>
-                                                           <div class="post-header-hour">
-                                                               <h1><strong>‧</strong></h1>
-                                                           </div>
-                                                       </div>
-                                                       <div class="post-header-buttons">
-                                                           <a class="follow-btn">1 minute ago</a>
-                                                       </div>
-                                                   </header>
-                                                   <div class="post-content">
-                                                       <div class="post-content-bg"></div>
-                                                           <h1 class="content-title">${titleData}</h1>
-                                                               <img class="uploaded-image-file" src="${imageUrl}" alt="Uploaded Image" />
-                                                       <p class="content-text-container">
-                                                               ${descriptionData}
-                                                       </p>
-                                                   </div>
-                                                   <div class="post-footer">
-                                                       <div class="footer-buttons">
-                                                           <a class="footer-btn-action" href="#"><i class="fa fa-heart"></i> 0</a>
-                                                           <a class="footer-btn-action" href="#"><i class="fa fa-comment"></i> 0</a>
-                                                           <a class="footer-btn-action" href="#"><i class="fa fa-share"></i> Share</a>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                                    `;
-
-        cont.innerHTML = previewHtml;
-    }
 </script>

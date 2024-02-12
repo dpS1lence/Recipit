@@ -29,6 +29,9 @@
         [HttpGet("/register")]
         public IActionResult Register() => GetView();
 
+        [HttpGet("/profile")]
+        public IActionResult Profile() => View();
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
