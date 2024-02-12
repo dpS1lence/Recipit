@@ -6,6 +6,6 @@ namespace Recipit.Services.Comments
     public interface ICommentService
     {
         Task<string> Delete(int id);
-        Task<string> Create(CommentViewModel model);
+        Task<int> Create(CommentSendModel model);
     }
 }

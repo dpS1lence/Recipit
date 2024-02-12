@@ -23,11 +23,14 @@
         private readonly RecipitDbContext _context = context;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
-        [HttpGet]
+        [HttpGet("/login")]
         public IActionResult Login() => GetView();
 
-        [HttpGet]
+        [HttpGet("/register")]
         public IActionResult Register() => GetView();
+
+        [HttpGet("/profile")]
+        public IActionResult Profile() => View();
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)

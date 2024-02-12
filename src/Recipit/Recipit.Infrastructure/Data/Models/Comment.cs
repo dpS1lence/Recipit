@@ -46,8 +46,5 @@
         // Navigation properties
         [ForeignKey(nameof(UserId))]
         public virtual RecipitUser User { get; set; } = default!;
-
-        [ForeignKey(nameof(RecipeId))]
-        public virtual Recipe Recipe { get; set; } = default!;
     }
 }
