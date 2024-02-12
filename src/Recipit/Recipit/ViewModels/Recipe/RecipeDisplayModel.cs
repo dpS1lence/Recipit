@@ -24,7 +24,7 @@ namespace Recipit.ViewModels.Recipe
 
         public string UserId { get; set; } = default!;
 
-        public UserViewModel User { get; set; } = default!;
+        public UserModel User { get; set; } = default!;
 
         public int NutritionalValue { get; set; }
 
@@ -59,7 +59,7 @@ namespace Recipit.ViewModels.Recipe
                     Text = pr.Text,
                     User = pr.User
                 })))
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserViewModel
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserModel
                 {
                     Id = src.User.Id,
                     Photo = src.User.Photo,

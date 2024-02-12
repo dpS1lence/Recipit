@@ -1,0 +1,87 @@
+﻿/* Base Variables */
+:root {
+    --primary-color: #ff7f50; /* coral */
+    --secondary-color: #f3f3f3; /* off-white */
+    --accent-color: #ffa500; /* bright orange */
+    --text-color: #333; /* dark gray for text */
+    --white-color: #ffffff;
+    --gray-color: rgb(128, 128, 128);
+}
+
+/* Container for Followers */
+.recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px; /* Space between cards */
+    padding: 20px; /* Padding around the grid */
+}
+
+/* Individual Follower Cards */
+.product-item {
+    background-color: var(--white-color);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 5px solid var(--secondary-color); /* Light grey border */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    margin-bottom: 20px; /* Space between cards */
+    width: 300px; /* Adjust based on the container's padding and desired gap */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+    /* Style for Follower Image */
+    .product-item img {
+        width: 100px; /* Adjust size as needed */
+        height: 100px; /* Maintain aspect ratio */
+        border-radius: 50%; /* Circular images */
+        margin-bottom: 10px; /* Space between image and text */
+    }
+
+/* Follower Details Styling */
+.recipe-title-and-rating, .recipe-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 5px; /* Space between title and rating */
+}
+
+.recipe-title {
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Button Styles */
+.delete-btn {
+    background-color: var(--white-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    color: var(--text-color);
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .delete-btn:hover {
+        background-color: var(--primary-color);
+        color: var(--white-color);
+    }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .recipes-container {
+        justify-content: center;
+    }
+
+    .product-item {
+        width: 90%; /* Full width on smaller screens */
+    }
+}

@@ -51,22 +51,25 @@
 </div>
 <!-- Comments Section -->
 <div class="comments-container">
-    @foreach (var comment in Model.Comments)
+    @if(Model.Comments != null)
     {
-        <div class="comment">
-            <div class="profile-image-text-ctr">
-                <img class="comment-image" src="@comment.User.Photo" alt="image" />
-                <p class="comment-user">@comment.User.UserName</p>
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="comment">
+                <div class="profile-image-text-ctr">
+                    <img class="comment-image" src="@comment.User?.Photo ?? @string.Empty" alt="image" />
+                    <p class="comment-user">@comment.User?.UserName ?? @string.Empty</p>
+                </div>
+                <p class="comment-text">@comment.Text</p>
+                <p class="comment-date">@comment.DatePosted.ToShortDateString()</p>
+                <div class="comment-rating">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <i class="@(i < comment.Rating ? "fa-solid" : "fa-regular") fa-star"></i>
+                    }
+                </div>
             </div>
-            <p class="comment-text">@comment.Text</p>
-            <p class="comment-date">@comment.DatePosted.ToShortDateString()</p>
-            <div class="comment-rating">
-                @for (int i = 0; i < 5; i++)
-                {
-                    <i class="@(i < comment.Rating ? "fa-solid" : "fa-regular") fa-star"></i>
-                }
-            </div>
-        </div>
+        }
     }
 </div>
 

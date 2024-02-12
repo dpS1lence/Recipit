@@ -6,6 +6,7 @@
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.MailSending;
+    using Recipit.Services.Account;
     using Recipit.Services.Comments;
     using Recipit.Services.Followers;
     using Recipit.Services.Products;
@@ -37,6 +38,7 @@
             builder.Services.AddScoped<IFollowerService, FollowerService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddTransient<IMailSender, MailSender>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddHttpClient();

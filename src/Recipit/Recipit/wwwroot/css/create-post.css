@@ -3,6 +3,8 @@
     --secondary-color: #f3f3f3; /* off-white */
     --accent-color: #ffa500; /* bright orange */
     --text-color: #333; /* dark gray for text */
+    --white-color: #ffffff;
+    --gray-color: rgb(128, 128, 128);
 }
 
 @keyframes skeleton-loading {
@@ -41,7 +43,7 @@
 
 .select-select-category {
     border: none;
-    background-color: white;
+    background-color: var(--white-color);
     color: var(--text-color);
 }
 

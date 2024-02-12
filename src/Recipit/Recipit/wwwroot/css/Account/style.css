@@ -3,6 +3,7 @@
     --secondary-color: #f3f3f3; /* off-white */
     --accent-color: #ffa500; /* bright orange */
     --text-color: #333; /* dark gray for text */
+    --white-color: #ffffff;
 }
 body {
     font-family: Arial, sans-serif;
@@ -12,7 +13,7 @@ body {
     align-items: center;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: var(--white-color);
     height: 100vh;
     background-image: url('/images/bg-photo.png');
     background-position: center;
@@ -22,10 +23,10 @@ body {
 }
 
 .login-container {
-    background: #fff;
+    background: var(--white-color);
     padding: 20px 0;
     border-radius: 20px;
-    border: 4px solid rgb(243, 243, 243);
+    border: 4px solid var(--white-color);
     box-shadow: 0 0 300px rgba(0, 0, 0, 0.1);
     width: 400px;
 }

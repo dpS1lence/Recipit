@@ -1,8 +1,10 @@
 ﻿:root {
     --primary-color: #ff7f50; /* coral */
-    --secondary-color: #f3f3f3; /* off-white */
+    --secondary-color: #f3f3f3; /* off-var(--white-color) */
     --accent-color: #ffa500; /* bright orange */
     --text-color: #333; /* dark gray for text */
+    --white-color: #ffffff;
+    --gray-color: rgb(128, 128, 128);
 }
 .recipe-products {
     padding: 15px;
@@ -118,7 +120,7 @@
 
 /* Comments Container */
 .comments-container {
-    background-color: white;
+    background-color: var(--white-color);
     border-radius: 20px;
     margin: 20px;
     padding: 15px;
@@ -153,7 +155,7 @@
 .comment-date {
     font-size: 12px;
     margin: 0;
-    color: gray;
+    color: var(--gray-color);
 }
 
 /* Comment Rating */
@@ -223,6 +225,6 @@
 }
 
     .submit-comment-btn:hover {
-        background-color: white;
+        background-color: var(--white-color);
         color: var(--text-color);
     }

@@ -17,7 +17,7 @@
 
         public async Task<IPage<ProductViewModel>> All()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products.Include(a => a.ProductRecipes).Where(a => a.ProductRecipes == null || a.ProductRecipes.Count == 0).ToListAsync();
 
             return new Page<ProductViewModel>(products.Select(_mapper.Map<ProductViewModel>), 1, 10, products.Count);
         }
@@ -76,11 +76,17 @@
                 if (!isInRecipe)
                 {
                     product.Name = model.Name;
-                    product.Photo = model.Photo;
+
+                    if(model.Photo != null)
+                    {
+                        product.Photo = model.Photo;
+                    }
+
                     product.Calories = model.Calories;
 
                     _context.Products.Update(product);
                     await _context.SaveChangesAsync();
+
                     return product.Name;
                 }
             }

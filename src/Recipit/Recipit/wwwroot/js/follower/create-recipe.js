@@ -1,5 +1,5 @@
-$(document).ready(function () {
-    $('#submitBtn').click(function () {
+$(function () {
+    $(document).on('click', '#submitBtn', function () {
         var title = document.getElementById('postTitle').value;
         var description = document.getElementById('postDescription').value;
         var category = document.getElementById('cars').value;

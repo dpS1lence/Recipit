@@ -76,7 +76,7 @@
                     return 0;
                 }
 
-                return Comments.Average(c => c.Rating);
+                return Math.Round(Comments.Average(c => c.Rating), 2);
             }
         }
 

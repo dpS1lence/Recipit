@@ -9,13 +9,13 @@ namespace Recipit.Contracts.Helpers
         public static async Task<RecipitUser> ById(UserManager<RecipitUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             var uId = httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? throw new ArgumentNullException(nameof(ById));
+                ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 
             return await userManager.FindByIdAsync(uId)
-                ?? throw new ArgumentNullException(nameof(ById));
+                ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         public static string Id(IHttpContextAccessor httpContextAccessor) => httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                ?? throw new ArgumentNullException(nameof(Id));
+                ?? throw new ArgumentNullException(nameof(httpContextAccessor));
     }
 }

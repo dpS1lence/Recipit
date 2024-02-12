@@ -149,7 +149,11 @@
 
             if (!string.IsNullOrEmpty(model.Author))
             {
-                filteredRecipes = filteredRecipes.Where(r => r.User.UserName.Contains(model.Author, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                filteredRecipes = filteredRecipes
+                    .Where(r => r.User?.UserName?
+                        .Contains(model.Author, StringComparison.CurrentCultureIgnoreCase) 
+                        ?? throw new ArgumentNullException(nameof(r)))
+                    .ToList();
             }
 
             if (model.AverageRating.HasValue)
