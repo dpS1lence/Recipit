@@ -21,6 +21,11 @@
         {
             Validate.Model(model, _logger);
 
+            if (string.IsNullOrEmpty(model.Text))
+                throw new ArgumentException(nameof(model.Text));
+            else if (model.RecipeId <= 0)
+                throw new ArgumentException(nameof(model.RecipeId));
+
             var comment = _mapper.Map<Comment>(model);
             comment.DatePosted = DateTime.UtcNow;
             comment.UserId = GetUser.Id(_httpContextAccessor);

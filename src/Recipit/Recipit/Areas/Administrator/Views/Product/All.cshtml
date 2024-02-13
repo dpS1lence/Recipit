@@ -3,6 +3,8 @@
 @using Recipit.ViewModels.Product
 @model IPage<ProductViewModel>
 <link href="~/css/products.css" rel="stylesheet" />
+
+<h1>Налични продукти за редакция</h1>
 <div class="recipes-container">
     @foreach (var item in Model)
     {
@@ -22,9 +24,9 @@
                 </div>
                 <!-- Edit Mode -->
                 <div class="edit-mode" style="display:none;">
-                    <input type="text" class="edit-name" value="@item.Name" />
-                    <input type="text" class="edit-calories" value="@item.Calories" />
-                    <input type="text" class="edit-image" value="@item.Photo" />
+                    <input required type="text" class="edit-name" value="@item.Name" />
+                    <input required type="text" class="edit-calories" value="@item.Calories" />
+                    <input required type="text" class="edit-image" value="@item.Photo" />
                     <div class="recipe-buttons">
                         <button class="save-btn">Запази</button>
                         <button class="cancel-btn">Откажи</button>

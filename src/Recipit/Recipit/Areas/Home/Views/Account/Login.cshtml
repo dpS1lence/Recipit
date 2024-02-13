@@ -17,11 +17,11 @@
         <form method="post" class="login-form" asp-area="" asp-controller="Account" asp-action="Login">
             <div class="input-container">
                 <i class="fa-solid fa-envelope"></i>
-                <input asp-for="@Model.Email" type="email" placeholder="Въведи имейл адрес">
+                <input required asp-for="@Model.Email" type="email" placeholder="Въведи имейл адрес">
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-lock"></i>
-                <input asp-for="@Model.Password" type="password" placeholder="Въведи парола">
+                <input required asp-for="@Model.Password" type="password" placeholder="Въведи парола">
             </div>
             <button type="submit" class="login-btn">Вход</button>
             <a class="google-login"><img class="google-image" src="~/images/google-icon.png" alt="google-image">Продължи с Google</a>

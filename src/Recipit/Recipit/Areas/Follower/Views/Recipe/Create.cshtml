@@ -31,15 +31,15 @@
             </div>
             <div class="post-content" id="text-content">
                 <label class="label-select-category" for="cars">Избери категория:</label>
-                <select class="select-select-category" name="cars" id="cars">
+                <select required class="select-select-category" name="cars" id="cars">
                     <option value="@Category.Appetizer">Предястие</option>
                     <option value="@Category.MainCourse">Основно ястие</option>
                     <option value="@Category.Salad">Салата</option>
                     <option value="@Category.Dessert">Десерт</option>
                     <option value="@Category.Soup">Супа</option>
                 </select>
-                <input id="postTitle" class="post-content-input-title" type="text" placeholder="Заглавие на рецептата" />
-                <textarea id="postDescription" class="post-content-input-description" rows="5" placeholder="Описание (Пълно описание на рецептата и начинът на приготвяне!)"></textarea>
+                <input required id="postTitle" class="post-content-input-title" type="text" placeholder="Заглавие на рецептата" />
+                <textarea required id="postDescription" class="post-content-input-description" rows="5" placeholder="Описание (Пълно описание на рецептата и начинът на приготвяне!)"></textarea>
                 <div class="products-select-container">
                     <button id="btn-add-product" class="button-add-product"><i class="fa fa-circle-plus"></i>Добави продукт</button>
                     <div id="product-container" class="added-products-container">
@@ -66,7 +66,7 @@
             </div>
             <div class="post-content hidden" id="image-content">
                 <div class="post-content-image-container" id="drop-area">
-                    <input class="post-content-input-file" type="file" id="image" accept="image/*" onchange="handleFiles(event)">
+                    <input required class="post-content-input-file" type="file" id="image" accept="image/*" onchange="handleFiles(event)">
                     <p id="postDescription"><label for="image">Drag & Drop or Browse</label></p>
                 </div>
                 <div class="bottom-btns-post">

@@ -1,4 +1,5 @@
 ﻿using Recipit.Pagination.Contracts;
+using Recipit.ViewModels;
 using Recipit.ViewModels.Recipe;
 
 namespace Recipit.Services.Recipes
@@ -11,5 +12,6 @@ namespace Recipit.Services.Recipes
         Task<IPage<RecipeDisplayModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize);
         Task<string> Create(RecipeViewModel recipe);
         Task<RecipeDisplayModel> ById(int id);
+        Task<HomePageViewModel> GetHomePage();
     }
 }

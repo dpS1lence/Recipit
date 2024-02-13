@@ -46,11 +46,10 @@
         public static void AddMvc(this WebApplicationBuilder builder)
         {
             builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-            builder.Services.AddControllersWithViews();
-
-            builder.Services.AddControllers().AddJsonOptions(options =>
+            builder.Services.AddControllersWithViews()
+            .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve; 
             });
         }
         public static void AddCustomIdentity(this WebApplicationBuilder builder)

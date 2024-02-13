@@ -34,6 +34,7 @@
         [HttpGet("/register")]
         public IActionResult Register() => GetView();
 
+        [Authorize]
         [HttpGet("/profile")]
         public async Task<IActionResult> Profile() => View(await _accountService.GetCurrentUser());
 

@@ -65,7 +65,7 @@
             var productItem = $('<div class="product">');
             productItem.append('<div class="x-icon" onclick="removeProduct(this)"><i class="fa fa-trash-can"></i></div>');
             productItem.append('<h1 class="product-name">' + productName + '</h1>');
-            productItem.append('<input class="product-input-for-quantity" type="text" placeholder="Количество" />');
+            productItem.append('<input required class="product-input-for-quantity" type="text" placeholder="Количество" />');
         }
 
         productContainer.append(productItem);

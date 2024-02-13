@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function () {
     var currentPage = 1;
     var pageSize = 6; // Adjust this as needed
     var totalPages; // Variable to store total pages

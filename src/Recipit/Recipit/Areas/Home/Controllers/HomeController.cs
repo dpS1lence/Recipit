@@ -2,15 +2,15 @@ namespace Recipit.Areas.Home.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Recipit.Models;
+    using Recipit.Services.Recipes;
     using System.Diagnostics;
 
     [Area("Home")]
-    public class HomeController : Controller
+    public class HomeController(IRecipeService recipeService) : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        private readonly IRecipeService _recipeService = recipeService;
+
+        public async Task<IActionResult> Index() => View(await _recipeService.GetHomePage());
 
         public IActionResult Privacy()
         {
