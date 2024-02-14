@@ -13,6 +13,6 @@
         public async Task<IActionResult> Create(CommentSendModel model) => Json(await _commentService.Create(model));
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id) => Json(await _commentService.Delete(id));
+        public async Task Delete(int id) => await _commentService.Delete(id);
     }
 }

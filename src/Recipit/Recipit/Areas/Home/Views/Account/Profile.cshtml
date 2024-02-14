@@ -70,7 +70,7 @@
                         <a class="view-recipe-btn" style="text-decoration: none;" asp-action="ViewRecipe" asp-controller="Recipe" asp-area="Home" asp-route-id="@recipe.Id"><i class="fa fa-eye"></i> Виж рецепта</a>
                         @{
                             var caloriesColorClass = recipe.NutritionalValue < 250 ? "recipe-calories-green" :
-                                recipe.NutritionalValue >= 250 && recipe.NutritionalValue <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
+                            recipe.NutritionalValue >= 250 && recipe.NutritionalValue <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
                         }
                         <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @recipe.NutritionalValue Калории</h2>
                     </div>
@@ -79,7 +79,7 @@
         }
         else
         {
-            <p>Потребителят няма публикувани рецепти.</p>
+            <p>Потребителят няма публикувани рецепти</p>
         }
     </div>
 </div>

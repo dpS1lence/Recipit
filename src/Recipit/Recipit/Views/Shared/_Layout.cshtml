@@ -50,14 +50,14 @@
                 </section>
                 <section>
                     @* <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Saved" asp-controller="Recipe">
-                            <span class="oi fa-solid fa-heart" aria-hidden="true"></span> Любими
-                        </a>
+                    <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Saved" asp-controller="Recipe">
+                    <span class="oi fa-solid fa-heart" aria-hidden="true"></span> Любими
+                    </a>
                     </div> *@
-                    @if(User?.Identity?.IsAuthenticated ?? false)
+                    @if (User?.Identity?.IsAuthenticated ?? false)
                     {
                         <div class="nav-item hover">
-                            <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Profile" asp-controller="Account">
+                            <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Profile" asp-controller="Profile">
                                 <span class="oi fa-solid fa-user" aria-hidden="true"></span> Профил
                             </a>
                         </div>
@@ -68,10 +68,10 @@
     </div>
     <div class="page" id="page">
         <header id="header">
-            <div class="header-main-container">
+            <div class="header-main-container">@* 
                 <div class="search-bar">
-                    <input class="searchbar" placeholder="Търси рецепта"/>
-                </div>
+                    <input type="submit" class="searchbar" id="searchbar" placeholder="Търси рецепта" />
+                </div> *@
                 @if (User?.Identity?.IsAuthenticated ?? false)
                 {
                     <div class="profile-button-container">

@@ -53,3 +53,73 @@
     width: 100%; /* Adjust based on layout */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+.btn {
+    color: var(--text-color);
+    font-weight: bold;
+    border: 2px solid var(--accent-color);
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+    .btn:hover {
+        background-color: var(--accent-color);
+    }
+
+.user-info-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between form fields */
+}
+
+.user-photo-edit {
+    width: 150px; /* Adjust based on preference */
+    height: 150px; /* Adjust to maintain aspect ratio */
+    border-radius: 50%; /* Circular photo */
+    object-fit: cover; /* Ensure the photo covers the area without distortion */
+    border: 3px solid var(--primary-color); /* Highlight with primary color */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+    .user-photo-edit:hover {
+        border: 3px solid var(--secondary-color);
+    }
+
+.user-info-edit input[type="text"],
+.user-info-edit input[type="email"] {
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+    width: 300px; /* Adjust based on parent padding */
+    margin: 0 20px;
+}
+
+.user-info-edit input[type="file"] {
+    display: none; /* Hidden but accessible via photo click */
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#saveChangesBtn {
+    background-color: var(--accent-color); /* Use accent color for save to differentiate */
+}
+
+#cancelChangesBtn {
+    background-color: var(--secondary-color); /* Gray for cancel to indicate secondary action */
+}
+
+    #saveChangesBtn:hover,
+    #cancelChangesBtn:hover {
+        opacity: 0.9; /* Slight opacity change on hover for feedback */
+    }

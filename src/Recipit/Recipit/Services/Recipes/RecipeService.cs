@@ -5,6 +5,7 @@
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
     using Recipit.Contracts;
+    using Recipit.Contracts.Enums;
     using Recipit.Contracts.Exceptions;
     using Recipit.Contracts.Helpers;
     using Recipit.Infrastructure.Data;
@@ -51,7 +52,7 @@
             else if (_context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
                 throw new ArgumentException(nameof(_context.Recipes));
 
-            var user = await GetUser.ById(_userManager, _httpContextAccessor);
+            var user = await GetUser.Data(_userManager, _httpContextAccessor);
 
             var recipe = _mapper.Map<Recipe>(model);
             recipe.User = user;
@@ -166,15 +167,19 @@
                     .ToList();
             }
 
-            if (model.AverageRating.HasValue)
+            if (model.AverageRating == SortDirection.Ascending)
             {
-                filteredRecipes = filteredRecipes.Where(r => r.AverageRating >= model.AverageRating.Value).ToList();
+                filteredRecipes = [.. filteredRecipes.OrderBy(r => r.AverageRating)];
             }
+            else if(model.AverageRating == SortDirection.Descending)
+                filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.AverageRating)];
 
-            if (model.NutritionalValue.HasValue)
+            if (model.NutritionalValue == SortDirection.Ascending)
             {
-                filteredRecipes = filteredRecipes.Where(r => r.NutritionalValue >= model.NutritionalValue.Value).ToList();
+                filteredRecipes = [.. filteredRecipes.OrderBy(r => r.NutritionalValue)];
             }
+            else if(model.NutritionalValue == SortDirection.Descending)
+                filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.NutritionalValue)];
 
             var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(filteredRecipes);
 
