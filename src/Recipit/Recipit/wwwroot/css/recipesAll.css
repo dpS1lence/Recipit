@@ -71,7 +71,7 @@
     margin-bottom: 20px; /* Add some space between the rows */
 }
 /* You can add more specific styles to better match the layout of your recipes */
-.recipe-data.skeleton-box {
+.recipe-data .skeleton-box {
     height: 150px;
 }
 

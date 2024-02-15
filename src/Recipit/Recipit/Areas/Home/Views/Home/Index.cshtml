@@ -15,7 +15,7 @@
 <div class="daily-recipe-container">
     <h2 class="recipe-title-in-home">Рецепта на деня</h2>
     <div class="recipes-container">
-        <div class="recipe-container">
+        <div class="recipe-container" style="width: 700px;">
             <div class="recipe-data">
                 <img class="recipe-image" src="@Model.RecipeOfTheDay.Photo" alt="Recipe Image" />
                 <div class="recipe-title-and-rating">
@@ -43,7 +43,7 @@
             </div>
             <div class="recipe-products">
                 <h1 class="recipe-ingridients-title">Съставки</h1>
-                <div class="ingridients-container">
+                <div class="ingridients-container flex-row">
                     @for (int i = 0; i < Model.RecipeOfTheDay.Products.Count() && i < 5; i++)
                     {
                         var product = Model.RecipeOfTheDay.Products.ElementAt(i);

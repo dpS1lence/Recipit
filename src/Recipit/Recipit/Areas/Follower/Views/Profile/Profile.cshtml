@@ -129,7 +129,8 @@
                         location.reload();
                     },
                     error: function (xhr, status, error) {
-                        alert('Възникна грешка! Моля опитайте отново!');
+                        console.log(error);
+                        location.reload();
                     }
                 });
             }

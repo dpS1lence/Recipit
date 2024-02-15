@@ -55,7 +55,7 @@ namespace Recipit.Services.Account
                     .Where(r => r.UserId == uId)
                     .ToListAsync(), 
                 _context.Comments
-                    .Where(c => _context.Recipes.Any(r => r.UserId == uId || r.Id == c.RecipeId))
+                    .Where(c => c.UserId == uId || _context.Recipes.Any(r => r.UserId == uId && r.Id == c.RecipeId))
                     .ToListAsync(),
                 _context.ProductsRecipies
                     .Where(pr => _context.Recipes.Any(r => r.UserId == uId && r.Id == pr.RecipeId))
