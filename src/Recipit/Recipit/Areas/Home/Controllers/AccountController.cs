@@ -9,7 +9,6 @@
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Models.Account;
     using Recipit.Services.Account;
-    using Recipit.Services.Followers;
 
     [AllowAnonymous]
     [Area("Home")]

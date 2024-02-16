@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
@@ -35,6 +36,24 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
+app.Use(async (context, next) =>
+{
+    var endpoint = context.GetEndpoint();
+    if (endpoint?.Metadata?.GetMetadata<IAuthorizeData>() != null)
+    {
+        var user = context.User?.Identity;
+        if (user == null || !user.IsAuthenticated)
+        {
+            context.Response.Redirect("/login");
+            return;
+        }
+    }
+
+    await next(context);
+});
+
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
