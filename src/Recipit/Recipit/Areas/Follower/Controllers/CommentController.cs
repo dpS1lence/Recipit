@@ -10,5 +10,13 @@ namespace Recipit.Areas.Follower.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CommentSendModel model) => Json(await _commentService.Create(model));
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, int recipeId)
+        {
+            await _commentService.Delete(id);
+
+            return RedirectToAction("ViewRecipe", "Recipe", new { id = recipeId, area = "Home" });
+        }
     }
 }

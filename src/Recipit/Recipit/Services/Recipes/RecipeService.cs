@@ -47,9 +47,11 @@
                 throw new ArgumentException(nameof(model.Description));
             else if (string.IsNullOrEmpty(model.Name))
                 throw new ArgumentException(nameof(model.Name));
+            else if (model.Calories < 0)
+                throw new ArgumentException(nameof(model.Calories));
             else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
                 throw new ArgumentException(nameof(model.Category));
-            else if (_context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
+            else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
                 throw new ArgumentException(nameof(_context.Recipes));
 
             var user = await GetUser.Data(_userManager, _httpContextAccessor);
@@ -108,9 +110,11 @@
             Validate.Model(recipeDbo, _logger);
 
             var comments = await _context.Comments.Where(a => a.RecipeId == recipeId).ToListAsync();
+            var products = await _context.ProductsRecipies.Where(a => a.RecipeId == recipeId).ToListAsync();
 
             _context.Recipes.Remove(recipeDbo!);
             _context.Comments.RemoveRange(comments);
+            _context.ProductsRecipies.RemoveRange(products);
 
             await _context.SaveChangesAsync();
         }
@@ -176,10 +180,10 @@
 
             if (model.NutritionalValue == SortDirection.Ascending)
             {
-                filteredRecipes = [.. filteredRecipes.OrderBy(r => r.NutritionalValue)];
+                filteredRecipes = [.. filteredRecipes.OrderBy(r => r.Calories)];
             }
             else if(model.NutritionalValue == SortDirection.Descending)
-                filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.NutritionalValue)];
+                filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.Calories)];
 
             var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(filteredRecipes);
 

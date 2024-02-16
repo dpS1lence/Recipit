@@ -13,5 +13,16 @@
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] RecipeViewModel model) => Json(await _recipeService.Create(model));
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _recipeService.Delete(id);
+
+            return Redirect("/profile");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id) => View(await _recipeService.ById(id));
     }
 }

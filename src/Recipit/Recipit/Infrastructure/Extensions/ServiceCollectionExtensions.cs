@@ -1,8 +1,6 @@
 ﻿namespace Recipit.Infrastructure.Extensions
 {
-    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Diagnostics.HealthChecks;
     using Recipit.Infrastructure.Data;
@@ -48,19 +46,18 @@
         public static void AddMvc(this WebApplicationBuilder builder)
         {
             builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-            builder.Services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-            })
+            builder.Services.AddControllersWithViews()
             .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve; 
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
             });
         }
         public static void AddCustomIdentity(this WebApplicationBuilder builder)
         {
-            builder.Services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options => {
-                options.LoginPath = "/login";
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
             });
 
             builder.Services.AddIdentity<RecipitUser, IdentityRole>(cfg =>

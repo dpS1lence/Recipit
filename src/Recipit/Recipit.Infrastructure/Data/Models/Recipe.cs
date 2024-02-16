@@ -30,8 +30,14 @@
         /// Must be non-empty and can be up to 1000 characters.
         /// </summary>
         [Required(ErrorMessage = "Description is required.")]
-        [StringLength(1000, ErrorMessage = "Description cannot exceed 1000 characters.")]
+        [StringLength(3000, ErrorMessage = "Description cannot exceed 3000 characters.")]
         public string Description { get; set; } = default!;
+
+        /// <summary>
+        /// Gets or sets the calories of the recipe.
+        /// </summary>
+        [Required(ErrorMessage = "Recipe calories is required.")]
+        public decimal Calories { get; set; }
 
         /// <summary>
         /// The user ID of the recipe creator.

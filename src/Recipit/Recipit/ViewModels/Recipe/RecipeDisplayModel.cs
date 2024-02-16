@@ -34,6 +34,8 @@ namespace Recipit.ViewModels.Recipe
 
         public decimal AverageRating { get; set; }
 
+        public decimal Calories { get; set; }
+
         public string Category { get; set; } = default!;
 
         public IEnumerable<ProductViewModel> Products { get; set; }

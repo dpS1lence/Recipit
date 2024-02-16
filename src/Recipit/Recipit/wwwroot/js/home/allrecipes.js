@@ -109,8 +109,8 @@
                     <h1 class="ingridient-more">+${products.length - 5} Други</h1>
                 </div>`;
             }
-
-            var nutritionalValue = recipe.nutritionalValue;
+            console.log(recipe);
+            var nutritionalValue = recipe.calories;
             // Create the element as a string since you're concatenating it into HTML
             var caloriesColorClass = nutritionalValue < 250 ? 'recipe-calories-green' :
                 nutritionalValue >= 250 && nutritionalValue <= 450 ? 'recipe-calories-orange' : 'recipe-calories-red';

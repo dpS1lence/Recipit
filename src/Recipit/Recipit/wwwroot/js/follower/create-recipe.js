@@ -2,9 +2,10 @@ $(function () {
     $(document).on('click', '#submitBtn', function () {
         var title = document.getElementById('postTitle').value;
         var description = document.getElementById('postDescription').value;
+        var cal = document.getElementById('cal').value;
         var category = document.getElementById('cars').value;
         var btn = document.getElementById('submitBtn');
-
+        console.log(cal);
         var productsWithQuantities = {};
         $('#product-container .product').each(function () {
             var productName = $(this).find('.product-name').text().trim();
@@ -19,6 +20,7 @@ $(function () {
         var formData = new FormData();
         formData.append('Name', title);
         formData.append('Description', description);
+        formData.append('Calories', cal);
         formData.append('Category', category);
         formData.append('Products', JSON.stringify(productsWithQuantities));
         formData.append('Photo', imageData);
