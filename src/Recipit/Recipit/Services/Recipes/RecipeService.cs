@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
     using Recipit.Contracts;
@@ -17,6 +18,8 @@
     using Recipit.ViewModels;
     using Recipit.ViewModels.Recipe;
     using System.Collections.Generic;
+    using System.Net.Mime;
+    using System.Security.Policy;
 
     public class RecipeService
         (RecipitDbContext context, UserManager<RecipitUser> userManager, HttpClient httpClient, ILogger<RecipeService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
@@ -35,18 +38,16 @@
 
             var dict = new Dictionary<string, string>();
 
+            ArgumentNullException.ThrowIfNull(dict);
+            ArgumentException.ThrowIfNullOrEmpty(model.Name);
+            ArgumentException.ThrowIfNullOrEmpty(model.Description);
+
             if (!string.IsNullOrEmpty(model.Products))
                 dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.Products);
-            if (dict == null)
-                throw new ArgumentException(nameof(dict));
             else if (dict.Count == 0)
                 throw new ArgumentException(nameof(dict.Count));
             else if (model.Photo == null || model.Photo == default)
                 throw new ArgumentException(nameof(model.Photo));
-            else if (string.IsNullOrEmpty(model.Description))
-                throw new ArgumentException(nameof(model.Description));
-            else if (string.IsNullOrEmpty(model.Name))
-                throw new ArgumentException(nameof(model.Name));
             else if (model.Calories < 0)
                 throw new ArgumentException(nameof(model.Calories));
             else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
@@ -64,14 +65,12 @@
             _context.Recipes.Add(recipe);
             await _context.SaveChangesAsync();
 
-            foreach (var item in dict)
+            foreach (var item in dict!)
             {
                 var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == item.Key);
 
-                if (product == null)
-                    throw new ProductNotFoundException(nameof(product));
-                else if (string.IsNullOrEmpty(item.Value))
-                    throw new ArgumentException(nameof(item.Value));
+                ArgumentNullException.ThrowIfNull(product);
+                ArgumentException.ThrowIfNullOrEmpty(item.Value);
 
                 recipe.NutritionalValue += product.Calories;
 
@@ -255,6 +254,23 @@
                 latestAndTopRatedRecipes.OrderByDescending(a => a.AverageRating)).Take(3);
 
             return model;
+        }
+
+        public async Task<EditRecipeOutputModel> EditById(int id)
+        {
+            var recipe = await _context.Recipes
+                .Include(a => a.ProductRecipes)
+                .ThenInclude(a => a.Product)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            ArgumentNullException.ThrowIfNull(recipe);
+            ArgumentNullException.ThrowIfNull(recipe.ProductRecipes);
+            
+            var map = _mapper.Map<EditRecipeOutputModel>(recipe);
+            map.Products = recipe.ProductRecipes
+                .Select(a => new Tuple<string, string>(a.Product.Name, a.QuantityDetails));
+
+            return map;
         }
     }
 }

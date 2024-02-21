@@ -23,6 +23,9 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id) => View(await _recipeService.ById(id));
+        public async Task<IActionResult> Edit(int id) => View(await _recipeService.EditById(id));
+
+        [HttpPost]
+        public async Task Edit([FromForm] RecipeViewModel model) => await _recipeService.Edit(model);
     }
 }

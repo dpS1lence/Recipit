@@ -1,5 +1,150 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Recipit.Infrastructure.Data.Models.Contracts
+@using Recipit.ViewModels.Recipe
+@model EditRecipeOutputModel
 @{
+    var imgUrl = "";
+    var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+    if (User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value != null)
+    {
+        imgUrl = User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value;
+    }
+    else
+    {
+        imgUrl = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+    }
 }
+
+<div class="cerate-post-container">
+    <section class="create-post-section">
+        <div class="create-post-title-container">
+            <h1>Редактирай рецепта</h1>
+        </div>
+        <div class="post-content-container">
+            <div class="post-content-navigation-top">
+                <a class="naligation-item" id="btn-post">
+                    <i class="navigation-item-icon fa fa-list-ul"></i> Рецепта
+                </a>
+                <a class="naligation-item" id="btn-image">
+                    <i class="navigation-item-icon fa fa-image"></i> Снимка
+                </a>
+                <a class="naligation-item" id="btn-preview">
+                    <i class="navigation-item-icon fa fa-magnifying-glass"></i> Преглед
+                </a>
+            </div>
+            <div class="post-content" id="text-content">
+                <label class="label-select-category" for="cars">Избери категория:</label>
+                <select required asp-for="@Model.Category" class="select-select-category" name="cars" id="cars">
+                    <option value="@Category.Appetizer">Предястие</option>
+                    <option value="@Category.MainCourse">Основно ястие</option>
+                    <option value="@Category.Salad">Салата</option>
+                    <option value="@Category.Dessert">Десерт</option>
+                    <option value="@Category.Soup">Супа</option>
+                </select>
+                <input required id="postTitle" asp-for="@Model.Name" class="post-content-input-title" type="text" placeholder="Заглавие на рецептата" />
+                <textarea required id="postDescription" asp-for="@Model.Description" class="post-content-input-description" rows="5" placeholder="Описание (Пълно описание на рецептата и начинът на приготвяне!)"></textarea>
+                <input required id="cal" asp-for="@Model.Calories" class="post-content-input-title" type="number" placeholder="Калории" />
+                <div class="products-select-container">
+                    <button id="btn-add-product" class="button-add-product"><i class="fa fa-circle-plus"></i>Добави продукт</button>
+                    <div id="product-container" class="added-products-container">
+                        @if (Model.Products is not null)
+                        {
+                            @foreach (var product in Model.Products)
+                            {
+                                <div class="product">
+                                    <div class="x-icon"><i class="fa fa-trash-can"></i></div>
+                                    <h1 class="product-name">@product.Item1</h1>
+                                    <input required class="product-input-for-quantity" value="@product.Item2" type="text" placeholder="Количество" />
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div id="product-popup" class="product-popup hidden">
+                    <input type="text" class="search-products" id="searchProduct" placeholder="Търси продукт">
+                    <ul id="li-skeleton" class="product-list">
+                        <li class="li-skeleton">
+                            <div class="skeleton-element"></div>
+                            <div class="skeleton-element"></div>
+                            <div class="skeleton-element"></div>
+                            <div class="skeleton-element"></div>
+                        </li>
+                    </ul>
+                    <ul id="product-list" class="product-list">
+                    </ul>
+                    <button class="add-new-product-btn" id="addNewProduct">Добави нов продукт</button>
+                </div>
+                <div class="bottom-btns-post">
+                    <a class="post-content-btn hidden">Назад</a>
+                    <a class="post-content-btn" id="text-display-image">Напред</a>
+                </div>
+            </div>
+            <div class="post-content hidden" id="image-content">
+                <div class="post-content-image-container" id="drop-area">
+                    <input required class="post-content-input-file" type="file" id="image" accept="image/*" onchange="handleFiles(event)">
+                    <p><label for="image">Drag & Drop or Browse</label></p>
+                    @if (Model.Photo != null)
+                    {
+                        <img src="@Model.Photo" alt="Existing Image" id="existingImage" style="max-width:100%; display:block;" />
+                    }
+                </div>
+                <div class="bottom-btns-post">
+                    <a class="post-content-btn" id="display-text">Назад</a>
+                    <a class="post-content-btn" id="display-preview">Напред</a>
+                </div>
+            </div>
+            <div class="post-content hidden" id="preview-content">
+                <div class="dynamic-content" id="dynamic-content">
+                </div>
+                <div class="bottom-btns-post">
+                    <a class="post-content-btn" id="preview-display-image">Назад</a>
+                    <a class="post-content-btn" id="submitBtn">Редактирай</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="create-post-profile-display-section">
+        <div class="profile-display-section-top">
+            <div class="image-container-recipit-shit">
+                <img class="img-pfp-head" src="~/images/recipcho-removebg-preview.png" alt="Image here." />
+            </div>
+            <div class="privacy-recipie-text-container">
+                <p class="text-content-privacy">
+                    При изпращане на рецепта за публикуване на нашия уебсайт,
+                    въздържайте се от споделяне на чувствителна информация и бъдете внимателни с изображения, които могат да компрометират поверителността.
+                    Изпращайки рецепта, вие ни давате правото да публикуваме и популяризираме съдържанието, като зачитаме вашата поверителност.
+                </p>
+            </div>
+        </div>
+        <div class="profile-display-section-bottom">
+        </div>
+    </section>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="~/js/follower/image-box.js"></script>
+<script src="~/js/follower/products.js"></script>
+<script src="~/js/follower/edit-recipe.js"></script>
+<script src="~/js/follower/create-post-page-actions.js"></script>
+<script src="~/js/follower/update-edit-preview.js"></script>
+<script>
+    $(document).ready(function () {
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('image');
+
+        var existingImage = document.getElementById('existingImage');
+        if (existingImage) {
+            var imageUrl = existingImage.src;
+            dropArea.style.backgroundImage = `url(${imageUrl})`;
+            dropArea.style.backgroundSize = 'contain';
+            dropArea.style.backgroundPosition = 'center';
+            dropArea.style.backgroundRepeat = 'no-repeat';
+            dropArea.style.backgroundColor = '#e6f7ff';
+        }
+        existingImage.style.display = 'none';
+
+
+        var imgUrl = "@Html.Raw(imgUrl)";
+        var username = "@Html.Raw(username)";
+        generatePreview(imgUrl, username);
+    });
+</script>

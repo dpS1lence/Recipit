@@ -6,6 +6,7 @@
     --white-color: #ffffff;
     --gray-color: rgb(128, 128, 128);
 }
+
 .recipe-products {
     padding: 15px;
 }
@@ -108,9 +109,49 @@
     font-weight: bold;
     margin: 5px 0;
 }
-.recipe-rating p{
+
+.recipe-rating p {
     color: var(--text-color);
     font-weight: bold;
+}
+
+.delete-recipe-btn {
+    text-decoration: none;
+    background-color: var(--white);
+    color: var(--text-color);
+    font-weight: bold;
+    border: 2px solid var(--accent-color);
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 3px;
+    transition: all 0.3s;
+}
+
+.delete-recipe-form:first-of-type .delete-recipe-btn {
+    border: 2px solid red;
+}
+
+    .delete-recipe-form:first-of-type .delete-recipe-btn:hover {
+        background-color: red;
+        color: white;
+    }
+
+.delete-comment-btn {
+    text-decoration: none;
+    background-color: var(--white);
+    color: var(--text-color);
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    margin: 3px;
+    margin-left: 20px;
+    margin-bottom: 0;
+    transition: all 0.3s;
+}
+
+.delete-recipe-btn:hover {
+    background-color: var(--accent-color);
+    color: var(--text-color);
 }
 
 /* Recipe Rating */

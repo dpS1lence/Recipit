@@ -2,13 +2,12 @@
 @using Recipit.ViewModels.Recipe
 @using System.Security.Claims
 @model RecipeDisplayModel
-
 @{
     ViewBag.Title = "Recipe Details";
 }
+
 <link href="~/css/viewrecipe.css" rel="stylesheet" />
 
-<!-- Recipe Details -->
 <div class="recipe-container">
     <h2 class="recipe-title">@Model.Name</h2>
     <h2 class="recipe-user">Публикувана от @Model.User.UserName</h2>
@@ -63,7 +62,6 @@
         </div>
     </form>
 </div>
-<!-- Comments Section -->
 <div class="comments-container">
     @if(Model.Comments != null)
     {
@@ -73,6 +71,12 @@
                 <div class="profile-image-text-ctr">
                     <img class="comment-image" src="@comment.User?.Photo ?? @string.Empty" alt="image" />
                     <p class="comment-user">@comment.User?.UserName ?? @string.Empty</p>
+                    @if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == comment.User?.Id)
+                    {
+                        <form asp-action="Delete" asp-controller="Comment" asp-area="Follower" asp-route-id="@comment.Id" asp-route-recipeId="@Model.Id" method="post">
+                            <button type="submit" class="delete-comment-btn" style="text-decoration: none;"><i class="fa-solid fa-trash-can"></i></button>
+                        </form>
+                    }
                 </div>
                 <p class="comment-text">@comment.Text</p>
                 <p class="comment-date">@comment.DatePosted.ToShortDateString()</p>
@@ -82,12 +86,6 @@
                         <i class="@(i < comment.Rating ? "fa-solid" : "fa-regular") fa-star"></i>
                     }
                 </div>
-                @if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == comment.User.Id)
-                {
-                    <form asp-action="Delete" asp-controller="Comment" asp-area="Follower" asp-route-id="@comment.Id" asp-route-recipeId="@Model.Id" method="post">
-                        <button type="submit" class="delete-comment-btn" style="text-decoration: none;"><i class="fa-solid fa-trash-can"></i></button>
-                    </form>
-                }
             </div>
         }
     }

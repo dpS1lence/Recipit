@@ -93,10 +93,10 @@
                     <div class="recipe-buttons">
                         <a class="view-recipe-btn" style="text-decoration: none;" asp-action="ViewRecipe" asp-controller="Recipe" asp-area="Home" asp-route-id="@recipe.Id"><i class="fa fa-eye"></i> Виж рецепта</a>
                         @{
-                            var caloriesColorClass = recipe.NutritionalValue < 250 ? "recipe-calories-green" :
-                            recipe.NutritionalValue >= 250 && recipe.NutritionalValue <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
+                            var caloriesColorClass = recipe.Calories < 250 ? "recipe-calories-green" :
+                            recipe.Calories >= 250 && recipe.Calories <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
                         }
-                        <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @recipe.NutritionalValue Калории</h2>
+                        <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @recipe.Calories Калории</h2>
                     </div>
                 </div>
             }
