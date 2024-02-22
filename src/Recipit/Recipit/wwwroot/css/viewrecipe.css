@@ -232,8 +232,10 @@
     flex-direction: row;
 }
 
+
 .comment-image {
     width: 40px;
+    border-radius: 50px;
 }
 
 .comment-user {

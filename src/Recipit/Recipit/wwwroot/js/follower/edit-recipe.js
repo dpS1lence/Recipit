@@ -2,6 +2,7 @@ $(function () {
     $(document).on('click', '#submitBtn', function () {
         var title = document.getElementById('postTitle').value;
         var description = document.getElementById('postDescription').value;
+        var id = document.getElementById('recipeId').value;
         var cal = document.getElementById('cal').value;
         var category = document.getElementById('cars').value;
         var btn = document.getElementById('submitBtn');
@@ -15,6 +16,7 @@ $(function () {
         var imageData = document.getElementById('image').files[0];
 
         var formData = new FormData();
+        formData.append('Id', id);
         formData.append('Name', title);
         formData.append('Description', description);
         formData.append('Calories', cal);
@@ -31,19 +33,9 @@ $(function () {
             contentType: false,
             data: formData,
             enctype: 'multipart/form-data',
-            success: function (data) {
-                document.getElementById('postTitle').value = '';
-                document.getElementById('postDescription').value = '';
-                document.getElementById('cars').value = '';
-                
-                $('#image').val('');
-
-                $('#product-container').empty();
-                location.reload();
+            success: function (data, textStatus, jqXHR) {
+                window.location.href = '/home/recipe/viewrecipe?id=' + id;
             },
-            error: function (error) {
-                location.reload();
-            }
         });
     });
 });

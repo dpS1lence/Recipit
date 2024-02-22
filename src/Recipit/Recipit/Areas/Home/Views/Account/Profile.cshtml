@@ -72,7 +72,7 @@
                             var caloriesColorClass = recipe.Calories < 250 ? "recipe-calories-green" :
                             recipe.Calories >= 250 && recipe.Calories <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
                         }
-                        <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @recipe.Calories Калории</h2>
+                        <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @((int)recipe.Calories) Калории</h2>
                     </div>
                 </div>
             }

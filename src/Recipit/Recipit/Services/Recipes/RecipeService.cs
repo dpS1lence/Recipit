@@ -2,12 +2,11 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
     using Recipit.Contracts;
+    using Recipit.Contracts.Constants;
     using Recipit.Contracts.Enums;
-    using Recipit.Contracts.Exceptions;
     using Recipit.Contracts.Helpers;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
@@ -18,8 +17,7 @@
     using Recipit.ViewModels;
     using Recipit.ViewModels.Recipe;
     using System.Collections.Generic;
-    using System.Net.Mime;
-    using System.Security.Policy;
+    using RecipeDb = Infrastructure.Data.Models.Recipe;
 
     public class RecipeService
         (RecipitDbContext context, UserManager<RecipitUser> userManager, HttpClient httpClient, ILogger<RecipeService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
@@ -57,7 +55,7 @@
 
             var user = await GetUser.Data(_userManager, _httpContextAccessor);
 
-            var recipe = _mapper.Map<Recipe>(model);
+            var recipe = _mapper.Map<RecipeDb>(model);
             recipe.User = user;
             recipe.UserId = user.Id;
             recipe.Photo = await UploadImage.ToImgur(model.Photo, _httpClient);
@@ -91,22 +89,81 @@
             return recipe.Name;
         }
 
-        public async Task Edit(RecipeViewModel recipe)
+        public async Task Edit(RecipeViewModel recipeViewModel)
         {
-            Validate.Model(recipe, _logger);
+            var existingRecipe = await _context.Recipes
+                .Include(a => a.ProductRecipes)
+                .ThenInclude(a => a.Product)
+                .FirstOrDefaultAsync(a => a.Id == recipeViewModel.Id);
 
-            var recipeDbo = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == recipe.Id);
-            Validate.Model(recipeDbo, _logger);
+            ArgumentNullException.ThrowIfNull(existingRecipe);
 
-            _context.Entry(recipeDbo!).CurrentValues.SetValues(recipe);
+            if (existingRecipe!.UserId != GetUser.Id(_httpContextAccessor))
+            {
+                throw new ArgumentException(nameof(existingRecipe.UserId));
+            }
 
+            existingRecipe.Name = recipeViewModel.Name;
+            existingRecipe.Description = recipeViewModel.Description;
+            
+            if (recipeViewModel.Photo is not null)
+            {
+                existingRecipe.Photo = await UploadImage.ToImgur(recipeViewModel.Photo, _httpClient);
+            }
+
+            existingRecipe.Calories = recipeViewModel.Calories;
+            existingRecipe.Category = recipeViewModel.Category;
+
+            var newProductsDict = string.IsNullOrEmpty(recipeViewModel.Products) ? [] 
+            : JsonConvert.DeserializeObject<Dictionary<string, string>>(recipeViewModel.Products);
+
+            ArgumentNullException.ThrowIfNull(newProductsDict);
+
+            existingRecipe.ProductRecipes = existingRecipe.ProductRecipes
+                .Where(pr => newProductsDict.ContainsKey(pr.Product.Name)).ToList();
+
+            foreach (var item in newProductsDict)
+            {
+                var productRecipe = existingRecipe.ProductRecipes
+                    .FirstOrDefault(pr => pr.Product.Name == item.Key);
+
+                if (productRecipe is null)
+                {
+                    var product = await _context.Products.FirstOrDefaultAsync(p => p.Name == item.Key);
+                    ArgumentNullException.ThrowIfNull(product, nameof(product));
+
+                    existingRecipe.ProductRecipes.Add(new ProductRecipe
+                    {
+                        Product = product,
+                        ProductId = product.Id,
+                        QuantityDetails = item.Value,
+                        Recipe = existingRecipe,
+                        RecipeId = existingRecipe.Id
+                    });
+                }
+                else
+                {
+                    productRecipe.QuantityDetails = item.Value;
+                }
+            }
+
+            _context.Recipes.Update(existingRecipe);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task Delete(int recipeId)
         {
             var recipeDbo = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == recipeId);
             Validate.Model(recipeDbo, _logger);
+
+            if (recipeDbo!.UserId != GetUser.Id(_httpContextAccessor))
+            {
+                if (!await _userManager.IsInRoleAsync(await GetUser.Data(_userManager, _httpContextAccessor), RecipitRole.Administrator))
+                {
+                    throw new ArgumentException(nameof(recipeDbo.UserId));
+                }
+            }
 
             var comments = await _context.Comments.Where(a => a.RecipeId == recipeId).ToListAsync();
             var products = await _context.ProductsRecipies.Where(a => a.RecipeId == recipeId).ToListAsync();
@@ -195,6 +252,7 @@
                 .Where(a => a.Id == id)
                 .Include(a => a.User)
                 .Include(a => a.Comments)
+                .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
                 .FirstOrDefaultAsync();

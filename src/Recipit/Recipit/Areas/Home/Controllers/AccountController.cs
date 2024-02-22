@@ -9,6 +9,7 @@
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Models.Account;
     using Recipit.Services.Account;
+    using System.Security.Claims;
 
     [AllowAnonymous]
     [Area("Home")]
@@ -84,6 +85,19 @@
 
             if (user != null)
             {
+                var existingClaims = await _userManager.GetClaimsAsync(user);
+                var profilePictureClaim = existingClaims.FirstOrDefault(c => c.Type == "profile_picture_url");
+                if (profilePictureClaim != null)
+                {
+                    await _userManager.RemoveClaimAsync(user, profilePictureClaim);
+                }
+
+                if (!string.IsNullOrEmpty(user.Photo))
+                {
+                    var claim = new Claim("profile_picture_url", user.Photo);
+                    await _userManager.AddClaimAsync(user, claim);
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
 
                 if (result.Succeeded)

@@ -40,6 +40,7 @@
                     <option value="@Category.Dessert">Десерт</option>
                     <option value="@Category.Soup">Супа</option>
                 </select>
+                <input id="recipeId" asp-for="@Model.Id" type="hidden" />
                 <input required id="postTitle" asp-for="@Model.Name" class="post-content-input-title" type="text" placeholder="Заглавие на рецептата" />
                 <textarea required id="postDescription" asp-for="@Model.Description" class="post-content-input-description" rows="5" placeholder="Описание (Пълно описание на рецептата и начинът на приготвяне!)"></textarea>
                 <input required id="cal" asp-for="@Model.Calories" class="post-content-input-title" type="number" placeholder="Калории" />
@@ -126,6 +127,23 @@
 <script src="~/js/follower/edit-recipe.js"></script>
 <script src="~/js/follower/create-post-page-actions.js"></script>
 <script src="~/js/follower/update-edit-preview.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Adds click event listeners to all existing x-icons
+        const xIcons = document.querySelectorAll('.x-icon');
+
+        xIcons.forEach(icon => {
+            icon.addEventListener('click', function () {
+                // This assumes the .product div is the immediate parent of .x-icon
+                const productElement = this.closest('.product');
+                if (productElement) {
+                    productElement.remove(); // Removes the product element from the DOM
+                }
+            });
+        });
+    });
+
+</script>
 <script>
     $(document).ready(function () {
         const dropArea = document.getElementById('drop-area');

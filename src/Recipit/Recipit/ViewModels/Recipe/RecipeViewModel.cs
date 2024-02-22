@@ -9,7 +9,7 @@
         public int Id { get; set; } = default!;
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
-        public string UserId { get; private set; } = default!;
+        public string UserId { get; set; } = default!;
         public int NutritionalValue { get; set; }
         public DateTime PublishDate { get; set; }
         public IFormFile Photo { get; set; } = default!;

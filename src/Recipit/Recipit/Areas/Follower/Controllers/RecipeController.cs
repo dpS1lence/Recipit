@@ -26,6 +26,11 @@
         public async Task<IActionResult> Edit(int id) => View(await _recipeService.EditById(id));
 
         [HttpPost]
-        public async Task Edit([FromForm] RecipeViewModel model) => await _recipeService.Edit(model);
+        public async Task<IActionResult> Edit([FromForm] RecipeViewModel model)
+        {
+            await _recipeService.Edit(model);
+
+            return RedirectToAction("ViewRecipe", "Recipe", new { id = model.Id, area = "Home" });
+        }
     }
 }

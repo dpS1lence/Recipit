@@ -1,4 +1,5 @@
-﻿@using Recipit.Contracts.Helpers
+﻿@using Recipit.Contracts.Constants
+@using Recipit.Contracts.Helpers
 @using Recipit.ViewModels.Recipe
 @using System.Security.Claims
 @model RecipeDisplayModel
@@ -10,7 +11,7 @@
 
 <div class="recipe-container">
     <h2 class="recipe-title">@Model.Name</h2>
-    <h2 class="recipe-user">Публикувана от @Model.User.UserName</h2>
+    <h2 class="recipe-user">Публикувана от <a asp-area="Home" asp-action="Profile" asp-controller="Account" asp-route-name="@Model.User.UserName">@Model.User.UserName</a></h2>
     <img class="recipe-photo" src="@Model.Photo" alt="@Model.Name">
     <p class="recipe-description">@Model.Description</p>
     <p class="recipe-category">Категория: @Model.Category</p>
@@ -24,10 +25,16 @@
         if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == Model.UserId)
         {
             <form class="delete-recipe-form" asp-action="Delete" asp-controller="Recipe" asp-area="Follower" asp-route-id="@Model.Id" method="post">
-                <button type="submit" class="delete-recipe-btn" style="text-decoration: none;"><i class="fa fa-eye"></i> Изтрий рецептата</button>
+                <button type="submit" class="delete-recipe-btn" style="text-decoration: none;"><i class="fa-solid fa-trash"></i> Изтрий рецептата</button>
             </form>
             <form class="delete-recipe-form" asp-action="Edit" asp-controller="Recipe" asp-area="Follower" asp-route-id="@Model.Id" method="get">
-                <button type="submit" class="delete-recipe-btn" style="text-decoration: none;"><i class="fa fa-eye"></i> Редактирай рецептата</button>
+                <button type="submit" class="delete-recipe-btn" style="text-decoration: none;"><i class="fa-solid fa-pen-to-square"></i> Редактирай рецептата</button>
+            </form>
+        }
+        else if (User?.IsInRole(RecipitRole.Administrator) ?? false)
+        {
+            <form class="delete-recipe-form" asp-action="Delete" asp-controller="Recipe" asp-area="Follower" asp-route-id="@Model.Id" method="post">
+                <button type="submit" class="delete-recipe-btn" style="text-decoration: none;"><i class="fa-solid fa-trash"></i> Изтрий рецептата</button>
             </form>
         }
     }
@@ -69,9 +76,9 @@
         {
             <div class="comment">
                 <div class="profile-image-text-ctr">
-                    <img class="comment-image" src="@comment.User?.Photo ?? @string.Empty" alt="image" />
-                    <p class="comment-user">@comment.User?.UserName ?? @string.Empty</p>
-                    @if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == comment.User?.Id)
+                    <img class="comment-image" src="@comment.User?.Photo" alt="image" />
+                    <p class="comment-user">@comment.User?.UserName</p>
+                    @if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == comment.User?.Id || User is not null && User.IsInRole(RecipitRole.Administrator))
                     {
                         <form asp-action="Delete" asp-controller="Comment" asp-area="Follower" asp-route-id="@comment.Id" asp-route-recipeId="@Model.Id" method="post">
                             <button type="submit" class="delete-comment-btn" style="text-decoration: none;"><i class="fa-solid fa-trash-can"></i></button>
