@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "SQLSxrvxr123$"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+
+  mvc:
+    image: dps1lence/recipit-api:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - sqlserver
