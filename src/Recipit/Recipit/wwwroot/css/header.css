@@ -3,6 +3,8 @@
     --secondary-color: #f3f3f3; /* off-white */
     --accent-color: #ffa500; /* bright orange */
     --text-color: #333; /* dark gray for text */
+    --white-color: #ffffff;
+    --gray-color: rgb(128, 128, 128);
 }
 header {
     display: flex;
@@ -10,7 +12,7 @@ header {
     flex-direction: row;
     border-bottom-width: 1px;
     border-color: rgba(0,0,0,.1);
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid var(--white-color);
 }
 
 .search-bar {
@@ -40,7 +42,7 @@ header {
     justify-content: flex-end;
     flex-direction: row;
     width: 100%;
-    background-color: white;
+    background-color: var(--white-color);
 }
 
 .profile-button-container {

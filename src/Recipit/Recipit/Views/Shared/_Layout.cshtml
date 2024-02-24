@@ -50,32 +50,35 @@
                 </section>
                 <section>
                     @* <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Saved" asp-controller="Recipe">
-                            <span class="oi fa-solid fa-heart" aria-hidden="true"></span> Любими
-                        </a>
+                    <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Saved" asp-controller="Recipe">
+                    <span class="oi fa-solid fa-heart" aria-hidden="true"></span> Любими
+                    </a>
                     </div> *@
-                    <div class="nav-item hover">
-                        <a class="nav-link fs-6 px-2" asp-area="Home" asp-action="Profile" asp-controller="Account">
-                            <span class="oi fa-solid fa-user" aria-hidden="true"></span> Профил
-                        </a>
-                    </div>
+                    @if (User?.Identity?.IsAuthenticated ?? false)
+                    {
+                        <div class="nav-item hover">
+                            <a class="nav-link fs-6 px-2" asp-area="Follower" asp-action="Profile" asp-controller="Profile">
+                                <span class="oi fa-solid fa-user" aria-hidden="true"></span> Профил
+                            </a>
+                        </div>
+                    }
                 </section>
             </nav>
         </div>
     </div>
     <div class="page" id="page">
         <header id="header">
-            <div class="header-main-container">
+            <div class="header-main-container">@* 
                 <div class="search-bar">
-                    <input class="searchbar" placeholder="Търси рецепта"/>
-                </div>
+                    <input type="submit" class="searchbar" id="searchbar" placeholder="Търси рецепта" />
+                </div> *@
                 @if (User?.Identity?.IsAuthenticated ?? false)
                 {
                     <div class="profile-button-container">
                         <a class="profile-button" asp-area="Home" asp-controller="Account" asp-action="Logout"><span class="fa-solid fa-right-from-bracket" aria-hidden="true"></span> Изход (@User?.FindFirst(ClaimTypes.Name)?.Value)</a>
                     </div>
                     <div class="profile-pic-button">
-                        <img src="~/images/recipcho.png" alt="Profile Picture" class="profile-picture" id="profilePicture">
+                        <img src="@User?.Claims.FirstOrDefault(c => c.Type == "profile_picture_url")?.Value ?? @("https://brightspotcdn.byu.edu/dims4/default/8325ccb/2147483647/strip/true/crop/340x340+0+0/resize/1200x1200!/quality/90/?url=https%3A%2F%2Fbrigham-young-brightspot.s3.amazonaws.com%2Fbd%2F7f%2Face2612141aa8c6ad180b0786739%2Fdefault-pfp.jpg")" alt="Profile Picture" class="profile-picture" id="profilePicture">
                     </div>
                 }
                 else

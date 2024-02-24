@@ -3,10 +3,12 @@
     --secondary-color: #f3f3f3; /* off-white */
     --accent-color: #ffa500; /* bright orange */
     --text-color: #333; /* dark gray for text */
+    --white-color: #ffffff;
+    --gray-color: rgb(128, 128, 128);
 }
 /* Product Card Specific Styles */
 .product-item {
-    background-color: white;
+    background-color: var(--white-color);
     border-radius: 20px;
     overflow: hidden;
     border: 5px solid var(--secondary-color); /* Light grey border */
@@ -88,7 +90,7 @@
     flex-direction: column;
 }
 .edit-btn, .cancel-btn {
-    background-color: white;
+    background-color: var(--white-color);
     border: 2px solid var(--secondary-color);
     border-radius: 25px;
     color: var(--text-color);
@@ -97,7 +99,7 @@
     background-color: var(--secondary-color);
 }
 .save-btn, .delete-btn {
-    background-color: white;
+    background-color: var(--white-color);
     border: 2px solid var(--primary-color);
     border-radius: 25px;
     color: var(--text-color);

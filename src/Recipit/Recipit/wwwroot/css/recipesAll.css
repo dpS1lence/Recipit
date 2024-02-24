@@ -3,7 +3,55 @@
     --secondary-color: #f3f3f3; /* off-white */
     --accent-color: #ffa500; /* bright orange */
     --text-color: #333; /* dark gray for text */
+    --white-color: #ffffff;
+    --gray-color: rgb(128, 128, 128);
 }
+
+.daily-recipe-container, .top-recipes-container, .latest-recipes-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.recipe-title-in-home {
+    margin: 40px 0;
+}
+
+.welcome-container {
+    color: var(--text-color);
+    padding: 20px;
+    font-weight: bold;
+    border-radius: 25px;
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+    .welcome-container h1 {
+        color: var(--primary-color);
+        font-size: 30px;
+    }
+
+    .welcome-container p {
+        color: var(--gray-color);
+        font-size: 16px;
+        margin: 0;
+        font-size: 20px;
+        padding: 10px;
+    }
+
+/* Additional style for animated numbers */
+.counter {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+
 .skeleton-box {
     background-color: #e0e0e0;
     border-radius: 4px;
@@ -23,7 +71,7 @@
     margin-bottom: 20px; /* Add some space between the rows */
 }
 /* You can add more specific styles to better match the layout of your recipes */
-.recipe-data.skeleton-box {
+.recipe-data .skeleton-box {
     height: 150px;
 }
 
@@ -83,7 +131,7 @@
         font-weight: bold;
         color: var(--text-color);
         border: 1px solid var(--secondary-color);
-        background-color: white;
+        background-color: var(--white-color);
         height: 40px;
         width: 160px;
         margin: 5px;
@@ -104,7 +152,7 @@
     .search-products-form .search-btn {
         padding: 10px 20px;
         border-radius: 10px;
-        background-color: white;
+        background-color: var(--white-color);
         color: var(--text-color);
         cursor: pointer;
         border: none;
@@ -130,7 +178,7 @@
 }
 
     #pagination button {
-        background-color: white;
+        background-color: var(--white-color);
         color: var(--text-color);
         border-radius: 10px;
         padding: 2px 20px;
@@ -162,7 +210,7 @@
 }
 
     .recipes-container .recipe-container {
-        background-color: #fff;
+        background-color: var(--white-color);
         margin: 20px;
         border-radius: 20px;
         overflow: hidden;
@@ -266,7 +314,7 @@
         }
 
             .recipes-container .recipe-container .recipe-buttons .view-recipe-btn {
-                background-color: white;
+                background-color: var(--white-color);
                 color: var(--text-color);
                 border-radius: 10px;
                 padding: 10px 20px;

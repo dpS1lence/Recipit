@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
+using Recipit.Middlewares;
 using Serilog;
 using ServiceCollectionExtensions = Recipit.Infrastructure.Extensions.ServiceCollectionExtensions;
 
@@ -22,7 +23,9 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error/Error");
+    app.UseExceptionHandler("/Home/Home/Error");
+    app.UseStatusCodePagesWithReExecute("/Home/Home/Error", "?statusCode={0}");
+    app.UseHsts();
 }
 else
 {
@@ -35,6 +38,23 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
+app.Use(async (context, next) =>
+{
+    var endpoint = context.GetEndpoint();
+    if (endpoint?.Metadata?.GetMetadata<IAuthorizeData>() != null)
+    {
+        var user = context.User?.Identity;
+        if (user == null || !user.IsAuthenticated)
+        {
+            context.Response.Redirect("/login");
+            return;
+        }
+    }
+
+    await next(context);
+});
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -55,9 +75,9 @@ try
 
     using var scope = app.Services.CreateScope();
 
-    //await DatabaseMiddleware.MigrateDatabase(scope, app.Configuration, app.Logger);
-    //
-    //app.CreateAdministratorUser(app.Configuration);
+    await DatabaseMiddleware.MigrateDatabase(scope, app.Configuration, app.Logger);
+    
+    app.CreateAdministratorUser(app.Configuration);
 
     app.Logger.LogInformation("Starting web host ({ApplicationName})...", appName);
     app.Run();
@@ -70,5 +90,5 @@ catch (Exception ex)
 }
 finally
 {
-    Serilog.Log.CloseAndFlush();
+    Log.CloseAndFlush();
 }

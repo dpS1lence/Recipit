@@ -3,6 +3,8 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.IdentityModel.Tokens;
+    using Recipit.Contracts;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Pagination;
@@ -10,14 +12,15 @@
     using Recipit.ViewModels.Product;
     using System.Linq;
 
-    public class ProductService(RecipitDbContext context, IMapper mapper) : IProductService
+    public class ProductService(RecipitDbContext context, IMapper mapper, ILogger<ProductService> logger) : IProductService
     {
         private readonly RecipitDbContext _context = context;
         private readonly IMapper _mapper = mapper;
+        private readonly ILogger _logger = logger;
 
         public async Task<IPage<ProductViewModel>> All()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products.Include(a => a.ProductRecipes).Where(a => a.ProductRecipes == null || a.ProductRecipes.Count == 0).ToListAsync();
 
             return new Page<ProductViewModel>(products.Select(_mapper.Map<ProductViewModel>), 1, 10, products.Count);
         }
@@ -32,9 +35,20 @@
 
         public async Task<ProductViewModel> Create(ProductViewModel model)
         {
+            Validate.Model(model, _logger);
+
             var product = _mapper.Map<Product>(model);
 
-            if(await _context.Products.AnyAsync(a => a.Name == product.Name))
+            if (product is null)
+                throw new ArgumentException(nameof(product));
+            else if (string.IsNullOrEmpty(product.Name))
+                throw new ArgumentException(nameof(product.Name));
+            else if (string.IsNullOrEmpty(product.Photo))
+                throw new ArgumentException(nameof(product.Photo));
+            else if (product.Calories < 0)
+                throw new ArgumentException(nameof(product.Calories));
+
+            if (await _context.Products.AnyAsync(a => a.Name == product.Name))
             {
                 throw new ArgumentException("Product already exists!");
             }
@@ -76,11 +90,17 @@
                 if (!isInRecipe)
                 {
                     product.Name = model.Name;
-                    product.Photo = model.Photo;
+
+                    if(model.Photo != null)
+                    {
+                        product.Photo = model.Photo;
+                    }
+
                     product.Calories = model.Calories;
 
                     _context.Products.Update(product);
                     await _context.SaveChangesAsync();
+
                     return product.Name;
                 }
             }

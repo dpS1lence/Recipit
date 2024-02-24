@@ -1,11 +1,11 @@
-﻿$(document).ready(function () {
+﻿$(function () {
     $('#li-skeleton').hide();
     var searchTimeout;
     var productPopup = $('#product-popup');
     var productList = $('#product-list');
     var productContainer = $('#product-container');
 
-    $('#btn-add-product').click(function () {
+    $(document).on('click', '#btn-add-product', function () {
         productPopup.toggleClass('hidden');
     });
 
@@ -23,7 +23,7 @@
         }, 1000);
     });
 
-    $('#addNewProduct').click(function () {
+    $(document).on('click', '#addNewProduct', function () {
         showNewProductForm();
     });
 
@@ -65,7 +65,7 @@
             var productItem = $('<div class="product">');
             productItem.append('<div class="x-icon" onclick="removeProduct(this)"><i class="fa fa-trash-can"></i></div>');
             productItem.append('<h1 class="product-name">' + productName + '</h1>');
-            productItem.append('<input class="product-input-for-quantity" type="text" placeholder="Количество" />');
+            productItem.append('<input required class="product-input-for-quantity" type="text" placeholder="Количество" />');
         }
 
         productContainer.append(productItem);
@@ -85,7 +85,7 @@
     function showNewProductForm() {
         fillFormForCreate();
 
-        $('#submitNewProduct').click(function () {
+        $(document).on('click', '#submitNewProduct', function () {
             var newProductName = $('#newProductName').val();
             var newProductPhoto = $('#newProductPhoto').val();
             var newProductCalories = $('#newProductCalories').val();
@@ -129,7 +129,7 @@
             }, 200);
         });
 
-        $('#addNewProduct').click(function () {
+        $(document).on('click', '#addNewProduct', function () {
             showNewProductForm();
             console.log('addNewProduct');
         });
@@ -142,7 +142,7 @@
         productPopup.append('<input class="search-products" type="number" id="newProductCalories" placeholder="Калории">');
         productPopup.append('<button class="add-new-product-btn" id="submitNewProduct">Създай</button>');
         productPopup.append('<button class="add-new-product-btn" id="cancelNewProduct">Откажи</button>');
-        $('#cancelNewProduct').click(function () {
+        $(document).on('click', '#cancelNewProduct', function () {
             fillFormForSearch();
         });
     }

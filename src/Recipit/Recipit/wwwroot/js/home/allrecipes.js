@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function () {
     var currentPage = 1;
     var pageSize = 6; // Adjust this as needed
     var totalPages; // Variable to store total pages
@@ -109,8 +109,8 @@
                     <h1 class="ingridient-more">+${products.length - 5} Други</h1>
                 </div>`;
             }
-
-            var nutritionalValue = recipe.nutritionalValue;
+            console.log(recipe);
+            var nutritionalValue = recipe.calories;
             // Create the element as a string since you're concatenating it into HTML
             var caloriesColorClass = nutritionalValue < 250 ? 'recipe-calories-green' :
                 nutritionalValue >= 250 && nutritionalValue <= 450 ? 'recipe-calories-orange' : 'recipe-calories-red';
@@ -138,24 +138,36 @@
                 </div>
             </div>`;
         });
-        console.log(html);
         $('#recipeDisplay').html(html);
     }
 
     // Function to generate star ratings
     function generateStarRating(averageRating) {
-        console.log(averageRating);
         var starsHtml = '';
-        for (var i = 1; i <= 5; i++) {
-            if (i <= averageRating) {
-                starsHtml += '<i class="fa-solid fa-star"></i>';
-            } else {
-                starsHtml += '<i class="fa-regular fa-star"></i>';
-            }
+        var fullStars = Math.floor(averageRating);
+        var hasHalfStar = averageRating > fullStars;
+
+        console.log("averageRating " + averageRating + " fullStars " + fullStars);
+        // Add full stars
+        for (var i = 0; i < fullStars; i++) {
+            starsHtml += '<i class="fas fa-star"></i>'; // Ensure "fas" and "fa-star" are correct for full stars
         }
-        console.log(starsHtml);
+
+        // Add half star if needed
+        if (hasHalfStar) {
+            starsHtml += '<i class="fas fa-star-half-alt"></i>'; // Use "fa-star-half-alt" for half stars, adjust if necessary
+        }
+
+        // Fill the rest with empty stars
+        var emptyStarsCount = 5 - fullStars - (hasHalfStar ? 1 : 0);
+        for (var i = 0; i < emptyStarsCount; i++) {
+            starsHtml += '<i class="far fa-star"></i>'; // Use "far" for empty stars if available, or adjust
+        }
+
         return starsHtml;
     }
+
+
 
     $(document).on('click', '.view-recipe-btn', function () {
         var recipeId = $(this).data('recipe-id');

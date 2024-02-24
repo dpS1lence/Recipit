@@ -1,31 +1,42 @@
-﻿$(document).ready(function () {
+﻿$(function () {
+    // Attach event handlers using .on()
+
     // Edit Button
-    $(".edit-btn").click(function () {
+    $(document).on('click', '.edit-btn', function () {
         var container = $(this).closest(".product-item");
         container.find(".view-mode").hide();
         container.find(".edit-mode").show();
     });
 
     // Cancel Button
-    $(".cancel-btn").click(function () {
+    $(document).on('click', '.cancel-btn', function () {
         var container = $(this).closest(".product-item");
         container.find(".edit-mode").hide();
         container.find(".view-mode").show();
     });
 
     // Save Button
-    $(".save-btn").click(function () {
+    $(document).on('click', '.save-btn', function () {
         var container = $(this).closest(".product-item");
         var id = container.data("product-id");
         var name = container.find(".edit-name").val();
         var calories = container.find(".edit-calories").val();
         var image = container.find(".edit-image").val();
 
-        // AJAX request to save changes
+        var formData = new FormData();
+        formData.append('Id', id);
+        formData.append('Name', name);
+        formData.append('Calories', calories);
+        formData.append('Photo', image);
+
+        console.log(formData);
+
         $.ajax({
-            url: '/administrator/product/edit', // Adjust URL as needed
+            url: '/administrator/product/edit',
             type: 'PUT',
-            data: JSON.stringify({ id: id, name: name, calories: calories, photo: image }),
+            processData: false,
+            contentType: false,
+            data: formData,
             success: function (response) {
                 location.reload();
             },
@@ -36,18 +47,15 @@
     });
 
     // Delete Button
-    $(".delete-btn").click(function () {
+    $(document).on('click', '.delete-btn', function () {
         var container = $(this).closest(".product-item");
         var name = container.find(".edit-name").val();
         if (confirm("Сигурни ли сте че искате да изтриете " + name + " ?")) {
-            var container = $(this).closest(".product-item");
             var id = container.data("product-id");
 
-            // AJAX request to delete
             $.ajax({
-                url: '/administrator/product/delete',
+                url: '/administrator/product/delete?id=' + encodeURIComponent(id),
                 type: 'DELETE',
-                data: JSON.stringify({ id: id }),
                 success: function (response) {
                     container.remove();
                 },

@@ -8,19 +8,24 @@
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Models.Account;
+    using Recipit.Services.Account;
+    using System.Security.Claims;
 
     [AllowAnonymous]
     [Area("Home")]
     public class AccountController
         (UserManager<RecipitUser> userManager, 
         SignInManager<RecipitUser> signInManager, 
-        IMapper mapper, RecipitDbContext context, 
+        IMapper mapper, 
+        RecipitDbContext context, 
+        IAccountService accountService, 
         RoleManager<IdentityRole> roleManager) : Controller
     {
         private readonly UserManager<RecipitUser> _userManager = userManager;
         private readonly SignInManager<RecipitUser> _signInManager = signInManager;
         private readonly IMapper _mapper = mapper;
         private readonly RecipitDbContext _context = context;
+        private readonly IAccountService _accountService = accountService;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
         [HttpGet("/login")]
@@ -29,8 +34,8 @@
         [HttpGet("/register")]
         public IActionResult Register() => GetView();
 
-        [HttpGet("/profile")]
-        public IActionResult Profile() => View();
+        [HttpGet("/u/{name}")]
+        public async Task<IActionResult> Profile(string name) => View(await _accountService.GetByName(name));
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -41,6 +46,12 @@
             }
 
             var user = _mapper.Map<RecipitUser>(model);
+
+            if (user == null || user.UserName == null || (await _userManager.FindByNameAsync(user.UserName)) != null)
+            {
+                return View(model);
+            }
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
@@ -74,6 +85,19 @@
 
             if (user != null)
             {
+                var existingClaims = await _userManager.GetClaimsAsync(user);
+                var profilePictureClaim = existingClaims.FirstOrDefault(c => c.Type == "profile_picture_url");
+                if (profilePictureClaim != null)
+                {
+                    await _userManager.RemoveClaimAsync(user, profilePictureClaim);
+                }
+
+                if (!string.IsNullOrEmpty(user.Photo))
+                {
+                    var claim = new Claim("profile_picture_url", user.Photo);
+                    await _userManager.AddClaimAsync(user, claim);
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
 
                 if (result.Succeeded)
@@ -101,11 +125,11 @@
             {
                 if (User.IsInRole(RecipitRole.Administrator))
                 {
-                    return RedirectToAction("Action", "Controller", new { Area = "Administrator" });
+                    return RedirectToAction("Followers", "Home", new { Area = "Administrator" });
                 }
                 if (User.IsInRole(RecipitRole.Follower))
                 {
-                    return RedirectToAction("Action", "Controller", new { Area = "Follower" });
+                    return RedirectToAction("Index", "Home", new { Area = "Follower" });
                 }
             }
 

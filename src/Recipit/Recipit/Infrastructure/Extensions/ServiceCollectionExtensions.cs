@@ -6,6 +6,7 @@
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.MailSending;
+    using Recipit.Services.Account;
     using Recipit.Services.Comments;
     using Recipit.Services.Followers;
     using Recipit.Services.Products;
@@ -37,6 +38,7 @@
             builder.Services.AddScoped<IFollowerService, FollowerService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddTransient<IMailSender, MailSender>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddHttpClient();
@@ -44,26 +46,20 @@
         public static void AddMvc(this WebApplicationBuilder builder)
         {
             builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-            builder.Services.AddControllersWithViews();
-
-            builder.Services.AddControllers().AddJsonOptions(options =>
+            builder.Services.AddControllersWithViews()
+            .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
             });
         }
         public static void AddCustomIdentity(this WebApplicationBuilder builder)
         {
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
                 options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
             });
-            builder.Services.ConfigureApplicationCookie(cfg =>
-            {
-                cfg.LoginPath = "/Home/Account/Login";
-                cfg.AccessDeniedPath = "/Home/Acoount/AccessDenied";
-            });
+
             builder.Services.AddIdentity<RecipitUser, IdentityRole>(cfg =>
             {
                 cfg.Password.RequireUppercase = false;

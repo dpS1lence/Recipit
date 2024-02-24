@@ -1,0 +1,193 @@
+﻿@using Recipit.Contracts.Constants
+@model Recipit.ViewModels.Account.UserViewModel
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<link href="~/css/recipesall.css" rel="stylesheet" />
+<link href="~/css/profile.css" rel="stylesheet" />
+
+<div class="user-profile-container">
+    <div class="user-info">
+        <img src="@Model.Photo" alt="User Photo" class="user-photo" />
+        <h2>@Model.FirstName @Model.LastName (@Model.Username)</h2>
+        <p>@Model.Email</p>
+    </div>
+    <div class="user-profile-actions">
+        <button id="editProfileBtn" class="btn">Редактирай</button>
+        <a id="changePasswordBtn" class="btn" asp-area="Follower" asp-controller="Profile" asp-action="ChangePassword">Промяна на парола</a>
+        @if (User.IsInRole(RecipitRole.Follower))
+        {
+            <button id="deleteProfileBtn" class="btn danger">Изтрий профил</button>
+        }
+    </div>
+
+    <!-- Hidden edit form -->
+    <div class="user-info-edit" style="display: none;">
+        <input type="file" id="profilePhotoUpload" style="display: none;" />
+        <img src="@Model.Photo" alt="User Photo" class="user-photo-edit" onclick="document.getElementById('profilePhotoUpload').click();" />
+        <input type="text" id="editFirstName" placeholder="First Name" value="@Model.FirstName" />
+        <input type="text" id="editLastName" placeholder="Last Name" value="@Model.LastName" />
+        <input type="email" id="editEmail" placeholder="Email" value="@Model.Email" />
+    </div>
+
+    <div class="edit-actions" style="display: none;">
+        <button id="saveChangesBtn" class="btn">Запази</button>
+        <button id="cancelChangesBtn" class="btn">Откажи</button>
+    </div>
+
+
+    <div class="recipes-container" id="recipeDisplay">
+        @if (Model.UserRecipes != null && Model.UserRecipes.Any())
+        {
+            foreach (var recipe in Model.UserRecipes)
+            {
+                <div class="recipe-container">
+                    <div class="recipe-data">
+                        <img class="recipe-image" src="@recipe.Photo" alt="Recipe Image" />
+                        <div class="recipe-title-and-rating">
+                            <h1 class="recipe-title">@recipe.Name</h1>
+                            <div class="stars-container">
+                                @{
+                                    var fullStars = Math.Floor(recipe.AverageRating);
+                                    var hasHalfStar = recipe.AverageRating > fullStars;
+                                    var totalStars = 5;
+                                }
+
+                                @for (int i = 0; i < fullStars; i++)
+                                {
+                                    <i class="fa-solid fa-star"></i>
+                                }
+                                @if (hasHalfStar)
+                                {
+                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                }
+                                @for (int i = 0; i < totalStars - fullStars - (hasHalfStar ? 1 : 0); i++)
+                                {
+                                    <i class="fa-regular fa-star"></i>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recipe-products">
+                        <h1 class="recipe-ingridients-title">Съставки</h1>
+                        <div class="ingridients-container">
+                            @for (int i = 0; i < recipe.Products.Count() && i < 5; i++)
+                            {
+                                var product = recipe.Products.ElementAt(i);
+                                <div class="ingridient">
+                                    <img class="ingridient-image" src="@product.Photo" alt="Product Image" />
+                                    <h1 class="ingridient-title">@product.Name</h1>
+                                </div>
+                            }
+                            @if (recipe.Products.Count() > 5)
+                            {
+                                <div class="ingridient">
+                                    <h1 class="ingridient-more">+@((recipe.Products.Count() - 5).ToString()) Още</h1>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="recipe-buttons">
+                        <a class="view-recipe-btn" style="text-decoration: none;" asp-action="ViewRecipe" asp-controller="Recipe" asp-area="Home" asp-route-id="@recipe.Id"><i class="fa fa-eye"></i> Виж рецепта</a>
+                        @{
+                            var caloriesColorClass = recipe.Calories < 250 ? "recipe-calories-green" :
+                            recipe.Calories >= 250 && recipe.Calories <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
+                        }
+                        <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @((int)recipe.Calories) Калории</h2>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Потребителят няма публикувани рецепти</p>
+        }
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#editProfileBtn').click(function () {
+            $('.user-info').hide();
+            $('.user-profile-actions').hide();
+            $('.user-info-edit').show();
+            $('.edit-actions').show();
+            console.log('kur');
+        });
+
+        $('#deleteProfileBtn').click(function () {
+            if (confirm("Сигурни ли сте че искате да изтриете профила си?")) {
+                $.ajax({
+                    url: '/follower/profile/delete',
+                    type: 'DELETE',
+                    success: function (response) {
+                        alert('Профилът ви беше изтрит!');
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+        $('#cancelChangesBtn').click(function () {
+            $('.user-info').show();
+            $('.user-profile-actions').show();
+            $('.user-info-edit').hide();
+            $('.edit-actions').hide();
+        });
+
+        $('#profilePhotoUpload').change(function () {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('.user-photo-edit').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Other click handlers...
+
+        $('#saveChangesBtn').click(function (e) {
+            e.preventDefault();
+
+            var formData = new FormData();
+            formData.append('Email', $('#editEmail').val());
+            formData.append('FirstName', $('#editFirstName').val());
+            formData.append('LastName', $('#editLastName').val());
+
+            var photo = $('#profilePhotoUpload')[0].files[0];
+            if (photo) {
+                formData.append('Photo', photo);
+            }
+
+            $.ajax({
+                url: '/follower/profile/edit',
+                type: 'PUT',
+                data: formData,
+                contentType: false, // Required for 'FormData' to work correctly
+                processData: false, // Required for 'FormData' to work correctly
+                success: function (response) {
+                    // Handle success. You might want to redirect the user or display a success message
+                    alert('Профилът ви беше редактиран.');
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle error. You might want to show the error message to the user
+                    alert('Възникна грешка! Моля опитайте отново!');
+                }
+            });
+        });
+    });
+
+</script>
