@@ -63,6 +63,7 @@ namespace Recipit.ViewModels.Recipe
                     {
                         Email = pr.User.Email,
                         Username = pr.User.UserName,
+                        Photo = pr.User.Photo,
                         Id = pr.User.Id
                     }
                 })))

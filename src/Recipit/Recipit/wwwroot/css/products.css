@@ -6,6 +6,14 @@
     --white-color: #ffffff;
     --gray-color: rgb(128, 128, 128);
 }
+
+
+.recipe-title-in-home {
+    margin: 40px 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 26px;
+}
 /* Product Card Specific Styles */
 .product-item {
     background-color: var(--white-color);

@@ -7,6 +7,7 @@
     using Recipit.Contracts.Constants;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
+    using Recipit.Infrastructure.Extensions.Contracts;
     using Recipit.Models.Account;
     using Recipit.Services.Account;
     using System.Security.Claims;
@@ -19,6 +20,7 @@
         IMapper mapper,
         RecipitDbContext context,
         IAccountService accountService,
+        IConfiguration configuration,
         RoleManager<IdentityRole> roleManager) : Controller
     {
         private readonly UserManager<RecipitUser> _userManager = userManager;
@@ -26,6 +28,7 @@
         private readonly IMapper _mapper = mapper;
         private readonly RecipitDbContext _context = context;
         private readonly IAccountService _accountService = accountService;
+        private readonly IConfiguration _configuration = configuration;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
         [HttpGet("/login")]
@@ -59,6 +62,8 @@
             {
                 return View(model);
             }
+
+            user.Photo = configuration.GetSection("UserSettings").Get<UserSettings>()!.Photo;
 
             var result = await _userManager.CreateAsync(user, model.Password);
 

@@ -17,6 +17,13 @@
     padding: 20px; /* Padding around the grid */
 }
 
+
+.recipe-title-in-home {
+    margin: 40px 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 26px;
+}
 /* Individual Follower Cards */
 .product-item {
     background-color: var(--white-color);
