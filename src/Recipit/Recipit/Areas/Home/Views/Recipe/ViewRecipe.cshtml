@@ -77,7 +77,7 @@
             <div class="comment">
                 <div class="profile-image-text-ctr">
                     <img class="comment-image" src="@comment.User?.Photo" alt="image" />
-                    <p class="comment-user">@comment.User?.UserName</p>
+                    <p class="comment-user">@comment.User?.Username</p>
                     @if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == comment.User?.Id || User is not null && User.IsInRole(RecipitRole.Administrator))
                     {
                         <form asp-action="Delete" asp-controller="Comment" asp-area="Follower" asp-route-id="@comment.Id" asp-route-recipeId="@Model.Id" method="post">

@@ -105,7 +105,7 @@
 
             existingRecipe.Name = recipeViewModel.Name;
             existingRecipe.Description = recipeViewModel.Description;
-            
+
             if (recipeViewModel.Photo is not null)
             {
                 existingRecipe.Photo = await UploadImage.ToImgur(recipeViewModel.Photo, _httpClient);
@@ -114,7 +114,7 @@
             existingRecipe.Calories = recipeViewModel.Calories;
             existingRecipe.Category = recipeViewModel.Category;
 
-            var newProductsDict = string.IsNullOrEmpty(recipeViewModel.Products) ? [] 
+            var newProductsDict = string.IsNullOrEmpty(recipeViewModel.Products) ? []
             : JsonConvert.DeserializeObject<Dictionary<string, string>>(recipeViewModel.Products);
 
             ArgumentNullException.ThrowIfNull(newProductsDict);
@@ -181,10 +181,10 @@
             var totalPages = (int)Math.Ceiling(totalRecipesCount / (double)pageSize);
 
             var allRecipes = await _context.Recipes
-                .Include(a => a.ProductRecipes)
-                .ThenInclude(a => a.Product)
                 .Include(a => a.User)
                 .Include(a => a.Comments)
+                .Include(a => a.ProductRecipes)
+                .ThenInclude(a => a.Product)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -231,14 +231,14 @@
             {
                 filteredRecipes = [.. filteredRecipes.OrderBy(r => r.AverageRating)];
             }
-            else if(model.AverageRating == SortDirection.Descending)
+            else if (model.AverageRating == SortDirection.Descending)
                 filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.AverageRating)];
 
             if (model.NutritionalValue == SortDirection.Ascending)
             {
                 filteredRecipes = [.. filteredRecipes.OrderBy(r => r.Calories)];
             }
-            else if(model.NutritionalValue == SortDirection.Descending)
+            else if (model.NutritionalValue == SortDirection.Descending)
                 filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.Calories)];
 
             var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(filteredRecipes);
@@ -323,7 +323,7 @@
 
             ArgumentNullException.ThrowIfNull(recipe);
             ArgumentNullException.ThrowIfNull(recipe.ProductRecipes);
-            
+
             var map = _mapper.Map<EditRecipeOutputModel>(recipe);
             map.Products = recipe.ProductRecipes
                 .Select(a => new Tuple<string, string>(a.Product.Name, a.QuantityDetails));

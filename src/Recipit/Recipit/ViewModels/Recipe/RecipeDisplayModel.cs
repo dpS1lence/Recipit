@@ -59,7 +59,12 @@ namespace Recipit.ViewModels.Recipe
                     Rating = pr.Rating,
                     RecipeId = pr.Id,
                     Text = pr.Text,
-                    User = pr.User
+                    User = new UserViewModel
+                    {
+                        Email = pr.User.Email,
+                        Username = pr.User.UserName,
+                        Id = pr.User.Id
+                    }
                 })))
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserModel
                 {

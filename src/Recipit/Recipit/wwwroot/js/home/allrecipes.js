@@ -1,12 +1,13 @@
 ﻿$(function () {
     var currentPage = 1;
-    var pageSize = 6; // Adjust this as needed
     var totalPages; // Variable to store total pages
     var currentFilterData = {}; // Object to hold the current filter data
 
     function loadRecipes(page, filterData) {
         $('#recipeSkeleton').show();
         $('#recipeDisplay').hide();
+
+        let pageSize = $('#pageSize').val();
 
         var url = '/home/recipe/recipes';
         var data = { currentPage: page, pageSize: pageSize };
@@ -63,8 +64,16 @@
 
     function updatePagination(page) {
         $('#currentPage').text(page);
-        $('#prevPage').prop('disabled', page === 1);
-        $('#nextPage').prop('disabled', page === totalPages);
+        if (page === 1) {
+            $('#prevPage').addClass('disabled');
+        } else {
+            $('#prevPage').removeClass('disabled');
+        }
+        if (page === totalPages) {
+            $('#nextPage').addClass('disabled');
+        } else {
+            $('#nextPage').removeClass('disabled');
+        }
     }
 
     $('#recipeFilterForm').submit(function (event) {

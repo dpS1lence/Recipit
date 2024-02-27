@@ -25,6 +25,11 @@
         <option value="@SortDirection.Ascending">Нарастващ</option>
         <option value="@SortDirection.Descending">Намаляващ</option>
     </select>
+    <select class="select-category" id="pageSize">
+        <option value="3">3 рецепти</option>
+        <option value="6">6 рецепти</option>
+        <option value="9">9 рецепти</option>
+    </select>
     <button class="search-btn" type="submit"><span class="oi fa-solid fa-filter" aria-hidden="true"></span>Филтрирай</button>
 </form>
 <div class="recipes-container" id="recipeSkeleton">
@@ -54,12 +59,12 @@
     </div>
 </div>
 
-<div class="recipes-container"id="recipeDisplay">
+<div class="recipes-container" id="recipeDisplay">
 </div>
 <div id="pagination">
-    <button id="prevPage">Previous</button>
+    <button id="prevPage">Предишна</button>
     <span id="currentPage">1</span>
-    <button id="nextPage">Next</button>
+    <button id="nextPage">Следваща</button>
 </div>
 
 
