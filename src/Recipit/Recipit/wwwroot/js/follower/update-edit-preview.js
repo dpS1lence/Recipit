@@ -1,4 +1,6 @@
 ﻿function generatePreview(imgUrl, username) {
+    console.log(imgUrl);
+    console.log(username);
     var displayPreview = document.getElementById('display-preview');
     var btnPreview = document.getElementById('btn-preview');
 

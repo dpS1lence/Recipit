@@ -51,23 +51,16 @@
                                                                </div>
                                                            </div>
                                                            <div class="post-header-buttons">
-                                                               <a class="follow-btn">1 minute ago</a>
+                                                               <a class="follow-btn">Преди 1 минута</a>
                                                            </div>
                                                        </header>
                                                        <div class="post-content">
                                                            <div class="post-content-bg"></div>
                                                                <h1 class="content-title">${titleData}</h1>
-                                                                   <img class="uploaded-image-file" src="${imageUrl}" alt="Uploaded Image" />
+                                                                   <img class="uploaded-image-file" src="${imageUrl}" alt="Снимка" />
                                                            <p class="content-text-container">
                                                                    ${descriptionData}
                                                            </p>
-                                                       </div>
-                                                       <div class="post-footer">
-                                                           <div class="footer-buttons">
-                                                               <a class="footer-btn-action" href="#"><i class="fa fa-heart"></i> 0</a>
-                                                               <a class="footer-btn-action" href="#"><i class="fa fa-comment"></i> 0</a>
-                                                               <a class="footer-btn-action" href="#"><i class="fa fa-share"></i> Share</a>
-                                                           </div>
                                                        </div>
                                                    </div>
                                                         `;

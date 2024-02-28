@@ -1,7 +1,8 @@
 ﻿@using Recipit.Infrastructure.Data.Models.Contracts
+@using System.Security.Claims
 @{
     var imgUrl = string.Empty;
-    var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+    var username = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
     if (User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value != null)
     {
         imgUrl = User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value;
@@ -20,8 +21,8 @@
         </div>
         <div class="external-recipe-create-container">
             <form class="external-recipe-create-form" method="post" asp-action="CreateExternaly" asp-controller="Recipe" asp-area="Follower" asp-route-url="@url">
-                <input class="external-recipe-input" asp-for="@url" placeholder="Линк" />
-                <button type="submit" class="external-recipe-button">Внеси от <img class="external-recipe-image" src="https://gotvach.bg/files/lib/content/logo/gotvach.svg" /></button>
+                <input id="external-create-input" class="external-recipe-input" asp-for="@url" required placeholder="Линк" />
+                <button type="submit" id="externalSubmitBtn" class="external-recipe-button">Внеси от <img class="external-recipe-image" src="https://gotvach.bg/files/lib/content/logo/gotvach.svg" /></button>
             </form>
         </div>
         <div class="post-content-container">
@@ -121,5 +122,18 @@
         var imgUrl = "@Html.Raw(imgUrl)";
         var username = "@Html.Raw(username)";
         generatePreview(imgUrl, username);
+    });
+</script>
+<script>
+    document.getElementById('externalSubmitBtn').addEventListener('click', function (e) {
+        var inputValue = document.getElementById('external-create-input').value;
+        if (!inputValue) {
+            window.open("https://recepti.gotvach.bg/?=6&s=10");
+        } else if (inputValue.startsWith("https://recepti.gotvach.bg/")) {
+            this.classList.add('loading');
+            this.innerHTML = '<div class="lds-dual-ring"></div>';
+        } else {
+            alert("Моля въведете валиден адрес, започващ с 'https://recepti.gotvach.bg/'");
+        }
     });
 </script>
