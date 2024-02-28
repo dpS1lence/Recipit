@@ -13,7 +13,6 @@ builder.AddMvc();
 builder.AddDatabase();
 builder.AddCustomHealthChecks();
 builder.AddCustomIdentity();
-builder.AddEmailSending();
 builder.AddServices();
 
 builder.Host.UseSerilog(ServiceCollectionExtensions.CreateSerilogLogger(builder.Configuration, appName));

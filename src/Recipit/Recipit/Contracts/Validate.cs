@@ -8,7 +8,7 @@
 
         public static void Model<T>(T model, ILogger logger)
         {
-            if (model == null)
+            if (model is null)
             {
                 var typeName = typeof(T).Name;
                 logger.LogError(ModelNullOrEmptyErrorMessage, typeName);
