@@ -1,6 +1,6 @@
 ﻿@using Recipit.Infrastructure.Data.Models.Contracts
 @{
-    var imgUrl = "";
+    var imgUrl = string.Empty;
     var username = User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
     if (User.Claims.FirstOrDefault(c => c.Type == "profile_picture")?.Value != null)
     {
@@ -10,12 +10,19 @@
     {
         imgUrl = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
     }
+    var url = string.Empty;
 }
 
 <div class="cerate-post-container">
     <section class="create-post-section">
         <div class="create-post-title-container">
             <h1>Публикувай рецепта</h1>
+        </div>
+        <div class="external-recipe-create-container">
+            <form class="external-recipe-create-form" method="post" asp-action="CreateExternaly" asp-controller="Recipe" asp-area="Follower" asp-route-url="@url">
+                <input class="external-recipe-input" asp-for="@url" placeholder="Линк" />
+                <button type="submit" class="external-recipe-button">Внеси от <img class="external-recipe-image" src="https://gotvach.bg/files/lib/content/logo/gotvach.svg" /></button>
+            </form>
         </div>
         <div class="post-content-container">
             <div class="post-content-navigation-top">

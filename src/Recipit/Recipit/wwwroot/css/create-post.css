@@ -357,18 +357,19 @@
 .post-content-btn {
     padding: 5px 20px;
     text-decoration: none;
-    background-color: var(--accent-color);
+    background-color: var(--white-color);
     color: var(--text-color);
     cursor: pointer;
     border: none;
     border-radius: 20px;
     transition: all 0.3s;
     border: 2px solid var(--accent-color);
+    font-weight: bold;
 }
 
     .post-content-btn:hover {
         border: 2px solid var(--accent-color);
-        background-color: var(--secondary-color);
+        background-color: var(--accent-color);
         color: var(--text-color);
     }
 
@@ -567,3 +568,45 @@
                 .post-container .post-footer .footer-buttons .footer-btn-action:hover {
                     color: var(--text-color);
                 }
+
+.external-recipe-create-container {
+    display: flex;
+    justify-content: center;
+}
+
+.external-recipe-create-form {
+    display: flex;
+    padding-top: 50px;
+    transition: all 0.3s;
+}
+
+    .external-recipe-create-form:hover .external-recipe-input {
+        border-color: var(--accent-color);
+    }
+
+    .external-recipe-create-form:hover .external-recipe-button {
+        border-color: var(--accent-color);
+    }
+
+.external-recipe-input {
+    border: 2px solid var(--secondary-color);
+    border-right: none;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding-left: 20px;
+}
+
+.external-recipe-button {
+    width: 300px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 2px solid var(--secondary-color);
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-left: none;
+    color: gray;
+}
