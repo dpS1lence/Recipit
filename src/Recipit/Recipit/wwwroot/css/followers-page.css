@@ -79,7 +79,7 @@
 
 /* Button Styles */
 .delete-btn {
-    background-color: var(--white-color);
+    background-color: transparent;
     border: 2px solid var(--accent-color);
     border-radius: 25px;
     color: var(--text-color);
