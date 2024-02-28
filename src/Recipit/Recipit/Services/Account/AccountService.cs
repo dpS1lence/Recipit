@@ -37,7 +37,7 @@ namespace Recipit.Services.Account
             var user = await _userManager.FindByIdAsync(GetUser.Id(_httpContextAccessor))
                 ?? throw new ArgumentNullException(nameof(model));
 
-            if(model.NewPassword == model.ConfirmNewPassword)
+            if (model.NewPassword == model.ConfirmNewPassword)
                 await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
         }
 
@@ -53,7 +53,7 @@ namespace Recipit.Services.Account
             {
                 _context.Recipes
                     .Where(r => r.UserId == uId)
-                    .ToListAsync(), 
+                    .ToListAsync(),
                 _context.Comments
                     .Where(c => c.UserId == uId || _context.Recipes.Any(r => r.UserId == uId && r.Id == c.RecipeId))
                     .ToListAsync(),
@@ -131,6 +131,7 @@ namespace Recipit.Services.Account
             var recipes = await _context.Recipes
                 .Where(a => a.UserId == user.Id)
                 .Include(a => a.Comments)
+                    .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
                 .ToListAsync();

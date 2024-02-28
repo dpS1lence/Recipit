@@ -4,23 +4,47 @@
 
 <link href="~/css/followers-page.css" rel="stylesheet" />
 
-<h1>Последователи</h1>
+<h1 class="recipe-title-in-home">Последователи</h1>
+<div class="p-search-ctr">
+    <input class="p-search" id="searchFollowers" type="text" placeholder="Търси" />
+</div>
 <div class="recipes-container">
-    @foreach (var follower in Model)
-    {
-        <div class="product-item" data-follower-id="@follower.Id">
-            <div class="recipe-data">
-                <img src="@follower.Photo" alt="Follower Photo" />
-                <div class="recipe-title-and-rating">
-                    <h3 class="recipe-title"><a asp-area="Home" asp-action="Profile" asp-controller="Account" asp-route-name="@follower.Username">@follower.Email</a></h3>
-                </div>
-                <div class="recipe-buttons">
-                    <button class="delete-btn" data-follower-id="@follower.Id">Remove Follower</button>
-                </div>
-            </div>
-        </div>
-    }
+    <table class="table-followers">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var follower in Model)
+            {
+                <tr data-follower-id="@follower.Id">
+                    <td><img src="@follower.Photo" alt="Follower Photo" style="width: 50px; height: 50px; border-radius: 50%;" /></td>
+                    <td>
+                        <a asp-area="Home" asp-action="Profile" asp-controller="Account" asp-route-name="@follower.Username">
+                            @follower.Email
+                        </a>
+                    </td>
+                    <td>
+                        <button class="delete-btn" data-follower-id="@follower.Id">Remove Follower</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="~/js/admin/followers-page.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#searchFollowers").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(".table-followers tbody tr").filter(function () {
+                $(this).toggle($(this).find('td:nth-child(2)').text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

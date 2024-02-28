@@ -1,6 +1,5 @@
 ﻿$(function () {
     var currentPage = 1;
-    var pageSize = 6; // Adjust this as needed
     var totalPages; // Variable to store total pages
     var currentFilterData = {}; // Object to hold the current filter data
 
@@ -8,8 +7,10 @@
         $('#recipeSkeleton').show();
         $('#recipeDisplay').hide();
 
+        let pageSize = $('#pageSize').val();
+
         var url = '/home/recipe/recipes';
-        var data = { currentPage: page, pageSize: pageSize };
+        var data = { currentPage: page, pageSize: pageSize, _: new Date().getTime() };
 
         if (filterData) { // If there is filter data, change URL and append data
             url = '/home/recipe/filter';
@@ -25,6 +26,7 @@
                 $('#recipeDisplay').show();
                 console.log(response);
                 if (response.recipes) {
+                    console.log(response.recipes);
                     displayRecipes(response.recipes); // Pass the 'recipes' object
                 } else {
                     console.error('No recipes found in response');
@@ -63,8 +65,16 @@
 
     function updatePagination(page) {
         $('#currentPage').text(page);
-        $('#prevPage').prop('disabled', page === 1);
-        $('#nextPage').prop('disabled', page === totalPages);
+        if (page === 1) {
+            $('#prevPage').addClass('disabled');
+        } else {
+            $('#prevPage').removeClass('disabled');
+        }
+        if (page === totalPages) {
+            $('#nextPage').addClass('disabled');
+        } else {
+            $('#nextPage').removeClass('disabled');
+        }
     }
 
     $('#recipeFilterForm').submit(function (event) {
@@ -122,7 +132,9 @@
             // Building the entire recipe HTML
             html += `<div class="recipe-container">
                 <div class="recipe-data">
-                    <img class="recipe-image" src="${recipe.photo}" alt="image"/>
+                    <div class="recipe-image-ctr">
+                        <img class="recipe-image" src="${recipe.photo}" alt="image"/>
+                    </div>
                     <div class="recipe-title-and-rating">
                         <h1 class="recipe-title">${recipe.name}</h1>
                         <div class="stars-container">${stars}</div>

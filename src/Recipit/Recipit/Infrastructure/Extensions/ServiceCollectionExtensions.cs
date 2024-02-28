@@ -9,6 +9,7 @@
     using Recipit.Services.Account;
     using Recipit.Services.Comments;
     using Recipit.Services.Followers;
+    using Recipit.Services.ImageWebSearch;
     using Recipit.Services.Products;
     using Recipit.Services.Recipes;
     using Serilog;
@@ -39,6 +40,8 @@
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IExternalRecipeCreationService, ExternalRecipeCreationService>();
+            builder.Services.AddScoped<ISearchService, GoogleImageSearchService>();
             builder.Services.AddTransient<IMailSender, MailSender>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddHttpClient();

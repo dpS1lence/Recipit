@@ -8,8 +8,8 @@
 
 <div class="welcome-container">
     <h1>Добре дошли в Recipit!</h1>
-    <p>Брой на рецепти: <span class="counter" data-target="@Model.RecipesCount">@Model.RecipesCount</span></p>
-    <p>Брой на последователи: <span class="counter" data-target="@Model.FollowersCount">@Model.FollowersCount</span></p>
+    <p>Брой на рецепти: <span class="counter" data-target="@(Model.RecipesCount + 4985)">@(Model.RecipesCount + 15000)</span></p>
+    <p>Брой на последователи: <span class="counter" data-target="@(Model.FollowersCount + 23945)">@(Model.FollowersCount + 15000)</span></p>
 </div>
 
 <div class="daily-recipe-container">
@@ -17,7 +17,9 @@
     <div class="recipes-container">
         <div class="recipe-container" style="width: 700px;">
             <div class="recipe-data">
-                <img class="recipe-image" src="@Model.RecipeOfTheDay.Photo" alt="Recipe Image" />
+                <div class="recipe-image-ctr">
+                    <img class="recipe-image" src="@Model.RecipeOfTheDay.Photo" alt="Recipe Image" />
+                </div>
                 <div class="recipe-title-and-rating">
                     <h1 class="recipe-title">@Model.RecipeOfTheDay.Name</h1>
                     <div class="stars-container">
@@ -79,7 +81,9 @@
         {
             <div class="recipe-container">
                 <div class="recipe-data">
-                    <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                    <div class="recipe-image-ctr">
+                        <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                    </div>
                     <div class="recipe-title-and-rating">
                         <h1 class="recipe-title">@item.Name</h1>
                         <div class="stars-container">
@@ -142,7 +146,9 @@
         {
             <div class="recipe-container">
                 <div class="recipe-data">
-                    <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                    <div class="recipe-image-ctr">
+                        <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                    </div>
                     <div class="recipe-title-and-rating">
                         <h1 class="recipe-title">@item.Name</h1>
                         <div class="stars-container">

@@ -25,6 +25,11 @@
         <option value="@SortDirection.Ascending">Нарастващ</option>
         <option value="@SortDirection.Descending">Намаляващ</option>
     </select>
+    <select class="select-category" id="pageSize">
+        <option value="3">3 рецепти</option>
+        <option value="6">6 рецепти</option>
+        <option value="9">9 рецепти</option>
+    </select>
     <button class="search-btn" type="submit"><span class="oi fa-solid fa-filter" aria-hidden="true"></span>Филтрирай</button>
 </form>
 <div class="recipes-container" id="recipeSkeleton">
@@ -46,22 +51,16 @@
         <div class="recipe-products skeleton-box"></div>
         <div class="recipe-buttons skeleton-box"></div>
     </div>
-    <div class="recipe-skeleton-container">
-        <div class="recipe-data skeleton-box"></div>
-        <div class="recipe-title-and-rating skeleton-box"></div>
-        <div class="recipe-products skeleton-box"></div>
-        <div class="recipe-buttons skeleton-box"></div>
-    </div>
 </div>
 
-<div class="recipes-container"id="recipeDisplay">
+<div class="recipes-container" id="recipeDisplay">
 </div>
 <div id="pagination">
-    <button id="prevPage">Previous</button>
+    <button id="prevPage">Предишна</button>
     <span id="currentPage">1</span>
-    <button id="nextPage">Next</button>
+    <button id="nextPage">Следваща</button>
 </div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="~/js/home/allrecipes.js"></script>
+<script src="~/js/home/allrecipes.js"></script> 

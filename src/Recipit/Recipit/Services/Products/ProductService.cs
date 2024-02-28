@@ -20,7 +20,10 @@
 
         public async Task<IPage<ProductViewModel>> All()
         {
-            var products = await _context.Products.Include(a => a.ProductRecipes).Where(a => a.ProductRecipes == null || a.ProductRecipes.Count == 0).ToListAsync();
+            var products = await _context.Products
+                .Include(a => a.ProductRecipes)
+                .Where(a => a.ProductRecipes == null || a.ProductRecipes.Count == 0)
+                .ToListAsync();
 
             return new Page<ProductViewModel>(products.Select(_mapper.Map<ProductViewModel>), 1, 10, products.Count);
         }
@@ -64,11 +67,11 @@
         {
             var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == id);
 
-            if(product != null)
+            if (product != null)
             {
                 var isInRecipe = await _context.Recipes.AnyAsync(b => b.Id == product.Id);
 
-                if(!isInRecipe)
+                if (!isInRecipe)
                 {
                     _context.Products.Remove(product);
                     await _context.SaveChangesAsync();
@@ -85,13 +88,15 @@
 
             if (product != null)
             {
-                var isInRecipe = await _context.Recipes.AnyAsync(b => b.Id == product.Id);
+                var isInRecipe = await _context.Recipes
+                    .Include(a => a.ProductRecipes)
+                    .AnyAsync(b => b.ProductRecipes.Any(a => a.ProductId == product.Id));
 
                 if (!isInRecipe)
                 {
                     product.Name = model.Name;
 
-                    if(model.Photo != null)
+                    if (model.Photo != null)
                     {
                         product.Photo = model.Photo;
                     }

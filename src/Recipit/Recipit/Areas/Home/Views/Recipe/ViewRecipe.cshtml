@@ -52,23 +52,30 @@
         }
     </div>
 </div>
-<div class="add-comment-container">
-    <h3>Публикувай коментар</h3>
-    <form method="post" id="commentForm">
-        <textarea required class="comment-textarea" name="commentText" placeholder="Текст на коментара"></textarea>
-        <div class="comment-submit-ctr">
-            <div class="comment-rating">
-                <i class="fa-regular fa-star" data-rating="1"></i>
-                <i class="fa-regular fa-star" data-rating="2"></i>
-                <i class="fa-regular fa-star" data-rating="3"></i>
-                <i class="fa-regular fa-star" data-rating="4"></i>
-                <i class="fa-regular fa-star" data-rating="5"></i>
-            </div>
-            <input type="hidden" id="newCommentRating" name="rating" value="0">
-            <input type="submit" value="Коментирай" class="submit-comment-btn">
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+    if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value != Model.UserId)
+    {
+        <div class="add-comment-container">
+            <h3>Публикувай коментар</h3>
+            <form method="post" id="commentForm">
+                <textarea required class="comment-textarea" name="commentText" placeholder="Текст на коментара"></textarea>
+                <div class="comment-submit-ctr">
+                    <div class="comment-rating">
+                        <i class="fa-regular fa-star" data-rating="1"></i>
+                        <i class="fa-regular fa-star" data-rating="2"></i>
+                        <i class="fa-regular fa-star" data-rating="3"></i>
+                        <i class="fa-regular fa-star" data-rating="4"></i>
+                        <i class="fa-regular fa-star" data-rating="5"></i>
+                    </div>
+                    <input type="hidden" id="newCommentRating" name="rating" value="0">
+                    <input type="submit" value="Коментирай" class="submit-comment-btn">
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+    }
+}
+
 <div class="comments-container">
     @if(Model.Comments != null)
     {
@@ -77,7 +84,7 @@
             <div class="comment">
                 <div class="profile-image-text-ctr">
                     <img class="comment-image" src="@comment.User?.Photo" alt="image" />
-                    <p class="comment-user">@comment.User?.UserName</p>
+                    <p class="comment-user">@comment.User?.Username</p>
                     @if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == comment.User?.Id || User is not null && User.IsInRole(RecipitRole.Administrator))
                     {
                         <form asp-action="Delete" asp-controller="Comment" asp-area="Follower" asp-route-id="@comment.Id" asp-route-recipeId="@Model.Id" method="post">
