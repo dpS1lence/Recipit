@@ -203,6 +203,7 @@
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
                 .Include(a => a.Comments)
+                .ThenInclude(a => a.User)
                 .Include(a => a.User)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)

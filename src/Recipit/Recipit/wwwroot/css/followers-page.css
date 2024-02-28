@@ -113,7 +113,6 @@
 }
 
     .table-followers th, .table-followers td {
-        border: 2px solid var(--secondary-color);
         padding: 8px;
     }
 

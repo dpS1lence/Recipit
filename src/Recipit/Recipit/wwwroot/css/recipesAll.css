@@ -238,11 +238,18 @@
             padding: 15px;
         }
 
-            .recipes-container .recipe-container .recipe-data .recipe-image {
+            .recipes-container .recipe-container .recipe-data .recipe-image-ctr {
                 width: 100px;
                 height: 100px;
                 border-radius: 50%;
-                margin-right: 15px;
+                margin-right: 10px;
+            }
+
+            .recipes-container .recipe-container .recipe-data .recipe-image {
+                width: 100px;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
             }
 
             .recipes-container .recipe-container .recipe-data .recipe-title-and-rating {

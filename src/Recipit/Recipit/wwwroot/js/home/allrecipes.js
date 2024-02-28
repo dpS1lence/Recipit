@@ -10,7 +10,7 @@
         let pageSize = $('#pageSize').val();
 
         var url = '/home/recipe/recipes';
-        var data = { currentPage: page, pageSize: pageSize };
+        var data = { currentPage: page, pageSize: pageSize, _: new Date().getTime() };
 
         if (filterData) { // If there is filter data, change URL and append data
             url = '/home/recipe/filter';
@@ -26,6 +26,7 @@
                 $('#recipeDisplay').show();
                 console.log(response);
                 if (response.recipes) {
+                    console.log(response.recipes);
                     displayRecipes(response.recipes); // Pass the 'recipes' object
                 } else {
                     console.error('No recipes found in response');
@@ -131,7 +132,9 @@
             // Building the entire recipe HTML
             html += `<div class="recipe-container">
                 <div class="recipe-data">
-                    <img class="recipe-image" src="${recipe.photo}" alt="image"/>
+                    <div class="recipe-image-ctr">
+                        <img class="recipe-image" src="${recipe.photo}" alt="image"/>
+                    </div>
                     <div class="recipe-title-and-rating">
                         <h1 class="recipe-title">${recipe.name}</h1>
                         <div class="stars-container">${stars}</div>
