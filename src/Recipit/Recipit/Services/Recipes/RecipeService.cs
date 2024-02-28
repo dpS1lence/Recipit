@@ -20,7 +20,12 @@
     using RecipeDb = Infrastructure.Data.Models.Recipe;
 
     public class RecipeService
-        (RecipitDbContext context, UserManager<RecipitUser> userManager, HttpClient httpClient, ILogger<RecipeService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        (RecipitDbContext context
+        , UserManager<RecipitUser> userManager
+        , HttpClient httpClient
+        , ILogger<RecipeService> logger
+        , IMapper mapper
+        , IHttpContextAccessor httpContextAccessor)
         : IRecipeService
     {
         private readonly RecipitDbContext _context = context;
@@ -44,13 +49,13 @@
                 dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.Products);
             else if (dict.Count == 0)
                 throw new ArgumentException(nameof(dict.Count));
-            else if (model.Photo == null || model.Photo == default)
+            else if (model.Photo is null || model.Photo == default)
                 throw new ArgumentException(nameof(model.Photo));
             else if (model.Calories < 0)
                 throw new ArgumentException(nameof(model.Calories));
             else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
                 throw new ArgumentException(nameof(model.Category));
-            else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
+            else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) is not null)
                 throw new ArgumentException(nameof(_context.Recipes));
 
             var user = await GetUser.Data(_userManager, _httpContextAccessor);
@@ -253,9 +258,9 @@
                 .Where(a => a.Id == id)
                 .Include(a => a.User)
                 .Include(a => a.Comments)
-                .ThenInclude(a => a.User)
+                    .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)
-                .ThenInclude(a => a.Product)
+                    .ThenInclude(a => a.Product)
                 .FirstOrDefaultAsync();
 
             return _mapper.Map<RecipeDisplayModel>(recipe);
@@ -268,6 +273,7 @@
             var recipesOnDate = await _context.Recipes
                 .Where(a => a.PublishDate.Date == DateTime.UtcNow.Date)
                 .Include(a => a.Comments)
+                    .ThenInclude(a => a.User)
                 .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
@@ -285,6 +291,7 @@
                     .Skip(randomIndex)
                     .Take(1)
                     .Include(a => a.Comments)
+                        .ThenInclude(a => a.User)
                     .Include(a => a.User)
                     .Include(a => a.ProductRecipes)
                         .ThenInclude(a => a.Product)
@@ -301,6 +308,7 @@
 
             var latestAndTopRatedRecipes = await _context.Recipes
                 .Include(a => a.Comments)
+                    .ThenInclude(a => a.User)
                 .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)

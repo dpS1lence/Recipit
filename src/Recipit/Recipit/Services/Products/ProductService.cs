@@ -42,22 +42,16 @@
 
             var product = _mapper.Map<Product>(model);
 
-            if (product is null)
-                throw new ArgumentException(nameof(product));
-            else if (string.IsNullOrEmpty(product.Name))
-                throw new ArgumentException(nameof(product.Name));
-            else if (string.IsNullOrEmpty(product.Photo))
-                throw new ArgumentException(nameof(product.Photo));
-            else if (product.Calories < 0)
-                throw new ArgumentException(nameof(product.Calories));
+            ArgumentNullException.ThrowIfNull(product);
+            ArgumentException.ThrowIfNullOrEmpty(product.Name);
+            ArgumentException.ThrowIfNullOrEmpty(product.Photo);
 
-            if (await _context.Products.AnyAsync(a => a.Name == product.Name))
-            {
-                throw new ArgumentException("Product already exists!");
-            }
+            if (product.Calories < 0)
+                throw new ArgumentException(nameof(product.Calories));
+            else if (await _context.Products.AnyAsync(a => a.Name == product.Name))
+                throw new ArgumentException(nameof(product));
 
             _context.Products.Add(product);
-
             await _context.SaveChangesAsync();
 
             return _mapper.Map<ProductViewModel>(product);
@@ -67,7 +61,7 @@
         {
             var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == id);
 
-            if (product != null)
+            if (product is not null)
             {
                 var isInRecipe = await _context.Recipes.AnyAsync(b => b.Id == product.Id);
 
@@ -79,14 +73,14 @@
                 }
             }
 
-            throw new ArgumentException("not deleted");
+            throw new ArgumentException(nameof(product));
         }
 
         public async Task<string> Edit(ProductViewModel model)
         {
             var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == model.Id);
 
-            if (product != null)
+            if (product is not null)
             {
                 var isInRecipe = await _context.Recipes
                     .Include(a => a.ProductRecipes)
@@ -96,7 +90,7 @@
                 {
                     product.Name = model.Name;
 
-                    if (model.Photo != null)
+                    if (model.Photo is not null)
                     {
                         product.Photo = model.Photo;
                     }
@@ -110,12 +104,7 @@
                 }
             }
 
-            throw new ArgumentException("not updated");
-        }
-
-        public Task<ProductViewModel> GetById(int id)
-        {
-            throw new NotImplementedException();
+            throw new ArgumentException(nameof(product));
         }
     }
 }

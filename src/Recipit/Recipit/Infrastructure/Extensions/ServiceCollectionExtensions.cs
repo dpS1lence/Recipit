@@ -5,7 +5,6 @@
     using Microsoft.Extensions.Diagnostics.HealthChecks;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
-    using Recipit.MailSending;
     using Recipit.Services.Account;
     using Recipit.Services.Comments;
     using Recipit.Services.Followers;
@@ -42,7 +41,6 @@
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IExternalRecipeCreationService, ExternalRecipeCreationService>();
             builder.Services.AddScoped<ISearchService, GoogleImageSearchService>();
-            builder.Services.AddTransient<IMailSender, MailSender>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddHttpClient();
         }
@@ -95,11 +93,6 @@
                     .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!,
                         name: "RecipitDB-check",
                         tags: tags);
-        }
-        public static void AddEmailSending(this WebApplicationBuilder builder)
-        {
-            builder.Services.Configure<EmailSendingSettings>(builder.Configuration.GetSection("EmailSending"));
-            builder.Services.AddTransient<IMailSender, MailSender>();
         }
     }
 }

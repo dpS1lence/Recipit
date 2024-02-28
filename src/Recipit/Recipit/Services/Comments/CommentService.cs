@@ -24,9 +24,8 @@
         {
             Validate.Model(model, _logger);
 
-            if (string.IsNullOrEmpty(model.Text))
-                throw new ArgumentException(nameof(model.Text));
-            else if (model.RecipeId <= 0)
+            ArgumentException.ThrowIfNullOrEmpty(model.Text);
+            if (model.RecipeId <= 0)
                 throw new ArgumentException(nameof(model.RecipeId));
 
             var comment = _mapper.Map<Comment>(model);
