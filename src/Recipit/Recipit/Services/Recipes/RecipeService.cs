@@ -205,11 +205,11 @@
             var totalPages = (int)Math.Ceiling(totalFilteredCount / (double)pageSize);
 
             var filteredRecipes = await _context.Recipes
+                .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
                 .Include(a => a.Comments)
                 .ThenInclude(a => a.User)
-                .Include(a => a.User)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
