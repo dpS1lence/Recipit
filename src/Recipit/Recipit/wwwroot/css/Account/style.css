@@ -5,6 +5,7 @@
     --text-color: #333; /* dark gray for text */
     --white-color: #ffffff;
 }
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -14,12 +15,12 @@ body {
     margin: 0;
     padding: 0;
     background-color: var(--white-color);
-    height: 100vh;
-    background-image: url('/images/bg-photo.png');
+    height: 100vh; /*
+    background-image: url('/images/7710959.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position-y: bottom;
+    background-position-y: bottom;*/
 }
 
 .login-container {

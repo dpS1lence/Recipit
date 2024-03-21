@@ -9,8 +9,8 @@ namespace Recipit.Services.Recipes
         Task Delete(int recipeId);
         Task Edit(RecipeViewModel recipe);
         Task<EditRecipeOutputModel> EditById(int id);
-        Task<IPage<RecipeDisplayModel>> All(int currentPage, int pageSize);
-        Task<IPage<RecipeDisplayModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize);
+        Task<IPage<RecipeOutputModel>> All(int currentPage, int pageSize);
+        Task<IPage<RecipeOutputModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize);
         Task<string> Create(RecipeViewModel recipe);
         Task<RecipeDisplayModel> ById(int id);
         Task<HomePageViewModel> GetHomePage();

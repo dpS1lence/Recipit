@@ -20,12 +20,7 @@
     using RecipeDb = Infrastructure.Data.Models.Recipe;
 
     public class RecipeService
-        (RecipitDbContext context
-        , UserManager<RecipitUser> userManager
-        , HttpClient httpClient
-        , ILogger<RecipeService> logger
-        , IMapper mapper
-        , IHttpContextAccessor httpContextAccessor)
+        (RecipitDbContext context, UserManager<RecipitUser> userManager, HttpClient httpClient, ILogger<RecipeService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         : IRecipeService
     {
         private readonly RecipitDbContext _context = context;
@@ -49,13 +44,13 @@
                 dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.Products);
             else if (dict.Count == 0)
                 throw new ArgumentException(nameof(dict.Count));
-            else if (model.Photo is null || model.Photo == default)
+            else if (model.Photo == null || model.Photo == default)
                 throw new ArgumentException(nameof(model.Photo));
             else if (model.Calories < 0)
                 throw new ArgumentException(nameof(model.Calories));
             else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
                 throw new ArgumentException(nameof(model.Category));
-            else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) is not null)
+            else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
                 throw new ArgumentException(nameof(_context.Recipes));
 
             var user = await GetUser.Data(_userManager, _httpContextAccessor);
@@ -180,53 +175,44 @@
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IPage<RecipeDisplayModel>> All(int currentPage, int pageSize)
+        public async Task<IPage<RecipeOutputModel>> All(int currentPage, int pageSize)
         {
             var totalRecipesCount = await _context.Recipes.CountAsync();
             var totalPages = (int)Math.Ceiling(totalRecipesCount / (double)pageSize);
 
             var allRecipes = await _context.Recipes
-                .Include(a => a.User)
-                .Include(a => a.Comments)
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(allRecipes);
+            var recipeViewModels = _mapper.Map<IEnumerable<RecipeOutputModel>>(allRecipes);
 
-            return new Page<RecipeDisplayModel>(recipeViewModels, currentPage, pageSize, totalPages);
+            return new Page<RecipeOutputModel>(recipeViewModels, currentPage, pageSize, totalPages);
         }
 
-        public async Task<IPage<RecipeDisplayModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize)
+        public async Task<IPage<RecipeOutputModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize)
         {
-            var totalFilteredCount = await _context.Recipes.CountAsync();
-            var totalPages = (int)Math.Ceiling(totalFilteredCount / (double)pageSize);
-
-            var filteredRecipes = await _context.Recipes
+            var recipes = await _context.Recipes
                 .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
-                .Include(a => a.Comments)
-                .ThenInclude(a => a.User)
-                .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
 
             if (!string.IsNullOrEmpty(model.Name))
             {
-                filteredRecipes = filteredRecipes.Where(r => r.Name.Contains(model.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                recipes = recipes.Where(r => r.Name.Contains(model.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(model.Category))
             {
-                filteredRecipes = filteredRecipes.Where(r => r.Category.Contains(model.Category, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                recipes = recipes.Where(r => r.Category.Contains(model.Category, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(model.Author))
             {
-                filteredRecipes = filteredRecipes
+                recipes = recipes
                     .Where(r => r.User?.UserName?
                         .Contains(model.Author, StringComparison.CurrentCultureIgnoreCase)
                         ?? throw new ArgumentNullException(nameof(r)))
@@ -235,21 +221,29 @@
 
             if (model.AverageRating == SortDirection.Ascending)
             {
-                filteredRecipes = [.. filteredRecipes.OrderBy(r => r.AverageRating)];
+                recipes = [.. recipes.OrderBy(r => r.AverageRating)];
             }
             else if (model.AverageRating == SortDirection.Descending)
-                filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.AverageRating)];
+                recipes = [.. recipes.OrderByDescending(r => r.AverageRating)];
 
             if (model.NutritionalValue == SortDirection.Ascending)
             {
-                filteredRecipes = [.. filteredRecipes.OrderBy(r => r.Calories)];
+                recipes = [.. recipes.OrderBy(r => r.Calories)];
             }
             else if (model.NutritionalValue == SortDirection.Descending)
-                filteredRecipes = [.. filteredRecipes.OrderByDescending(r => r.Calories)];
+                recipes = [.. recipes.OrderByDescending(r => r.Calories)];
 
-            var recipeViewModels = _mapper.Map<IEnumerable<RecipeDisplayModel>>(filteredRecipes);
+            var totalFilteredCount = recipes.Count;
+            var totalPages = (int)Math.Ceiling(totalFilteredCount / (double)pageSize);
 
-            return new Page<RecipeDisplayModel>(recipeViewModels, currentPage, pageSize, totalPages);
+            var filtered = recipes
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var recipeViewModels = _mapper.Map<IEnumerable<RecipeOutputModel>>(filtered);
+
+            return new Page<RecipeOutputModel>(recipeViewModels, currentPage, pageSize, totalPages);
         }
 
         public async Task<RecipeDisplayModel> ById(int id)
@@ -258,9 +252,9 @@
                 .Where(a => a.Id == id)
                 .Include(a => a.User)
                 .Include(a => a.Comments)
-                    .ThenInclude(a => a.User)
+                .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)
-                    .ThenInclude(a => a.Product)
+                .ThenInclude(a => a.Product)
                 .FirstOrDefaultAsync();
 
             return _mapper.Map<RecipeDisplayModel>(recipe);
@@ -273,7 +267,6 @@
             var recipesOnDate = await _context.Recipes
                 .Where(a => a.PublishDate.Date == DateTime.UtcNow.Date)
                 .Include(a => a.Comments)
-                    .ThenInclude(a => a.User)
                 .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
@@ -291,7 +284,6 @@
                     .Skip(randomIndex)
                     .Take(1)
                     .Include(a => a.Comments)
-                        .ThenInclude(a => a.User)
                     .Include(a => a.User)
                     .Include(a => a.ProductRecipes)
                         .ThenInclude(a => a.Product)
@@ -308,7 +300,6 @@
 
             var latestAndTopRatedRecipes = await _context.Recipes
                 .Include(a => a.Comments)
-                    .ThenInclude(a => a.User)
                 .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)

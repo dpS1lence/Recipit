@@ -15,6 +15,13 @@
         container.find(".view-mode").show();
     });
 
+    $(document).on('click', '.edit-btn-inrecipe', function () {
+        console.log('kurwa');
+        var container = $(this).closest(".product-item");
+        container.find(".view-mode").hide();
+        container.find(".edit-mode").show();
+    });
+
     // Save Button
     $(document).on('click', '.save-btn', function () {
         var container = $(this).closest(".product-item");

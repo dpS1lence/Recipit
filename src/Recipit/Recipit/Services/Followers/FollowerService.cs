@@ -9,7 +9,7 @@
     using Recipit.ViewModels.Followers;
 
     public class FollowerService
-        (RecipitDbContext context, IMapper mapper, IConfiguration configuration) 
+        (RecipitDbContext context, IMapper mapper, IConfiguration configuration)
         : IFollowerService
     {
         private readonly RecipitDbContext _context = context;

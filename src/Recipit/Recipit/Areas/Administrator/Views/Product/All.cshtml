@@ -1,14 +1,17 @@
 ﻿@using Recipit.Pagination.Contracts
 @using Recipit.ViewModels.Followers
 @using Recipit.ViewModels.Product
-@model IPage<ProductViewModel>
+@model IEnumerable<ProductViewModel>
 <link href="~/css/products.css" rel="stylesheet" />
 
-<h1 class="recipe-title-in-home">Налични продукти за редакция</h1>
+<h1 class="recipe-title-in-home">Продукти</h1>
+<div class="p-search-ctr">
+    <input class="p-search" id="searchInput" type="text" placeholder="Търси" />
+</div>
 <div class="recipes-container">
     @foreach (var item in Model)
     {
-        <div class="recipe-container product-item" data-product-id="@item.Id">
+        <div class="recipe-container product-item @(item.IsInRecipe.Value ? "in-recipe" : "")" data-product-id="@item.Id">
             <div class="recipe-data">
                 <!-- View Mode -->
                 <div class="view-mode">
@@ -17,7 +20,11 @@
                         <h3 class="recipe-title">@item.Name</h3>
                         <p class="recipe-calories">@item.Calories кал</p>
                     </div>
-                    <div class="recipe-buttons">
+                    <div class="@(item.IsInRecipe.Value ? "enabled" : "dissabled")">
+                        <h1><i class="fa-solid fa-lock"></i> В Рецепта</h1>
+                        <a class="edit-btn-inrecipe">Редактирай въпреки това</a>
+                    </div>
+                    <div class="recipe-buttons @(item.IsInRecipe.Value ? "dissabled" : "")">
                         <button class="edit-btn">Редактирай</button>
                         <button class="delete-btn">Изтрий</button>
                     </div>
@@ -39,3 +46,21 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="~/js/admin/products.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to filter products based on search input
+        $('#searchInput').on('input', function () {
+            var searchText = $(this).val().toLowerCase();
+
+            $('.recipe-container').each(function () {
+                var productName = $(this).find('.recipe-title').text().toLowerCase();
+                if (productName.includes(searchText)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+
+</script>

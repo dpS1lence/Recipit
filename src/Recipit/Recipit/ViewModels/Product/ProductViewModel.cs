@@ -3,7 +3,7 @@
     using AutoMapper;
     using Recipit.Infrastructure.Mapping;
     using ProductDbo = Infrastructure.Data.Models.Product;
-    
+
     public class ProductViewModel : IMapFrom<ProductDbo>
     {
         public int Id { get; set; }
@@ -11,6 +11,8 @@
         public int Calories { get; set; }
         public string? Photo { get; set; }
         public string? QuantityDetails { get; set; }
+        public bool? IsInRecipe { get; set; }
+        public int? RecipeId { get; set; }
         public void Mapping(Profile map)
         {
             map.CreateMap<ProductViewModel, ProductDbo>()
