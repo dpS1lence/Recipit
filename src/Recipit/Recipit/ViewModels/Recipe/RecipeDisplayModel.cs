@@ -38,6 +38,8 @@ namespace Recipit.ViewModels.Recipe
 
         public string Category { get; set; } = default!;
 
+        public int UserRating { get; set; }
+
         public IEnumerable<ProductViewModel> Products { get; set; }
         public IEnumerable<CommentViewModel>? Comments { get; set; }
 
@@ -56,7 +58,6 @@ namespace Recipit.ViewModels.Recipe
                 {
                     DatePosted = pr.DatePosted,
                     Id = pr.Id,
-                    Rating = pr.Rating,
                     RecipeId = pr.Id,
                     Text = pr.Text,
                     User = new UserViewModel

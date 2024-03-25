@@ -12,7 +12,7 @@ namespace Recipit.Services.Recipes
         Task<IPage<RecipeOutputModel>> All(int currentPage, int pageSize);
         Task<IPage<RecipeOutputModel>> Filter(RecipeFilterModel model, int currentPage, int pageSize);
         Task<string> Create(RecipeViewModel recipe);
-        Task<RecipeDisplayModel> ById(int id);
+        Task<RecipeDisplayModel> ById(int id, bool isUserAuthenticated);
         Task<HomePageViewModel> GetHomePage();
     }
 }

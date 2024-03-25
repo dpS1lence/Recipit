@@ -167,9 +167,11 @@
 
             var comments = await _context.Comments.Where(a => a.RecipeId == recipeId).ToListAsync();
             var products = await _context.ProductsRecipies.Where(a => a.RecipeId == recipeId).ToListAsync();
+            var ratings = await _context.Ratings.Where(a => a.RecipeId == recipeId).ToListAsync();
 
             _context.Recipes.Remove(recipeDbo!);
             _context.Comments.RemoveRange(comments);
+            _context.Ratings.RemoveRange(ratings);
             _context.ProductsRecipies.RemoveRange(products);
 
             await _context.SaveChangesAsync();
@@ -181,6 +183,7 @@
             var totalPages = (int)Math.Ceiling(totalRecipesCount / (double)pageSize);
 
             var allRecipes = await _context.Recipes
+                .Include(a => a.Ratings)
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
                 .Skip((currentPage - 1) * pageSize)
@@ -196,6 +199,7 @@
         {
             var recipes = await _context.Recipes
                 .Include(a => a.User)
+                .Include(a => a.Ratings)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
                 .ToListAsync();
@@ -246,18 +250,31 @@
             return new Page<RecipeOutputModel>(recipeViewModels, currentPage, pageSize, totalPages);
         }
 
-        public async Task<RecipeDisplayModel> ById(int id)
+        public async Task<RecipeDisplayModel> ById(int id, bool isUserAuthenticated)
         {
             var recipe = await _context.Recipes
                 .Where(a => a.Id == id)
                 .Include(a => a.User)
                 .Include(a => a.Comments)
+                .Include(a => a.Ratings)
                 .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
                 .FirstOrDefaultAsync();
 
-            return _mapper.Map<RecipeDisplayModel>(recipe);
+            var map = _mapper.Map<RecipeDisplayModel>(recipe);
+
+            if (isUserAuthenticated)
+            {
+                var userRating = await _context.Ratings.FirstOrDefaultAsync(a => a.UserId == GetUser.Id(_httpContextAccessor) && a.RecipeId == id);
+
+                if (userRating != null)
+                {
+                    map.UserRating = (int)userRating.Value;
+                }
+            }
+
+            return map;
         }
 
         public async Task<HomePageViewModel> GetHomePage()
@@ -266,7 +283,7 @@
 
             var recipesOnDate = await _context.Recipes
                 .Where(a => a.PublishDate.Date == DateTime.UtcNow.Date)
-                .Include(a => a.Comments)
+                .Include(a => a.Ratings)
                 .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
@@ -283,7 +300,7 @@
                 dailyRecipe = await _context.Recipes
                     .Skip(randomIndex)
                     .Take(1)
-                    .Include(a => a.Comments)
+                    .Include(a => a.Ratings)
                     .Include(a => a.User)
                     .Include(a => a.ProductRecipes)
                         .ThenInclude(a => a.Product)
@@ -299,7 +316,7 @@
             model.FollowersCount = await _context.Users.CountAsync();
 
             var latestAndTopRatedRecipes = await _context.Recipes
-                .Include(a => a.Comments)
+                .Include(a => a.Ratings)
                 .Include(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)

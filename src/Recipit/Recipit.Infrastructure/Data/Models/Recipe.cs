@@ -13,8 +13,9 @@
     {
         public Recipe()
         {
-            Comments = new HashSet<Comment>();
-            ProductRecipes = new HashSet<ProductRecipe>();
+            Comments = [];
+            ProductRecipes = [];
+            Ratings = [];
         }
 
         /// <summary>
@@ -77,12 +78,12 @@
         {
             get
             {
-                if (Comments == null || Comments.Count == 0)
+                if (Ratings == null || Ratings.Count == 0)
                 {
                     return 0;
                 }
 
-                return Math.Round(Comments.Average(c => c.Rating), 2);
+                return Math.Round(Ratings.Average(c => c.Value), 2);
             }
         }
 
@@ -99,6 +100,8 @@
         /// Navigation property for the products associated with the comments.
         /// </summary>
         public virtual ICollection<Comment> Comments { get; private set; }
+
+        public virtual ICollection<Rating> Ratings { get; private set; }
 
         public virtual ICollection<ProductRecipe> ProductRecipes { get; set; }
     }

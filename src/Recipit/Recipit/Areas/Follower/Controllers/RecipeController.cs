@@ -1,12 +1,14 @@
 ﻿namespace Recipit.Areas.Follower.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Recipit.Services.Ratings;
     using Recipit.Services.Recipes;
     using Recipit.ViewModels.Recipe;
 
-    public class RecipeController(IRecipeService recipeService, IExternalRecipeCreationService externalRecipeService) : FollowerController
+    public class RecipeController(IRecipeService recipeService, IRatingService ratingService, IExternalRecipeCreationService externalRecipeService) : FollowerController
     {
         private readonly IRecipeService _recipeService = recipeService;
+        private readonly IRatingService _ratingService = ratingService;
         private readonly IExternalRecipeCreationService _externalRecipeService = externalRecipeService;
 
         [HttpGet]
@@ -33,6 +35,9 @@
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id) => View(await _recipeService.EditById(id));
+
+        [HttpGet]
+        public async Task Rate(int value, int recipeId) => await _ratingService.Rate(value, recipeId);
 
         [HttpPost]
         public async Task<IActionResult> Edit([FromForm] RecipeViewModel model)

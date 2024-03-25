@@ -87,26 +87,19 @@
 
             if (product != null)
             {
-                var isInRecipe = await _context.Recipes
-                    .Include(a => a.ProductRecipes)
-                    .AnyAsync(b => b.ProductRecipes.Any(a => a.ProductId == product.Id));
+                product.Name = model.Name;
 
-                if (!isInRecipe)
+                if (model.Photo != null)
                 {
-                    product.Name = model.Name;
-
-                    if (model.Photo != null)
-                    {
-                        product.Photo = model.Photo;
-                    }
-
-                    product.Calories = model.Calories;
-
-                    _context.Products.Update(product);
-                    await _context.SaveChangesAsync();
-
-                    return product.Name;
+                    product.Photo = model.Photo;
                 }
+
+                product.Calories = model.Calories;
+
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+
+                return product.Name;
             }
 
             throw new ArgumentException("not updated");

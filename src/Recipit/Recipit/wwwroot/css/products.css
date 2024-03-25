@@ -26,6 +26,7 @@
     .product-item img {
         width: 100px; /* Make image cover the card width */
         height: auto; /* Maintain aspect ratio */
+        max-height: 150px;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px; /* Round corners at the top */
     }

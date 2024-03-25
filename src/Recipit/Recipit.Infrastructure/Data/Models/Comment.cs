@@ -37,12 +37,6 @@
         [DataType(DataType.DateTime)]
         public DateTime DatePosted { get; set; }
 
-        /// <summary>
-        /// Gets or sets the rating of the recipe, from 1 to 5.
-        /// </summary>
-        [Range(1.0, 5.0, ErrorMessage = "Rating must be between 1 and 5.")]
-        public decimal Rating { get; set; }
-
         // Navigation properties
         [ForeignKey(nameof(UserId))]
         public virtual RecipitUser User { get; set; } = default!;

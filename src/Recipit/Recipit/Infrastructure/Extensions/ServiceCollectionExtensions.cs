@@ -10,6 +10,7 @@
     using Recipit.Services.Followers;
     using Recipit.Services.ImageWebSearch;
     using Recipit.Services.Products;
+    using Recipit.Services.Ratings;
     using Recipit.Services.Recipes;
     using Serilog;
 
@@ -39,6 +40,7 @@
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IRatingService, RatingService>();
             builder.Services.AddScoped<IExternalRecipeCreationService, ExternalRecipeCreationService>();
             builder.Services.AddScoped<ISearchService, GoogleImageSearchService>();
             builder.Services.AddHttpContextAccessor();

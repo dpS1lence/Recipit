@@ -19,7 +19,9 @@
         <div class="recipes-container">
             <div class="recipe-container" style="width: 700px;">
                 <div class="recipe-data">
-                    <img class="recipe-image" src="@Model.RecipeOfTheDay.Photo" alt="Recipe Image" />
+                    <div class="recipe-image-ctr">
+                        <img class="recipe-image" src="@Model.RecipeOfTheDay.Photo" alt="Recipe Image" />
+                    </div>
                     <div class="recipe-title-and-rating">
                         <h1 class="recipe-title">@Model.RecipeOfTheDay.Name</h1>
                         <div class="stars-container">
@@ -81,7 +83,9 @@
             {
                 <div class="recipe-container">
                     <div class="recipe-data">
-                        <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                        <div class="recipe-image-ctr">
+                            <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                        </div>
                         <div class="recipe-title-and-rating">
                             <h1 class="recipe-title">@item.Name</h1>
                             <div class="stars-container">
@@ -144,7 +148,9 @@
             {
                 <div class="recipe-container">
                     <div class="recipe-data">
-                        <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                        <div class="recipe-image-ctr">
+                            <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                        </div>
                         <div class="recipe-title-and-rating">
                             <h1 class="recipe-title">@item.Name</h1>
                             <div class="stars-container">
