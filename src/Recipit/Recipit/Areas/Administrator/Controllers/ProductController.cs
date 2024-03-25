@@ -12,9 +12,21 @@
         public async Task<IActionResult> All() => View(await _productService.All());
 
         [HttpPut]
-        public async Task<IActionResult> Edit([FromForm] ProductViewModel model) => Json(await _productService.Edit(model));
+        public async Task<IActionResult> Edit([FromForm] ProductViewModel model)
+        {
+            TempData["message"] = $"Успешно редактирахте {model.Name}!";
+
+            return Json(await _productService.Edit(model));
+        }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] int id) => Json(await _productService.Delete(id));
+        public async Task<IActionResult> Delete([FromQuery] int id)
+        {
+            var name = await _productService.Delete(id);
+
+            TempData["message"] = $"Успешно изтрихте {name}!";
+
+            return Json(name);
+        }
     }
 }

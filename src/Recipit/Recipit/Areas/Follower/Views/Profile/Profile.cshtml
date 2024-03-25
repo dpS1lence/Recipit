@@ -126,7 +126,6 @@
                     url: '/follower/profile/delete',
                     type: 'DELETE',
                     success: function (response) {
-                        alert('Профилът ви беше изтрит!');
                         location.reload();
                     },
                     error: function (xhr, status, error) {
@@ -177,11 +176,9 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    alert('Профилът ви беше редактиран.');
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    alert('Възникна грешка! Моля опитайте отново!');
                 }
             });
         });

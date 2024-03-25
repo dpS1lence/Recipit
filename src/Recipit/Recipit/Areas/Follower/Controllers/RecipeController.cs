@@ -15,12 +15,30 @@
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] RecipeViewModel model) => Json(await _recipeService.Create(model));
+        public async Task<IActionResult> Create([FromForm] RecipeViewModel model)
+        {
+            try
+            {
+                var action = await _recipeService.Create(model);
+
+                TempData["message"] = $"Успешно създадохте {model.Name}!";
+
+                return Json(action);
+            }
+            catch(ArgumentException ex)
+            {
+                TempData["messageDanger"] = ex.Message;
+
+                return BadRequest();
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateExternaly(string url)
         {
             var resultId = await _externalRecipeService.Create(url);
+
+            TempData["message"] = $"Успешно създадохте рецепта от gotvach.bg!";
 
             return RedirectToAction("ViewRecipe", "Recipe", new { id = resultId, area = "Home" });
         }
@@ -28,7 +46,9 @@
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await _recipeService.Delete(id);
+            var name = await _recipeService.Delete(id);
+
+            TempData["message"] = $"Успешно изтрихте {name}!";
 
             return Redirect("/profile");
         }
@@ -44,7 +64,9 @@
         {
             await _recipeService.Edit(model);
 
-            return RedirectToAction("ViewRecipe", "Recipe", new { id = model.Id, area = "Home" });
+            TempData["message"] = $"Успешно редактирахте {model.Name}!";
+
+            return RedirectToAction("ViewRecipe", "Recipe", new { id = model.Id, area = "Home"});
         }
     }
 }

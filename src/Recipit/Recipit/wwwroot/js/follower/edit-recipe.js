@@ -26,6 +26,7 @@ $(function () {
         
         btn.style.cursor = 'wait';
         btn.style.pointerEvents = 'none';
+        console.log('dsadasdasasddsasadasds');
         $.ajax({
             url: '/follower/recipe/edit',
             type: 'POST',

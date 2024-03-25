@@ -1,7 +1,9 @@
-namespace Recipit.Areas.Home.Controllers
+﻿namespace Recipit.Areas.Home.Controllers
 {
     using Microsoft.AspNetCore.Diagnostics;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
+    using Recipit.Middlewares;
     using Recipit.Models;
     using Recipit.Services.Recipes;
     using System.Diagnostics;
@@ -23,9 +25,11 @@ namespace Recipit.Areas.Home.Controllers
         public IActionResult Error()
         {
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            if (exceptionHandlerPathFeature?.Error != null)
+            if (exceptionHandlerPathFeature is not null && exceptionHandlerPathFeature.Error is not null)
             {
                 _logger.LogError(exceptionHandlerPathFeature.Error, "Unhandled exception.");
+
+                //TempData["messageDanger"] = exceptionHandlerPathFeature.Error.Message;
             }
 
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

@@ -44,10 +44,12 @@ namespace Recipit.Services.Account
         public async Task DeleteProfile() =>
             await DeleteUserById(GetUser.Id(_httpContextAccessor));
 
-        public async Task DeleteUserById(string uId)
+        public async Task<string> DeleteUserById(string uId)
         {
             var user = await _userManager.FindByIdAsync(uId)
                 ?? throw new ArgumentNullException(nameof(uId));
+
+            var userName = user.UserName;
 
             var tasks = new Task[]
             {
@@ -75,6 +77,8 @@ namespace Recipit.Services.Account
             await _context.SaveChangesAsync();
 
             await _userManager.DeleteAsync(user);
+
+            return userName!;
         }
 
         public async Task EditProfile(EditProfileInputModel model)

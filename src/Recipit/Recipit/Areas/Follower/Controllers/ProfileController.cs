@@ -16,7 +16,12 @@
         public async Task<IActionResult> Profile() => View(await _accountService.GetCurrentUser());
 
         [HttpPut]
-        public async Task Edit([FromForm] EditProfileInputModel model) => await _accountService.EditProfile(model);
+        public async Task Edit([FromForm] EditProfileInputModel model)
+        {
+            TempData["message"] = "Успешно редактирахте своя профил!";
+
+            await _accountService.EditProfile(model);
+        }
 
         [HttpGet]
         public IActionResult ChangePassword() => View();

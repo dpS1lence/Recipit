@@ -152,7 +152,7 @@
         }
 
 
-        public async Task Delete(int recipeId)
+        public async Task<string> Delete(int recipeId)
         {
             var recipeDbo = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == recipeId);
             Validate.Model(recipeDbo, _logger);
@@ -165,6 +165,8 @@
                 }
             }
 
+            var recipeName = recipeDbo.Name;
+
             var comments = await _context.Comments.Where(a => a.RecipeId == recipeId).ToListAsync();
             var products = await _context.ProductsRecipies.Where(a => a.RecipeId == recipeId).ToListAsync();
             var ratings = await _context.Ratings.Where(a => a.RecipeId == recipeId).ToListAsync();
@@ -175,6 +177,8 @@
             _context.ProductsRecipies.RemoveRange(products);
 
             await _context.SaveChangesAsync();
+
+            return recipeName;
         }
 
         public async Task<IPage<RecipeOutputModel>> All(int currentPage, int pageSize)

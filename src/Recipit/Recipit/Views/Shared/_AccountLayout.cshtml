@@ -4,10 +4,56 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="~/css/account/style.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
     <title>@ViewData["Title"] - Recipit</title>
 </head>
 <body>
+    @if (TempData["message"] != null)
+    {
+        <div id="notification-popup" class="notification-popup">
+            <div class="notification-image">
+                <img src="~/images/recipcho.png" alt="Image here." />
+            </div>
+            <div class="notification-content">
+                <h4 class="notification-title">Съобщение!</h4>
+                <p class="notification-summary">@TempData["message"]</p>
+                <span class="notification-date">@DateTime.Now.ToString("dd/mm/yyyy")</span>
+            </div>
+        </div>
+    }
+    @if (TempData["messageDanger"] != null)
+    {
+        <div id="notification-popup error-box" class="notification-popup">
+            <div class="notification-image">
+                <img src="~/images/recipcho.png" alt="Image here." />
+            </div>
+            <div class="notification-content">
+                <h4 class="notification-title error">Възникна Грешка!</h4>
+                <p class="notification-summary error">@TempData["messageDanger"]</p>
+                <span class="notification-date">@DateTime.Now.ToString("dd/mm/yyyy")</span>
+            </div>
+        </div>
+    }
     @RenderBody()
     <script src="https://kit.fontawesome.com/90737a6dc1.js" crossorigin="anonymous"></script>
+    <script>
+        setTimeout(function () {
+            var notificationPopups = document.getElementsByClassName('notification-popup');
+            if (notificationPopups) {
+                for (var i = 0; i < notificationPopups.length; i++) {
+                    var notificationPopup = notificationPopups[i];
+                    notificationPopup.style.opacity = 1;
+                    (function fade() {
+                        if ((notificationPopup.style.opacity -= 0.1) < 0) {
+                            notificationPopup.style.display = 'none';
+                        } else {
+                            requestAnimationFrame(fade);
+                        }
+                    })();
+                }
+            }
+        }, 5000);
+    </script>
 </body>
+
 </html>

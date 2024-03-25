@@ -9,6 +9,11 @@
         private readonly IRecipeService _recipeService = recipeService;
 
         [HttpPost]
-        public async Task Delete([FromBody] int recipeId) => await _recipeService.Delete(recipeId);
+        public async Task Delete([FromBody] int recipeId)
+        {
+            var name = await _recipeService.Delete(recipeId);
+
+            TempData["message"] = $"Успешно изтрихте {name}!";
+        }
     }
 }

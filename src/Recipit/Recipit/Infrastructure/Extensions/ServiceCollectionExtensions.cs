@@ -45,6 +45,7 @@
             builder.Services.AddScoped<ISearchService, GoogleImageSearchService>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddHttpClient();
+            builder.Services.AddSession();
         }
         public static void AddMvc(this WebApplicationBuilder builder)
         {

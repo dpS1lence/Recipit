@@ -48,6 +48,9 @@
             ArgumentNullException.ThrowIfNull(products);
             ArgumentNullException.ThrowIfNull(user);
 
+            if (await _context.Recipes.Where(a => a.UserId == GetUser.Id(_httpContextAccessor) && a.Name == title).AnyAsync())
+                throw new ArgumentException("Вече сте създали тази рецепта!");
+
             var recipe = new Recipe
             {
                 Name = title,
@@ -67,7 +70,7 @@
             foreach (var item in products)
             {
                 var product = new Product();
-                if(await _context.Products.AnyAsync(a => string.Equals(a.Name.ToLower(), item.Name.ToLower())))
+                if (await _context.Products.AnyAsync(a => string.Equals(a.Name.ToLower(), item.Name.ToLower())))
                 {
                     product = await _context.Products.FirstOrDefaultAsync(a => a.Name == item.Name);
                 }
@@ -84,7 +87,7 @@
                 }
 
                 ArgumentNullException.ThrowIfNull(product);
-                
+
                 _context.ProductsRecipies.Add(new ProductRecipe
                 {
                     Product = product,

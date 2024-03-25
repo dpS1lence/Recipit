@@ -1,4 +1,5 @@
-﻿@using Recipit.Contracts.Constants
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Recipit.Contracts.Constants
 @using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +14,7 @@
     <link href="~/css/create-post.css" rel="stylesheet" />
 </head>
 <body>
+    <div id="error-popup-container"></div>
     <div class="container-section">
         <div class="navbar" id="navbar">
             <a href="#" class="btn-hide hidden" id="navbar-hide"><i class="fa fa-xmark"></i></a>
@@ -68,9 +70,10 @@
     </div>
     <div class="page" id="page">
         <header id="header">
-            <div class="header-main-container">@* 
+            <div class="header-main-container">
+                @*
                 <div class="search-bar">
-                    <input type="submit" class="searchbar" id="searchbar" placeholder="Търси рецепта" />
+                <input type="submit" class="searchbar" id="searchbar" placeholder="Търси рецепта" />
                 </div> *@
                 @if (User?.Identity?.IsAuthenticated ?? false)
                 {
@@ -94,8 +97,54 @@
         </header>
         <div class="container-main">
             <main role="main" class="pb-3">
+                @if (TempData["message"] != null)
+                {
+                    <div id="notification-popup" class="notification-popup">
+                        <div class="notification-image">
+                            <img src="~/images/recipcho.png" alt="Image here." />
+                        </div>
+                        <div class="notification-content">
+                            <h4 class="notification-title">Съобщение</h4>
+                            <p class="notification-summary">@TempData["message"]</p>
+                            <span class="notification-date">@DateTime.Now.ToString("dd/mm/yyyy")</span>
+                        </div>
+                    </div>
+
+                    HttpContextAccessor.HttpContext.Session.Remove("Message");
+                }
+                @if (TempData["messageDanger"] != null)
+                {
+                    <div id="notification-popup error-box" class="notification-popup">
+                        <div class="notification-image">
+                            <img src="~/images/recipcho.png" alt="Image here." />
+                        </div>
+                        <div class="notification-content">
+                            <h4 class="notification-title error">Възникна Грешка!</h4>
+                            <p class="notification-summary error">@TempData["messageDanger"]</p>
+                            <span class="notification-date">@DateTime.Now.ToString("dd/mm/yyyy")</span>
+                        </div>
+                    </div>
+                }
                 @RenderBody()
                 <script src="https://kit.fontawesome.com/90737a6dc1.js" crossorigin="anonymous"></script>
+                <script>
+                    setTimeout(function () {
+                        var notificationPopups = document.getElementsByClassName('notification-popup');
+                        if (notificationPopups) {
+                            for (var i = 0; i < notificationPopups.length; i++) {
+                                var notificationPopup = notificationPopups[i];
+                                notificationPopup.style.opacity = 1;
+                                (function fade() {
+                                    if ((notificationPopup.style.opacity -= 0.1) < 0) {
+                                        notificationPopup.style.display = 'none';
+                                    } else {
+                                        requestAnimationFrame(fade);
+                                    }
+                                })();
+                            }
+                        }
+                    }, 5000);
+                </script>
             </main>
         </div>
     </div>
@@ -129,6 +178,5 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -15,6 +15,11 @@
         public async Task<IActionResult> All(int pageIndex = 1, int pageSize = 1) => View(await _followerService.GetAll(pageIndex, pageSize));
 
         [HttpDelete]
-        public async Task Delete([FromQuery] string followerId) => await _accountService.DeleteUserById(followerId);
+        public async Task Delete([FromQuery] string followerId)
+        {
+            var name = await _accountService.DeleteUserById(followerId);
+
+            TempData["message"] = $"Успешно изтрихте профила на потребител {name}!";
+        }
     }
 }

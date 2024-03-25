@@ -48,7 +48,6 @@
                 location.reload();
             },
             error: function () {
-                alert("An error occurred");
             }
         });
     });
@@ -67,7 +66,6 @@
                     container.remove();
                 },
                 error: function () {
-                    alert("An error occurred");
                 }
             });
         }
