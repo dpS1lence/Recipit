@@ -13,20 +13,8 @@ namespace Recipit.Areas.Home.Controllers
         public IActionResult All() => View();
 
         [HttpGet]
-        public async Task<IActionResult> ViewRecipe(int id)
-        {
-            if (TempData["message"] is string message)
-            {
-                HttpContext.Session.SetString("Message", message);
-            }
-            else if(HttpContext.Session.GetString("Message") is not null)
-            {
-                TempData["message"] = HttpContext.Session.GetString("Message");
-                HttpContext.Session.Remove("Message");
-            }
-
-            return View(await _recipeService.ById(id, User?.Identity?.IsAuthenticated ?? false));
-        }
+        public async Task<IActionResult> ViewRecipe(int id) 
+            => View(await _recipeService.ById(id, User?.Identity?.IsAuthenticated ?? false));
 
         [HttpGet]
         public async Task<IActionResult> Recipes(int currentPage, int pageSize)

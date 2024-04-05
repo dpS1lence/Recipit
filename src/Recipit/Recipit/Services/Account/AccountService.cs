@@ -49,36 +49,29 @@ namespace Recipit.Services.Account
             var user = await _userManager.FindByIdAsync(uId)
                 ?? throw new ArgumentNullException(nameof(uId));
 
-            var userName = user.UserName;
-
-            var tasks = new Task[]
-            {
-                _context.Recipes
+            var userRecipes = await _context.Recipes
                     .Where(r => r.UserId == uId)
-                    .ToListAsync(),
-                _context.Comments
+                    .ToListAsync();
+            var recipeComments = await _context.Comments
                     .Where(c => c.UserId == uId || _context.Recipes.Any(r => r.UserId == uId && r.Id == c.RecipeId))
-                    .ToListAsync(),
-                _context.ProductsRecipies
+                    .ToListAsync();
+            var recipeProducts = await _context.ProductsRecipies
                     .Where(pr => _context.Recipes.Any(r => r.UserId == uId && r.Id == pr.RecipeId))
-                    .ToListAsync()
-            };
-
-            await Task.WhenAll(tasks);
-
-            var userRecipes = ((Task<List<Recipe>>)tasks[0]).Result;
-            var recipeComments = ((Task<List<Comment>>)tasks[1]).Result;
-            var recipeProducts = ((Task<List<ProductRecipe>>)tasks[2]).Result;
+                    .ToListAsync();
+            var ratings = await _context.Ratings
+                    .Where(r => r.UserId == uId)
+                    .ToListAsync();
 
             _context.RemoveRange(userRecipes);
             _context.RemoveRange(recipeComments);
             _context.RemoveRange(recipeProducts);
+            _context.RemoveRange(ratings);
 
             await _context.SaveChangesAsync();
 
             await _userManager.DeleteAsync(user);
 
-            return userName!;
+            return user.UserName!;
         }
 
         public async Task EditProfile(EditProfileInputModel model)
@@ -138,6 +131,7 @@ namespace Recipit.Services.Account
                     .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)
                     .ThenInclude(a => a.Product)
+                .Include(a => a.Ratings)
                 .ToListAsync();
 
             map.UserRecipes = _mapper.Map<IEnumerable<RecipeDisplayModel>>(recipes);

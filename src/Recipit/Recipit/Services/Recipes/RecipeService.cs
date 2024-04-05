@@ -36,22 +36,22 @@
 
             var dict = new Dictionary<string, string>();
 
-            ArgumentNullException.ThrowIfNull(dict);
-            ArgumentException.ThrowIfNullOrEmpty(model.Name);
-            ArgumentException.ThrowIfNullOrEmpty(model.Description);
+            ArgumentException.ThrowIfNullOrEmpty(model.Name, ExceptionMessages.Recipe.NameIsNullOrEmpty);
+            ArgumentException.ThrowIfNullOrEmpty(model.Description, ExceptionMessages.Recipe.DescriptionIsNullOrEmpty);
 
             if (!string.IsNullOrEmpty(model.Products))
                 dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.Products);
-            else if (dict.Count == 0)
-                throw new ArgumentException(nameof(dict.Count));
+            ArgumentNullException.ThrowIfNull(dict, ExceptionMessages.Recipe.ProductListIsNull);
+            if (dict.Count == 0)
+                throw new ArgumentException(ExceptionMessages.Recipe.ProductListIsEmpty);
             else if (model.Photo == null || model.Photo == default)
-                throw new ArgumentException(nameof(model.Photo));
+                throw new ArgumentException(ExceptionMessages.Recipe.PhotoIsInvalid);
             else if (model.Calories < 0)
-                throw new ArgumentException(nameof(model.Calories));
+                throw new ArgumentException(ExceptionMessages.Recipe.CaloriesIsNullOrEmpty);
             else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
-                throw new ArgumentException(nameof(model.Category));
+                throw new ArgumentException(ExceptionMessages.Recipe.CategoryIsNullOrEmpty);
             else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
-                throw new ArgumentException(nameof(_context.Recipes));
+                throw new ArgumentException(ExceptionMessages.Recipe.AlreadyExists);
 
             var user = await GetUser.Data(_userManager, _httpContextAccessor);
 
@@ -67,8 +67,8 @@
             {
                 var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == item.Key);
 
-                ArgumentNullException.ThrowIfNull(product);
-                ArgumentException.ThrowIfNullOrEmpty(item.Value);
+                ArgumentNullException.ThrowIfNull(product, ExceptionMessages.Recipe.ProductDoesNotExist);
+                ArgumentException.ThrowIfNullOrEmpty(item.Value, ExceptionMessages.Recipe.ProductMustHaveValue);
 
                 recipe.NutritionalValue += product.Calories;
 
@@ -260,6 +260,7 @@
                 .Where(a => a.Id == id)
                 .Include(a => a.User)
                 .Include(a => a.Comments)
+                .ThenInclude(a => a.User)
                 .Include(a => a.Ratings)
                 .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)

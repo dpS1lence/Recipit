@@ -144,6 +144,13 @@
 </script>
 <script>
     $(document).ready(function () {
+        var imgUrl = "@Html.Raw(imgUrl)";
+        var username = "@Html.Raw(username)";
+        generatePreview(imgUrl, username);
+    });
+</script>
+<script>
+    $(document).ready(function () {
         const dropArea = document.getElementById('drop-area');
         const fileInput = document.getElementById('image');
 
@@ -157,10 +164,5 @@
             dropArea.style.backgroundColor = '#e6f7ff';
         }
         existingImage.style.display = 'none';
-
-
-        var imgUrl = "@Html.Raw(imgUrl)";
-        var username = "@Html.Raw(username)";
-        generatePreview(imgUrl, username);
     });
 </script>

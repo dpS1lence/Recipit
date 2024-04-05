@@ -27,7 +27,7 @@
             }
             catch(ArgumentException ex)
             {
-                TempData["messageDanger"] = ex.Message;
+                TempData["messageDanger"] = ex.ParamName;
 
                 return BadRequest();
             }

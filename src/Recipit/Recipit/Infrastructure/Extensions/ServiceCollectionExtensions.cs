@@ -1,5 +1,6 @@
 ﻿namespace Recipit.Infrastructure.Extensions
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -85,6 +86,25 @@
                 .CreateLogger();
 
             return loggerConfig;
+        }
+
+        public static void UseMappedEndpointsWithLoginRedirect(this IApplicationBuilder app)
+        {
+            app.Use(async (context, next) =>
+            {
+                var endpoint = context.GetEndpoint();
+                if (endpoint?.Metadata?.GetMetadata<IAuthorizeData>() != null)
+                {
+                    var user = context.User?.Identity;
+                    if (user == null || !user.IsAuthenticated)
+                    {
+                        context.Response.Redirect("/login");
+                        return;
+                    }
+                }
+
+                await next(context);
+            });
         }
 
         private static readonly string[] tags = ["IdentityDB"];

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Recipit.Infrastructure.Extensions;
 using Recipit.Middlewares;
@@ -39,21 +38,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 
-app.Use(async (context, next) =>
-{
-    var endpoint = context.GetEndpoint();
-    if (endpoint?.Metadata?.GetMetadata<IAuthorizeData>() != null)
-    {
-        var user = context.User?.Identity;
-        if (user == null || !user.IsAuthenticated)
-        {
-            context.Response.Redirect("/login");
-            return;
-        }
-    }
-
-    await next(context);
-});
+app.UseMappedEndpointsWithLoginRedirect();
 
 app.UseAuthorization();
 

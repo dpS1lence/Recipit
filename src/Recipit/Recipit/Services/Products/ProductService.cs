@@ -5,7 +5,10 @@
     using Recipit.Contracts;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
+    using Recipit.Pagination;
+    using Recipit.Pagination.Contracts;
     using Recipit.ViewModels.Product;
+    using System.Drawing.Printing;
     using System.Linq;
 
     public class ProductService(RecipitDbContext context, IMapper mapper, ILogger<ProductService> logger) : IProductService
@@ -105,9 +108,39 @@
             throw new ArgumentException("not updated");
         }
 
-        public Task<ProductViewModel> GetById(int id)
+        public async Task<IPage<ProductViewModel>> GetPaginated(int pageIndex, string? name)
         {
-            throw new NotImplementedException();
+            if (pageIndex == 0) pageIndex = 1;
+            var pageSize = 40;
+
+            var productsRaw = await _context.Products
+                .Include(a => a.ProductRecipes)
+                .OrderBy(a => a.ProductRecipes.Count)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            if(name is not null)
+                productsRaw = await _context.Products
+                .Include(a => a.ProductRecipes)
+                .OrderBy(a => a.ProductRecipes.Count)
+                .Where(a => a.Name.Contains(name))
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var products = _mapper.Map<IEnumerable<ProductViewModel>>(productsRaw)
+                .ToList();
+
+            for (int i = 0; i < productsRaw.Count; i++)
+            {
+                products[i].IsInRecipe = productsRaw[i].ProductRecipes.Count != 0;
+            }
+
+            var totalFilteredCount = products.Count;
+            var totalPages = (int)Math.Ceiling(totalFilteredCount / (double)pageSize);
+
+            return new Page<ProductViewModel>(products, pageIndex, pageSize, totalPages);
         }
     }
 }

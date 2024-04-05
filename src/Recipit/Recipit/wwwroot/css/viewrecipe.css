@@ -14,6 +14,7 @@
     .recipe-products .recipe-ingridients-title {
         font-weight: bold;
         margin-bottom: 10px;
+        width: fit-content;
     }
 
 .ingridients-container {
@@ -250,6 +251,16 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.first {
+    width: 40%;
+}
+
+.last {
+    margin-top: 80px;
+    width: 60%;
+    padding-right: 100px;
 }
 /* Submit Comment Button */
 .submit-comment-btn {

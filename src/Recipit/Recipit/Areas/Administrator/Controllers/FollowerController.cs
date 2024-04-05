@@ -14,8 +14,8 @@
         [Route("manage")]
         public async Task<IActionResult> All(int pageIndex = 1, int pageSize = 1) => View(await _followerService.GetAll(pageIndex, pageSize));
 
-        [HttpDelete]
-        public async Task Delete([FromQuery] string followerId)
+        [HttpGet("/followers/delete/{followerId}")]
+        public async Task Delete(string followerId)
         {
             var name = await _accountService.DeleteUserById(followerId);
 

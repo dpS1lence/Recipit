@@ -7,8 +7,9 @@
     {
         public RecipitUser()
         {
-            Recipes = new HashSet<Recipe>();
-            Comments = new HashSet<Comment>();
+            Recipes = [];
+            Comments = [];
+            Ratings = [];
         }
 
         /// <summary>
@@ -42,5 +43,6 @@
 
         public virtual ICollection<Recipe> Recipes { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

@@ -10,32 +10,38 @@
 <link href="~/css/viewrecipe.css" rel="stylesheet" />
 
 <div class="recipe-container">
-    <h2 class="recipe-title">@Model.Name</h2>
-    <h2 class="recipe-user">Публикувана от <a asp-area="Home" asp-action="Profile" asp-controller="Account" asp-route-name="@Model.User.UserName">@Model.User.UserName</a></h2>
-    <img class="recipe-photo" src="@Model.Photo" alt="@Model.Name">
-    <p class="recipe-description">@Model.Description</p>
-    <p class="recipe-category">Категория: @Model.Category</p>
-    <p class="recipe-nutritional">Калории: @Model.Calories</p>
-    <p class="recipe-nutritional">Хранителна стойност: @Model.NutritionalValue</p>
-    <p class="recipe-date">Публикувана на: @Model.PublishDate.ToShortDateString()</p>
-    <div class="recipe-rating">
-        <p>Оценка: @Model.AverageRating</p>
-    </div>
-    @if(User?.Identity?.IsAuthenticated ?? false)
-    {
-        <div class="rating-main">
-            <p>Твоята Оценка:</p>
-            <div class="recipe-rating-stars">
-                <i class="fa-regular fa-star" data-rating="1"></i>
-                <i class="fa-regular fa-star" data-rating="2"></i>
-                <i class="fa-regular fa-star" data-rating="3"></i>
-                <i class="fa-regular fa-star" data-rating="4"></i>
-                <i class="fa-regular fa-star" data-rating="5"></i>
-            </div>
-            <input type="hidden" id="recipeRating" name="rating" value="0">
+    <div class="d-flex row">
+        <div class="first">
+            <h2 class="recipe-title">@Model.Name</h2>
+            <h2 class="recipe-user">Публикувана от <a asp-area="Home" asp-action="Profile" asp-controller="Account" asp-route-name="@Model.User.UserName">@Model.User.UserName</a></h2>
+            <img class="recipe-photo" src="@Model.Photo" alt="@Model.Name">
         </div>
-        <input type="hidden" id="userRating" name="urating" value="@(Model.UserRating)">
-    }
+        <div class="last">
+            <p class="recipe-description">@Model.Description</p>
+            <p class="recipe-category">Категория: @Model.Category</p>
+            <p class="recipe-nutritional">Калории: @Model.Calories</p>
+            <p class="recipe-nutritional">Хранителна стойност: @Model.NutritionalValue</p>
+            <p class="recipe-date">Публикувана на: @Model.PublishDate.ToShortDateString()</p>
+            <div class="recipe-rating">
+                <p>Оценка: @Model.AverageRating</p>
+            </div>
+            @if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                <div class="rating-main">
+                    <p>Твоята Оценка:</p>
+                    <div class="recipe-rating-stars">
+                        <i class="fa-regular fa-star" data-rating="1"></i>
+                        <i class="fa-regular fa-star" data-rating="2"></i>
+                        <i class="fa-regular fa-star" data-rating="3"></i>
+                        <i class="fa-regular fa-star" data-rating="4"></i>
+                        <i class="fa-regular fa-star" data-rating="5"></i>
+                    </div>
+                    <input type="hidden" id="recipeRating" name="rating" value="0">
+                </div>
+                <input type="hidden" id="userRating" name="urating" value="@(Model.UserRating)">
+            }
+        </div>
+    </div>
     @{
         if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == Model.UserId)
         {
@@ -55,7 +61,9 @@
     }
 </div>
 <div class="recipe-products">
-    <h1 class="recipe-ingridients-title">Съставки</h1>
+    <div class="row justify-content-center align-items-center">
+        <h1 class="recipe-ingridients-title">Съставки</h1>
+    </div>
     <div class="ingridients-container">
         @foreach (var item in Model.Products)
         {
