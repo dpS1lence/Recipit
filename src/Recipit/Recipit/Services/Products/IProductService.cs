@@ -5,7 +5,8 @@
 
     public interface IProductService
     {
-        Task<IPage<ProductViewModel>> All();
+        Task<IPage<ProductViewModel>> GetPaginated(int pageIndex, string? name);
+        Task<IEnumerable<ProductViewModel>> All();
         Task<ProductViewModel> Create(ProductViewModel model);
         Task<string> Delete(int id);
         Task<string> Edit(ProductViewModel model);

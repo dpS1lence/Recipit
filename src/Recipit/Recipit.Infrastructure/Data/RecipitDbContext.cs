@@ -11,6 +11,7 @@
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductRecipe> ProductsRecipies { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,8 +20,8 @@
             modelBuilder.Entity<ProductRecipe>()
                 .HasKey(pr => new { pr.ProductId, pr.RecipeId });
 
-            modelBuilder.Entity<Comment>()
-                .Property(c => c.Rating)
+            modelBuilder.Entity<Rating>()
+                .Property(c => c.Value)
                 .HasPrecision(3, 2);
         }
     }

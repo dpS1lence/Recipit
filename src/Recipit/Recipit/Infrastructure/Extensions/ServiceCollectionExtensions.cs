@@ -1,5 +1,6 @@
 ﻿namespace Recipit.Infrastructure.Extensions
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -10,6 +11,7 @@
     using Recipit.Services.Followers;
     using Recipit.Services.ImageWebSearch;
     using Recipit.Services.Products;
+    using Recipit.Services.Ratings;
     using Recipit.Services.Recipes;
     using Serilog;
 
@@ -39,10 +41,12 @@
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IRatingService, RatingService>();
             builder.Services.AddScoped<IExternalRecipeCreationService, ExternalRecipeCreationService>();
             builder.Services.AddScoped<ISearchService, GoogleImageSearchService>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddHttpClient();
+            builder.Services.AddSession();
         }
         public static void AddMvc(this WebApplicationBuilder builder)
         {
@@ -82,6 +86,25 @@
                 .CreateLogger();
 
             return loggerConfig;
+        }
+
+        public static void UseMappedEndpointsWithLoginRedirect(this IApplicationBuilder app)
+        {
+            app.Use(async (context, next) =>
+            {
+                var endpoint = context.GetEndpoint();
+                if (endpoint?.Metadata?.GetMetadata<IAuthorizeData>() != null)
+                {
+                    var user = context.User?.Identity;
+                    if (user == null || !user.IsAuthenticated)
+                    {
+                        context.Response.Redirect("/login");
+                        return;
+                    }
+                }
+
+                await next(context);
+            });
         }
 
         private static readonly string[] tags = ["IdentityDB"];

@@ -23,7 +23,6 @@
         }
     </div>
 
-    <!-- Hidden edit form -->
     <div class="user-info-edit" style="display: none;">
         <input type="file" id="profilePhotoUpload" style="display: none;" />
         <img src="@Model.Photo" alt="User Photo" class="user-photo-edit" onclick="document.getElementById('profilePhotoUpload').click();" />
@@ -127,7 +126,6 @@
                     url: '/follower/profile/delete',
                     type: 'DELETE',
                     success: function (response) {
-                        alert('Профилът ви беше изтрит!');
                         location.reload();
                     },
                     error: function (xhr, status, error) {
@@ -158,8 +156,6 @@
 </script>
 <script>
     $(document).ready(function () {
-        // Other click handlers...
-
         $('#saveChangesBtn').click(function (e) {
             e.preventDefault();
 
@@ -177,19 +173,14 @@
                 url: '/follower/profile/edit',
                 type: 'PUT',
                 data: formData,
-                contentType: false, // Required for 'FormData' to work correctly
-                processData: false, // Required for 'FormData' to work correctly
+                contentType: false,
+                processData: false,
                 success: function (response) {
-                    // Handle success. You might want to redirect the user or display a success message
-                    alert('Профилът ви беше редактиран.');
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    // Handle error. You might want to show the error message to the user
-                    alert('Възникна грешка! Моля опитайте отново!');
                 }
             });
         });
     });
-
 </script>

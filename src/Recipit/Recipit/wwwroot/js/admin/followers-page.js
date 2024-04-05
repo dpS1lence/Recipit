@@ -2,17 +2,15 @@
     $(document).on('click', '.delete-btn', function () {
         if (confirm("Сигурни ли сте че искате да изтриете последователя?")) {
             var followerId = $(this).data("follower-id");
-            var container = $(this).closest(".product-item");
 
             $.ajax({
-                url: '/followers/delete?followerId=' + encodeURIComponent(followerId),
-                type: 'DELETE',
+                url: '/followers/delete/' + encodeURIComponent(followerId),
+                type: 'GET',
                 success: function (response) {
-                    container.fadeOut("slow", function () { $(this).remove(); });
-                    alert("Follower removed successfully.");
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
-                    alert("Error removing follower: " + error);
+                    location.reload();
                 }
             });
         }

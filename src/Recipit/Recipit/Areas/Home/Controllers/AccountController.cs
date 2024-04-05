@@ -58,8 +58,10 @@
 
             var user = _mapper.Map<RecipitUser>(model);
 
-            if (user == null || user.UserName == null || (await _userManager.FindByNameAsync(user.UserName)) != null)
+            if (user is null || user.UserName is null || (await _userManager.FindByNameAsync(user.UserName)) is not null)
             {
+                TempData["messageDanger"] = "Профил с това потребителско име вече съществува!";
+
                 return View(model);
             }
 
@@ -70,6 +72,8 @@
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("User registration failed: {0}", string.Join(", ", result.Errors));
+
+                TempData["messageDanger"] = "Вашата регистрация беше неуспешна!";
 
                 return View(model);
             }
@@ -115,6 +119,8 @@
 
                 if (result.Succeeded)
                 {
+                    TempData["message"] = $"Добре дошъл {user.FirstName}!";
+
                     return RedirectToAction("Index", "Home");
                 }
             }

@@ -29,7 +29,13 @@ namespace Recipit.Services.ImageWebSearch
 
                 if (searchResults.Items is not null && searchResults.Items.Count != 0)
                 {
-                    return searchResults.Items.First().Link;
+                    foreach(var item in searchResults.Items.Select(a => a.Link))
+                    {
+                        if (item.Split('.').Last().ToCharArray().Length <= 4)
+                        {
+                            return item;
+                        }
+                    }
                 }
             }
 

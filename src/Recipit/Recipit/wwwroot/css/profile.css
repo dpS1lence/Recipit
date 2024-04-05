@@ -5,6 +5,7 @@
     --text-color: #333; /* dark gray for text */
     --white-color: #ffffff;
     --gray-color: rgb(128, 128, 128);
+    --gray-color: rgb(128, 128, 128);
 }
 /* User Profile Styles */
 .user-profile-container {

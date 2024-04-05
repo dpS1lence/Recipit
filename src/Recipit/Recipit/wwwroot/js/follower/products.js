@@ -15,7 +15,7 @@
         clearTimeout(searchTimeout);
 
         searchTimeout = setTimeout(function () {
-            if (searchTerm.length > 0) {
+            if (searchTerm.length > 2) {
                 populateProductList(searchTerm);
             } else {
                 productList.empty();

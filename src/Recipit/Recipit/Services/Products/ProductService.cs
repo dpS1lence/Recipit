@@ -1,15 +1,14 @@
 ﻿namespace Recipit.Services.Products
 {
     using AutoMapper;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.IdentityModel.Tokens;
     using Recipit.Contracts;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
     using Recipit.Pagination;
     using Recipit.Pagination.Contracts;
     using Recipit.ViewModels.Product;
+    using System.Drawing.Printing;
     using System.Linq;
 
     public class ProductService(RecipitDbContext context, IMapper mapper, ILogger<ProductService> logger) : IProductService
@@ -18,14 +17,17 @@
         private readonly IMapper _mapper = mapper;
         private readonly ILogger _logger = logger;
 
-        public async Task<IPage<ProductViewModel>> All()
+        public async Task<IEnumerable<ProductViewModel>> All()
         {
-            var products = await _context.Products
-                .Include(a => a.ProductRecipes)
-                .Where(a => a.ProductRecipes == null || a.ProductRecipes.Count == 0)
-                .ToListAsync();
+            var productsRaw = await _context.Products.Include(a => a.ProductRecipes).ToListAsync();
+            var products = _mapper.Map<IEnumerable<ProductViewModel>>(productsRaw).ToList();
 
-            return new Page<ProductViewModel>(products.Select(_mapper.Map<ProductViewModel>), 1, 10, products.Count);
+            for (int i = 0; i < productsRaw.Count; i++)
+            {
+                products[i].IsInRecipe = productsRaw[i].ProductRecipes.Count != 0;
+            }
+
+            return products.OrderBy(a => a.IsInRecipe!.Value);
         }
 
         public async Task<IEnumerable<ProductViewModel>> SearchProducts(string searchText)
@@ -42,16 +44,22 @@
 
             var product = _mapper.Map<Product>(model);
 
-            ArgumentNullException.ThrowIfNull(product);
-            ArgumentException.ThrowIfNullOrEmpty(product.Name);
-            ArgumentException.ThrowIfNullOrEmpty(product.Photo);
-
-            if (product.Calories < 0)
-                throw new ArgumentException(nameof(product.Calories));
-            else if (await _context.Products.AnyAsync(a => a.Name == product.Name))
+            if (product is null)
                 throw new ArgumentException(nameof(product));
+            else if (string.IsNullOrEmpty(product.Name))
+                throw new ArgumentException(nameof(product.Name));
+            else if (string.IsNullOrEmpty(product.Photo))
+                throw new ArgumentException(nameof(product.Photo));
+            else if (product.Calories < 0)
+                throw new ArgumentException(nameof(product.Calories));
+
+            if (await _context.Products.AnyAsync(a => a.Name == product.Name))
+            {
+                throw new ArgumentException("Product already exists!");
+            }
 
             _context.Products.Add(product);
+
             await _context.SaveChangesAsync();
 
             return _mapper.Map<ProductViewModel>(product);
@@ -61,7 +69,7 @@
         {
             var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == id);
 
-            if (product is not null)
+            if (product != null)
             {
                 var isInRecipe = await _context.Recipes.AnyAsync(b => b.Id == product.Id);
 
@@ -73,38 +81,66 @@
                 }
             }
 
-            throw new ArgumentException(nameof(product));
+            throw new ArgumentException("not deleted");
         }
 
         public async Task<string> Edit(ProductViewModel model)
         {
             var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == model.Id);
 
-            if (product is not null)
+            if (product != null)
             {
-                var isInRecipe = await _context.Recipes
-                    .Include(a => a.ProductRecipes)
-                    .AnyAsync(b => b.ProductRecipes.Any(a => a.ProductId == product.Id));
+                product.Name = model.Name;
 
-                if (!isInRecipe)
+                if (model.Photo != null)
                 {
-                    product.Name = model.Name;
-
-                    if (model.Photo is not null)
-                    {
-                        product.Photo = model.Photo;
-                    }
-
-                    product.Calories = model.Calories;
-
-                    _context.Products.Update(product);
-                    await _context.SaveChangesAsync();
-
-                    return product.Name;
+                    product.Photo = model.Photo;
                 }
+
+                product.Calories = model.Calories;
+
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+
+                return product.Name;
             }
 
-            throw new ArgumentException(nameof(product));
+            throw new ArgumentException("not updated");
+        }
+
+        public async Task<IPage<ProductViewModel>> GetPaginated(int pageIndex, string? name)
+        {
+            if (pageIndex == 0) pageIndex = 1;
+            var pageSize = 40;
+
+            var productsRaw = await _context.Products
+                .Include(a => a.ProductRecipes)
+                .OrderBy(a => a.ProductRecipes.Count)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            if(name is not null)
+                productsRaw = await _context.Products
+                .Include(a => a.ProductRecipes)
+                .OrderBy(a => a.ProductRecipes.Count)
+                .Where(a => a.Name.Contains(name))
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var products = _mapper.Map<IEnumerable<ProductViewModel>>(productsRaw)
+                .ToList();
+
+            for (int i = 0; i < productsRaw.Count; i++)
+            {
+                products[i].IsInRecipe = productsRaw[i].ProductRecipes.Count != 0;
+            }
+
+            var totalFilteredCount = products.Count;
+            var totalPages = (int)Math.Ceiling(totalFilteredCount / (double)pageSize);
+
+            return new Page<ProductViewModel>(products, pageIndex, pageSize, totalPages);
         }
     }
 }

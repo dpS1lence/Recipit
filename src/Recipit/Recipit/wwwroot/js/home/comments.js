@@ -14,7 +14,6 @@
                     Rating: parseInt(commentDetails.Rating)
                 }),
                 success: function (response) {
-                    alert('Коментарът ви беше споделен успешно!');
                     localStorage.removeItem('pendingComment');
                     location.reload();
                 },

@@ -12,8 +12,9 @@ namespace Recipit.ViewModels.Recipe
     {
         public RecipeDisplayModel()
         {
-            Products = new HashSet<ProductViewModel>();
-            Comments = new HashSet<CommentViewModel>();
+            Products = [];
+            Comments = [];
+            Ratings = [];
         }
 
         public int Id { get; set; }
@@ -38,8 +39,11 @@ namespace Recipit.ViewModels.Recipe
 
         public string Category { get; set; } = default!;
 
+        public int UserRating { get; set; }
+
         public IEnumerable<ProductViewModel> Products { get; set; }
         public IEnumerable<CommentViewModel>? Comments { get; set; }
+        public IEnumerable<Rating>? Ratings { get; set; }
 
         public void Mapping(Profile map)
         {
@@ -52,11 +56,11 @@ namespace Recipit.ViewModels.Recipe
                     Id = pr.Product.Id,
                     Name = pr.Product.Name
                 })))
+                .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments.Select(pr => new CommentViewModel
                 {
                     DatePosted = pr.DatePosted,
                     Id = pr.Id,
-                    Rating = pr.Rating,
                     RecipeId = pr.Id,
                     Text = pr.Text,
                     User = new UserViewModel

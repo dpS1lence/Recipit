@@ -129,20 +129,25 @@
 <script src="~/js/follower/update-edit-preview.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Adds click event listeners to all existing x-icons
         const xIcons = document.querySelectorAll('.x-icon');
 
         xIcons.forEach(icon => {
             icon.addEventListener('click', function () {
-                // This assumes the .product div is the immediate parent of .x-icon
                 const productElement = this.closest('.product');
                 if (productElement) {
-                    productElement.remove(); // Removes the product element from the DOM
+                    productElement.remove();
                 }
             });
         });
     });
 
+</script>
+<script>
+    $(document).ready(function () {
+        var imgUrl = "@Html.Raw(imgUrl)";
+        var username = "@Html.Raw(username)";
+        generatePreview(imgUrl, username);
+    });
 </script>
 <script>
     $(document).ready(function () {
@@ -159,10 +164,5 @@
             dropArea.style.backgroundColor = '#e6f7ff';
         }
         existingImage.style.display = 'none';
-
-
-        var imgUrl = "@Html.Raw(imgUrl)";
-        var username = "@Html.Raw(username)";
-        generatePreview(imgUrl, username);
     });
 </script>
