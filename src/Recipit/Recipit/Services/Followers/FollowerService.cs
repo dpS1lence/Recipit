@@ -16,7 +16,6 @@
         private readonly IMapper _mapper = mapper;
         private readonly UserSettings _settings = configuration.GetSection("UserSettings").Get<UserSettings>()!;
 
-
         public async Task<IPage<FollowerViewModel>> GetAll(int pageIndex = 1, int pageSize = 50)
         {
             var all = await _context.Users.Where(user => user.Email != _settings.Email).ToListAsync();

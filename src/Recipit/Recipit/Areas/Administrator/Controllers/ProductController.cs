@@ -14,10 +14,10 @@
         {
             if(json)
             {
-                return Json(await _productService.GetPaginated(pageIndex, name));
+                return Json(await _productService.AllPaginated(pageIndex, name));
             }
 
-            return View(await _productService.GetPaginated(pageIndex, name));
+            return View(await _productService.AllPaginated(pageIndex, name));
         }
         [HttpPut]
         public async Task<IActionResult> Edit([FromForm] ProductViewModel model) => Json(await _productService.Edit(model));

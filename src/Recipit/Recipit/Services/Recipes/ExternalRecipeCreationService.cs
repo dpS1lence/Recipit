@@ -14,22 +14,17 @@
 
     public partial class ExternalRecipeCreationService
         (RecipitDbContext context
-        , UserManager<RecipitUser> userManager
-        , HttpClient httpClient
+        , UserManager<Comment> userManager
         , ILogger<RecipeService> logger
-        , IMapper mapper
         , IHttpContextAccessor httpContextAccessor
         , ISearchService searchService)
         : IExternalRecipeCreationService
     {
         private readonly RecipitDbContext _context = context;
-        private readonly UserManager<RecipitUser> _userManager = userManager;
-        private readonly HttpClient _httpClient = httpClient;
+        private readonly UserManager<Comment> _userManager = userManager;
         private readonly ILogger _logger = logger;
         private readonly ISearchService _searchService = searchService;
-        private readonly IMapper _mapper = mapper;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private static readonly string[] separator = ["\r\n", "\r", "\n"];
 
         public async Task<int> Create(string url)
         {
@@ -103,7 +98,7 @@
             return recipe.Id;
         }
 
-        private string FetchDescription(string htmlContent)
+        private static string FetchDescription(string htmlContent)
         {
             var sb = new StringBuilder();
 
@@ -133,7 +128,7 @@
                 {
                     string productName = match.Groups[1].Value.Trim();
                     string quantity = match.Groups[2].Value.Trim();
-                    var imageUrl = await _searchService.ImageUrlByName(productName);
+                    var imageUrl = await _searchService.GetImageUrlByName(productName);
 
                     products.Add(new(productName, quantity, imageUrl));
                 }
@@ -159,9 +154,6 @@
             }
         }
 
-
-        [GeneratedRegex("<[^>]+>")]
-        private static partial Regex MyRegex();
         [GeneratedRegex(@"<p class=""desc"">(.*?)<\/p>")]
         private static partial Regex RawDecription();
         [GeneratedRegex("<a href=[^>]+>(.*?)</a>")]

@@ -65,8 +65,8 @@ namespace Recipit.ViewModels.Recipe
                     Text = pr.Text,
                     User = new UserViewModel
                     {
-                        Email = pr.User.Email,
-                        Username = pr.User.UserName,
+                        Email = pr.User.Email!,
+                        Username = pr.User.UserName!,
                         Photo = pr.User.Photo,
                         Id = pr.User.Id
                     }
@@ -96,7 +96,7 @@ namespace Recipit.ViewModels.Recipe
                         Photo = p.Photo ?? "https://media.istockphoto.com/id/1354776457/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg"
                     }
                 })))
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new RecipitUser
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new Comment
                 {
                     Id = src.User.Id,
                     Photo = src.User.Photo,

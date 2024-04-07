@@ -6,11 +6,11 @@ using Recipit.Infrastructure.Data.Models;
 
 namespace Recipit.Services.Ratings
 {
-    public class RatingService(RecipitDbContext context, UserManager<RecipitUser> userManager, IHttpContextAccessor httpContextAccessor)
+    public class RatingService(RecipitDbContext context, UserManager<Comment> userManager, IHttpContextAccessor httpContextAccessor)
     : IRatingService
     {
         private readonly RecipitDbContext _context = context;
-        private readonly UserManager<RecipitUser> _userManager = userManager;
+        private readonly UserManager<Comment> _userManager = userManager;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task Rate(decimal value, int recipeId)

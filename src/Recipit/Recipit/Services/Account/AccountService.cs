@@ -18,7 +18,7 @@ namespace Recipit.Services.Account
 {
     public class AccountService
         (RecipitDbContext context,
-        UserManager<RecipitUser> userManager,
+        UserManager<Comment> userManager,
         ILogger<FollowerService> logger,
         IMapper mapper,
         IHttpContextAccessor httpContextAccessor,
@@ -26,7 +26,7 @@ namespace Recipit.Services.Account
         : IAccountService
     {
         private readonly RecipitDbContext _context = context;
-        private readonly UserManager<RecipitUser> _userManager = userManager;
+        private readonly UserManager<Comment> _userManager = userManager;
         private readonly ILogger _logger = logger;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly IMapper _mapper = mapper;

@@ -1,20 +1,25 @@
 ﻿using AutoMapper;
 using Recipit.Infrastructure.Data.Models;
 using Recipit.Infrastructure.Mapping;
+using System.ComponentModel.DataAnnotations;
 
 namespace Recipit.Models.Account
 {
-    public class RegisterViewModel : IMapFrom<RecipitUser>
+    public class RegisterViewModel : IMapFrom<Comment>
     {
         public string Email { get; set; } = default!;
+
+        [MinLength(8, ErrorMessage = "Паролата трябва да е минимум 8 символа")]
         public string Password { get; set; } = default!;
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;
+
+        [RegularExpression(@"^[a-zA-Z0-9\-\._]+$", ErrorMessage = "Моля използвайте само латиски букви, цифри и '-', '.', '_'")]
         public string Username { get; set; } = default!;
 
         public void Mapping(Profile map)
         {
-            map.CreateMap<RegisterViewModel, RecipitUser>()
+            map.CreateMap<RegisterViewModel, Comment>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))

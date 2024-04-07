@@ -12,36 +12,37 @@
 <div class="recipes-container">
     @foreach (var item in Model)
     {
-        <div class="recipe-container product-item @(item.IsInRecipe.Value ? "in-recipe" : "")" data-product-id="@item.Id">
-            <div class="recipe-data">
-                <!-- View Mode -->
-                <div class="view-mode">
-                    <img src="@item.Photo" alt="@item.Name" class="recipe-image" />
-                    <div class="recipe-title-and-rating">
-                        <h3 class="recipe-title">@item.Name</h3>
-                        <p class="recipe-calories">@item.Calories кал</p>
+        if(item is not null && item.IsInRecipe is not null)
+        {
+            <div class="recipe-container product-item @(item.IsInRecipe.Value ? "in-recipe" : "")" data-product-id="@item.Id">
+                <div class="recipe-data">
+                    <div class="view-mode">
+                        <img src="@item.Photo" alt="@item.Name" class="recipe-image" />
+                        <div class="recipe-title-and-rating">
+                            <h3 class="recipe-title">@item.Name</h3>
+                            <p class="recipe-calories">@item.Calories кал</p>
+                        </div>
+                        <div class="@(item.IsInRecipe.Value ? "enabled" : "dissabled")">
+                            <h1><i class="fa-solid fa-lock"></i> В Рецепта</h1>
+                            <a class="edit-btn-inrecipe">Редактирай въпреки това</a>
+                        </div>
+                        <div class="recipe-buttons @(item.IsInRecipe.Value ? "dissabled" : "")">
+                            <button class="edit-btn">Редактирай</button>
+                            <button class="delete-btn">Изтрий</button>
+                        </div>
                     </div>
-                    <div class="@(item.IsInRecipe.Value ? "enabled" : "dissabled")">
-                        <h1><i class="fa-solid fa-lock"></i> В Рецепта</h1>
-                        <a class="edit-btn-inrecipe">Редактирай въпреки това</a>
-                    </div>
-                    <div class="recipe-buttons @(item.IsInRecipe.Value ? "dissabled" : "")">
-                        <button class="edit-btn">Редактирай</button>
-                        <button class="delete-btn">Изтрий</button>
-                    </div>
-                </div>
-                <!-- Edit Mode -->
-                <div class="edit-mode" style="display:none;">
-                    <input required type="text" class="edit-name" value="@item.Name" />
-                    <input required type="text" class="edit-calories" value="@item.Calories" />
-                    <input required type="text" class="edit-image" value="@item.Photo" />
-                    <div class="recipe-buttons">
-                        <button class="save-btn">Запази</button>
-                        <button class="cancel-btn">Откажи</button>
+                    <div class="edit-mode" style="display:none;">
+                        <input required type="text" class="edit-name" value="@item.Name" />
+                        <input required type="text" class="edit-calories" value="@item.Calories" />
+                        <input required type="text" class="edit-image" value="@item.Photo" />
+                        <div class="recipe-buttons">
+                            <button class="save-btn">Запази</button>
+                            <button class="cancel-btn">Откажи</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     }
 </div>
 
@@ -49,7 +50,6 @@
 <script src="~/js/admin/products.js"></script>
 <script>
     $(document).ready(function () {
-        // Function to filter products based on search input
         $('#searchInput').on('input', function () {
             var searchText = $(this).val().toLowerCase();
 
@@ -131,7 +131,6 @@
                     container.find(".edit-mode").show();
                 });
 
-                // Cancel Button
                 $(document).on('click', '.cancel-btn', function () {
                     var container = $(this).closest(".product-item");
                     container.find(".edit-mode").hide();
@@ -145,7 +144,6 @@
                     container.find(".edit-mode").show();
                 });
 
-                // Save Button
                 $(document).on('click', '.save-btn', function () {
                     var container = $(this).closest(".product-item");
                     var id = container.data("product-id");
@@ -175,7 +173,6 @@
                     });
                 });
 
-                // Delete Button
                 $(document).on('click', '.delete-btn', function () {
                     var container = $(this).closest(".product-item");
                     var name = container.find(".edit-name").val();

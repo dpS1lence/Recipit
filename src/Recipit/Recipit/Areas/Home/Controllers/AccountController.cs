@@ -15,21 +15,22 @@
     [AllowAnonymous]
     [Area("Home")]
     public class AccountController
-        (UserManager<RecipitUser> userManager,
-        SignInManager<RecipitUser> signInManager,
+        (UserManager<Infrastructure.Data.Models.Comment> userManager,
+        SignInManager<Infrastructure.Data.Models.Comment> signInManager,
         IMapper mapper,
         RecipitDbContext context,
         IAccountService accountService,
         IConfiguration configuration,
         RoleManager<IdentityRole> roleManager) : Controller
     {
-        private readonly UserManager<RecipitUser> _userManager = userManager;
-        private readonly SignInManager<RecipitUser> _signInManager = signInManager;
+        private readonly UserManager<Infrastructure.Data.Models.Comment> _userManager = userManager;
+        private readonly SignInManager<Infrastructure.Data.Models.Comment> _signInManager = signInManager;
         private readonly IMapper _mapper = mapper;
         private readonly RecipitDbContext _context = context;
         private readonly IAccountService _accountService = accountService;
-        private readonly IConfiguration _configuration = configuration;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+
+        public IConfiguration Configuration => configuration;
 
         [HttpGet("/login")]
         public IActionResult Login() => GetView();
@@ -56,7 +57,7 @@
                 return View(model);
             }
 
-            var user = _mapper.Map<RecipitUser>(model);
+            var user = _mapper.Map<Infrastructure.Data.Models.Comment>(model);
 
             if (user is null || user.UserName is null || (await _userManager.FindByNameAsync(user.UserName)) is not null)
             {
@@ -65,7 +66,7 @@
                 return View(model);
             }
 
-            user.Photo = configuration.GetSection("UserSettings").Get<UserSettings>()!.Photo;
+            user.Photo = Configuration.GetSection("UserSettings").Get<UserSettings>()!.Photo;
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
