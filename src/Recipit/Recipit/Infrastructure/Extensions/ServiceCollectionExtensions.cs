@@ -68,6 +68,9 @@
             builder.Services.AddIdentity<RecipitUser, IdentityRole>(cfg =>
             {
                 cfg.Password.RequireUppercase = false;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequireLowercase = false;
+                cfg.Password.RequireDigit = false;
                 cfg.User.RequireUniqueEmail = true;
                 cfg.SignIn.RequireConfirmedEmail = false;
             })

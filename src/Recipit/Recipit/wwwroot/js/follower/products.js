@@ -4,6 +4,7 @@
     var productPopup = $('#product-popup');
     var productList = $('#product-list');
     var productContainer = $('#product-container');
+    var submiting = false;
 
     $(document).on('click', '#btn-add-product', function () {
         productPopup.toggleClass('hidden');
@@ -26,6 +27,36 @@
     $(document).on('click', '#addNewProduct', function () {
         showNewProductForm();
     });
+
+
+    if (!submiting) {
+        $(document).on('click', '#submitNewProduct', function () {
+            submiting = true;
+            console.log('submiting now : ' + submiting);
+            var newProductName = $('#newProductName').val();
+            var newProductPhoto = $('#newProductPhoto').val();
+            var newProductCalories = $('#newProductCalories').val();
+
+            $.ajax({
+                url: '/follower/product/create',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Name: newProductName,
+                    Photo: newProductPhoto,
+                    Calories: newProductCalories
+                }),
+                success: function (data) {
+                    submiting = false;
+                    fillFormForSearch();
+                },
+                error: function (error) {
+                    submiting = false;
+                    fillFormForExists();
+                }
+            });
+        });
+    }
 
     function populateProductList(searchTerm) {
         $('#li-skeleton').show();
@@ -84,29 +115,6 @@
 
     function showNewProductForm() {
         fillFormForCreate();
-
-        $(document).on('click', '#submitNewProduct', function () {
-            var newProductName = $('#newProductName').val();
-            var newProductPhoto = $('#newProductPhoto').val();
-            var newProductCalories = $('#newProductCalories').val();
-
-            $.ajax({
-                url: '/follower/product/create',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    Name: newProductName,
-                    Photo: newProductPhoto,
-                    Calories: newProductCalories
-                }),
-                success: function (data) {
-                    fillFormForSearch();
-                },
-                error: function (error) {
-                    fillFormForExists();
-                }
-            });
-        });
     }
 
     function fillFormForSearch() {

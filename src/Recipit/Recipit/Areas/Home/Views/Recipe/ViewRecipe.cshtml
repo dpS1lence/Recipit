@@ -27,18 +27,21 @@
             </div>
             @if (User?.Identity?.IsAuthenticated ?? false)
             {
-                <div class="rating-main">
-                    <p>Твоята Оценка:</p>
-                    <div class="recipe-rating-stars">
-                        <i class="fa-regular fa-star" data-rating="1"></i>
-                        <i class="fa-regular fa-star" data-rating="2"></i>
-                        <i class="fa-regular fa-star" data-rating="3"></i>
-                        <i class="fa-regular fa-star" data-rating="4"></i>
-                        <i class="fa-regular fa-star" data-rating="5"></i>
+                if (User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value != Model.UserId)
+                {
+                    <div class="rating-main">
+                        <p>Твоята Оценка:</p>
+                        <div class="recipe-rating-stars">
+                            <i class="fa-regular fa-star" data-rating="1"></i>
+                            <i class="fa-regular fa-star" data-rating="2"></i>
+                            <i class="fa-regular fa-star" data-rating="3"></i>
+                            <i class="fa-regular fa-star" data-rating="4"></i>
+                            <i class="fa-regular fa-star" data-rating="5"></i>
+                        </div>
+                        <input type="hidden" id="recipeRating" name="rating" value="0">
                     </div>
-                    <input type="hidden" id="recipeRating" name="rating" value="0">
-                </div>
-                <input type="hidden" id="userRating" name="urating" value="@(Model.UserRating)">
+                    <input type="hidden" id="userRating" name="urating" value="@(Model.UserRating)">
+                }
             }
         </div>
     </div>

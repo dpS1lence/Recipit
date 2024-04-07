@@ -6,7 +6,6 @@
     using Recipit.Contracts.Helpers;
     using Recipit.Infrastructure.Data;
     using Recipit.Infrastructure.Data.Models;
-    using Recipit.Infrastructure.Data.Models.Contracts;
     using Recipit.Infrastructure.Mapping;
     using Recipit.Services.ImageWebSearch;
     using System.Text;
@@ -34,6 +33,7 @@
             var img = "https://recepti.gotvach.bg" + Image().Matches(htmlContent).FirstOrDefault()?.Groups[1].Value;
             var description = FetchDescription(htmlContent);
             var products = await FetchProducts(htmlContent);
+            var categoryMatch = Category().Matches(htmlContent).FirstOrDefault()?.Groups[1].Value;
 
             var user = await GetUser.Data(_userManager, _httpContextAccessor);
 
@@ -42,6 +42,7 @@
             ArgumentNullException.ThrowIfNull(description);
             ArgumentNullException.ThrowIfNull(products);
             ArgumentNullException.ThrowIfNull(user);
+            ArgumentNullException.ThrowIfNull(categoryMatch);
 
             if (await _context.Recipes.Where(a => a.UserId == GetUser.Id(_httpContextAccessor) && a.Name == title).AnyAsync())
                 throw new ArgumentException("Вече сте създали тази рецепта!");
@@ -51,7 +52,7 @@
                 Name = title,
                 Description = description,
                 Photo = img,
-                Category = Category.MainCourse,
+                Category = Contracts.Constants.GotvachBgCategories.GetName(categoryMatch),
                 UserId = user.Id,
                 User = user,
                 PublishDate = DateTime.UtcNow,
@@ -168,6 +169,8 @@
         private static partial Regex Image();
         [GeneratedRegex(@"<li><b>([^<]+)</b> - ([^<]+)</li>")]
         private static partial Regex Products();
+        [GeneratedRegex(@"<a href=""https:\/\/recepti\.gotvach\.bg\/[^\/]*\/"">([^<]*)<\/a>")]
+        private static partial Regex Category();
     }
 
     class RecipeProduct(string name, string quantity, string url) : IMapFrom<Product>

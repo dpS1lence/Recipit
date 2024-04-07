@@ -37,17 +37,27 @@
 
         public async Task<string> Create(RecipeViewModel model)
         {
-            ValidateRecipeModel(model);
-
+            Validate.Model(model, _logger);
             var dict = new Dictionary<string, string>();
+
+            ArgumentException.ThrowIfNullOrEmpty(model.Name, ExceptionMessages.Recipe.NameIsNullOrEmpty);
+            ArgumentException.ThrowIfNullOrEmpty(model.Description, ExceptionMessages.Recipe.DescriptionIsNullOrEmpty);
 
             if (!string.IsNullOrEmpty(model.Products))
             {
                 dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.Products);
                 ArgumentNullException.ThrowIfNull(dict, ExceptionMessages.Recipe.ProductListIsNull);
+                if (dict.Count == 0)
+                    throw new ArgumentException(ExceptionMessages.Recipe.ProductListIsEmpty);
+                else if (model.Photo == null || model.Photo == default)
+                    throw new ArgumentException(ExceptionMessages.Recipe.PhotoIsInvalid);
+                else if (model.Calories < 0)
+                    throw new ArgumentException(ExceptionMessages.Recipe.CaloriesIsNullOrEmpty);
+                else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
+                    throw new ArgumentException(ExceptionMessages.Recipe.CategoryIsNullOrEmpty);
+                else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
+                    throw new ArgumentException(ExceptionMessages.Recipe.AlreadyExists);
             }
-            else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
-                throw new ArgumentException(ExceptionMessages.Recipe.AlreadyExists);
 
             var user = await GetUser.Data(_userManager, _httpContextAccessor);
 
@@ -141,21 +151,6 @@
 
             _context.Recipes.Update(recipeDbo);
             await _context.SaveChangesAsync();
-        }
-
-        private void ValidateRecipeModel(RecipeViewModel model)
-        {
-            Validate.Model(model, _logger);
-
-            ArgumentException.ThrowIfNullOrEmpty(model.Name, ExceptionMessages.Recipe.NameIsNullOrEmpty);
-            ArgumentException.ThrowIfNullOrEmpty(model.Description, ExceptionMessages.Recipe.DescriptionIsNullOrEmpty);
-
-            if (model.Photo == null || model.Photo == default)
-                throw new ArgumentException(ExceptionMessages.Recipe.PhotoIsInvalid);
-            else if (model.Calories < 0)
-                throw new ArgumentException(ExceptionMessages.Recipe.CaloriesIsNullOrEmpty);
-            else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
-                throw new ArgumentException(ExceptionMessages.Recipe.CategoryIsNullOrEmpty);
         }
 
         public async Task<string> Delete(int recipeId)
@@ -280,7 +275,7 @@
             if (isUserAuthenticated)
             {
                 var userRating = await _context.Ratings
-                    .FirstOrDefaultAsync(a => 
+                    .FirstOrDefaultAsync(a =>
                         a.UserId == GetUser.Id(_httpContextAccessor) && a.RecipeId == id);
 
                 if (userRating != null)

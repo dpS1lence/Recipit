@@ -68,7 +68,7 @@
 
             if (product != null)
             {
-                var isInRecipe = await _context.Recipes.AnyAsync(b => b.Id == product.Id);
+                var isInRecipe = await _context.ProductsRecipies.AnyAsync(b => b.ProductId == product.Id);
 
                 if (!isInRecipe)
                 {
@@ -94,8 +94,6 @@
                 throw new ArgumentException(nameof(model.Photo));
             else if (model.Calories < 0)
                 throw new ArgumentException(nameof(model.Calories));
-            else if (await _context.Products.AnyAsync(a => a.Name == model.Name))
-                throw new ArgumentException("Product already exists!");
 
             product.Name = model.Name;
             product.Photo = model.Photo;

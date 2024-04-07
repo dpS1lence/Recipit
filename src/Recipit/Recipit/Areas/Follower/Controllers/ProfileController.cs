@@ -33,7 +33,7 @@
 
             await _signInManager.SignOutAsync();
 
-            return RedirectToAction("Index", "Home", new { Area = "Home" });
+            return RedirectToAction("Login", "Account", new { Area = "Home" });
         }
 
         [HttpDelete]
