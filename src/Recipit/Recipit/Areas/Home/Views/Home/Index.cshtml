@@ -16,64 +16,67 @@
             <h2 class="recipe-title-in-home-last">Най-харесвани</h2>
         </div>
         <div class="recipes-container">
-            @foreach (var item in new List<RecipeDisplayModel> { Model.RecipeOfTheDay, Model.TopRatedRecipes.First(), Model.TopRatedRecipes.Last() })
+            @if (Model.RecipeOfTheDay is not null && Model.TopRatedRecipes is not null)
             {
-                <div class="recipe-container">
-                    <div class="recipe-data">
-                        <div class="recipe-image-ctr">
-                            <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                @foreach (var item in new List<RecipeDisplayModel> { Model.RecipeOfTheDay, Model.TopRatedRecipes.First(), Model.TopRatedRecipes.Last() })
+                {
+                    <div class="recipe-container">
+                        <div class="recipe-data">
+                            <div class="recipe-image-ctr">
+                                <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                            </div>
+                            <div class="recipe-title-and-rating">
+                                <h1 class="recipe-title">@item.Name</h1>
+                                <div class="stars-container">
+                                    @{
+                                        var fullStars = Math.Floor(item.AverageRating);
+                                        var hasHalfStar = item.AverageRating > fullStars;
+                                        var totalStars = 5;
+                                    }
+                                    @for (int i = 0; i < fullStars; i++)
+                                    {
+                                        <i class="fa-solid fa-star"></i>
+                                    }
+                                    @if (hasHalfStar)
+                                    {
+                                        <i class="fa-solid fa-star-half-stroke"></i>
+                                    }
+                                    @for (int i = 0; i < totalStars - fullStars - (hasHalfStar ? 1 : 0); i++)
+                                    {
+                                        <i class="fa-regular fa-star"></i>
+                                    }
+                                </div>
+                            </div>
                         </div>
-                        <div class="recipe-title-and-rating">
-                            <h1 class="recipe-title">@item.Name</h1>
-                            <div class="stars-container">
-                                @{
-                                    var fullStars = Math.Floor(item.AverageRating);
-                                    var hasHalfStar = item.AverageRating > fullStars;
-                                    var totalStars = 5;
-                                }
-                                @for (int i = 0; i < fullStars; i++)
+                        <div class="recipe-products">
+                            <h1 class="recipe-ingridients-title">Съставки</h1>
+                            <div class="ingridients-container">
+                                @for (int i = 0; i < item.Products.Count() && i < 5; i++)
                                 {
-                                    <i class="fa-solid fa-star"></i>
+                                    var product = item.Products.ElementAt(i);
+                                    <div class="ingridient">
+                                        <img class="ingridient-image" src="@product.Photo" alt="Product Image" />
+                                        <h1 class="ingridient-title">@product.Name</h1>
+                                    </div>
                                 }
-                                @if (hasHalfStar)
+                                @if (item.Products.Count() > 5)
                                 {
-                                    <i class="fa-solid fa-star-half-stroke"></i>
-                                }
-                                @for (int i = 0; i < totalStars - fullStars - (hasHalfStar ? 1 : 0); i++)
-                                {
-                                    <i class="fa-regular fa-star"></i>
+                                    <div class="ingridient">
+                                        <h1 class="ingridient-more">+@((item.Products.Count() - 5).ToString()) Още</h1>
+                                    </div>
                                 }
                             </div>
                         </div>
-                    </div>
-                    <div class="recipe-products">
-                        <h1 class="recipe-ingridients-title">Съставки</h1>
-                        <div class="ingridients-container">
-                            @for (int i = 0; i < item.Products.Count() && i < 5; i++)
-                            {
-                                var product = item.Products.ElementAt(i);
-                                <div class="ingridient">
-                                    <img class="ingridient-image" src="@product.Photo" alt="Product Image" />
-                                    <h1 class="ingridient-title">@product.Name</h1>
-                                </div>
+                        <div class="recipe-buttons">
+                            <a class="view-recipe-btn" style="text-decoration: none;" asp-action="ViewRecipe" asp-controller="Recipe" asp-area="Home" asp-route-id="@item.Id"><i class="fa fa-eye"></i>Виж рецептата</a>
+                            @{
+                                var caloriesColorClass = item.Calories < 250 ? "recipe-calories-green" :
+                                item.Calories >= 250 && item.Calories <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
                             }
-                            @if (item.Products.Count() > 5)
-                            {
-                                <div class="ingridient">
-                                    <h1 class="ingridient-more">+@((item.Products.Count() - 5).ToString()) Още</h1>
-                                </div>
-                            }
+                            <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @((int)item.Calories) Калории</h2>
                         </div>
                     </div>
-                    <div class="recipe-buttons">
-                        <a class="view-recipe-btn" style="text-decoration: none;" asp-action="ViewRecipe" asp-controller="Recipe" asp-area="Home" asp-route-id="@item.Id"><i class="fa fa-eye"></i>Виж рецептата</a>
-                        @{
-                            var caloriesColorClass = item.Calories < 250 ? "recipe-calories-green" :
-                            item.Calories >= 250 && item.Calories <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
-                        }
-                        <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @((int)item.Calories) Калории</h2>
-                    </div>
-                </div>
+                }
             }
         </div>
     </div>
@@ -81,64 +84,67 @@
     <div class="latest-recipes-container">
         <h2 class="recipe-title-in-home">Последно публикувани</h2>
         <div class="recipes-container">
-            @foreach (var item in Model.LatestRecipes)
+            @if (Model.LatestRecipes is not null)
             {
-                <div class="recipe-container">
-                    <div class="recipe-data">
-                        <div class="recipe-image-ctr">
-                            <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                @foreach (var item in Model.LatestRecipes)
+                {
+                    <div class="recipe-container">
+                        <div class="recipe-data">
+                            <div class="recipe-image-ctr">
+                                <img class="recipe-image" src="@item.Photo" alt="Recipe Image" />
+                            </div>
+                            <div class="recipe-title-and-rating">
+                                <h1 class="recipe-title">@item.Name</h1>
+                                <div class="stars-container">
+                                    @{
+                                        var fullStars = Math.Floor(item.AverageRating);
+                                        var hasHalfStar = item.AverageRating > fullStars;
+                                        var totalStars = 5;
+                                    }
+                                    @for (int i = 0; i < fullStars; i++)
+                                    {
+                                        <i class="fa-solid fa-star"></i>
+                                    }
+                                    @if (hasHalfStar)
+                                    {
+                                        <i class="fa-solid fa-star-half-stroke"></i>
+                                    }
+                                    @for (int i = 0; i < totalStars - fullStars - (hasHalfStar ? 1 : 0); i++)
+                                    {
+                                        <i class="fa-regular fa-star"></i>
+                                    }
+                                </div>
+                            </div>
                         </div>
-                        <div class="recipe-title-and-rating">
-                            <h1 class="recipe-title">@item.Name</h1>
-                            <div class="stars-container">
-                                @{
-                                    var fullStars = Math.Floor(item.AverageRating);
-                                    var hasHalfStar = item.AverageRating > fullStars;
-                                    var totalStars = 5;
-                                }
-                                @for (int i = 0; i < fullStars; i++)
+                        <div class="recipe-products">
+                            <h1 class="recipe-ingridients-title">Съставки</h1>
+                            <div class="ingridients-container">
+                                @for (int i = 0; i < item.Products.Count() && i < 5; i++)
                                 {
-                                    <i class="fa-solid fa-star"></i>
+                                    var product = item.Products.ElementAt(i);
+                                    <div class="ingridient">
+                                        <img class="ingridient-image" src="@product.Photo" alt="Product Image" />
+                                        <h1 class="ingridient-title">@product.Name</h1>
+                                    </div>
                                 }
-                                @if (hasHalfStar)
+                                @if (item.Products.Count() > 5)
                                 {
-                                    <i class="fa-solid fa-star-half-stroke"></i>
-                                }
-                                @for (int i = 0; i < totalStars - fullStars - (hasHalfStar ? 1 : 0); i++)
-                                {
-                                    <i class="fa-regular fa-star"></i>
+                                    <div class="ingridient">
+                                        <h1 class="ingridient-more">+@((item.Products.Count() - 5).ToString()) Още</h1>
+                                    </div>
                                 }
                             </div>
                         </div>
-                    </div>
-                    <div class="recipe-products">
-                        <h1 class="recipe-ingridients-title">Съставки</h1>
-                        <div class="ingridients-container">
-                            @for (int i = 0; i < item.Products.Count() && i < 5; i++)
-                            {
-                                var product = item.Products.ElementAt(i);
-                                <div class="ingridient">
-                                    <img class="ingridient-image" src="@product.Photo" alt="Product Image" />
-                                    <h1 class="ingridient-title">@product.Name</h1>
-                                </div>
+                        <div class="recipe-buttons">
+                            <a class="view-recipe-btn" style="text-decoration: none;" asp-action="ViewRecipe" asp-controller="Recipe" asp-area="Home" asp-route-id="@item.Id"><i class="fa fa-eye"></i>Виж рецептата</a>
+                            @{
+                                var caloriesColorClass = item.Calories < 250 ? "recipe-calories-green" :
+                                item.Calories >= 250 && item.Calories <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
                             }
-                            @if (item.Products.Count() > 5)
-                            {
-                                <div class="ingridient">
-                                    <h1 class="ingridient-more">+@((item.Products.Count() - 5).ToString()) Още</h1>
-                                </div>
-                            }
+                            <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @((int)item.Calories) Калории</h2>
                         </div>
                     </div>
-                    <div class="recipe-buttons">
-                        <a class="view-recipe-btn" style="text-decoration: none;" asp-action="ViewRecipe" asp-controller="Recipe" asp-area="Home" asp-route-id="@item.Id"><i class="fa fa-eye"></i>Виж рецептата</a>
-                        @{
-                            var caloriesColorClass = item.Calories < 250 ? "recipe-calories-green" :
-                            item.Calories >= 250 && item.Calories <= 450 ? "recipe-calories-orange" : "recipe-calories-red";
-                        }
-                        <h2 class="recipe-calories @caloriesColorClass"><i class="fa fa-fire"></i> @((int)item.Calories) Калории</h2>
-                    </div>
-                </div>
+                }
             }
         </div>
     </div>

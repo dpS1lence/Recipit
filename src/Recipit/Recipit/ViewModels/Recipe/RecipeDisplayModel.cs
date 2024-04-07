@@ -65,8 +65,8 @@ namespace Recipit.ViewModels.Recipe
                     Text = pr.Text,
                     User = new UserViewModel
                     {
-                        Email = pr.User.Email,
-                        Username = pr.User.UserName,
+                        Email = pr.User.Email!,
+                        Username = pr.User.UserName!,
                         Photo = pr.User.Photo,
                         Id = pr.User.Id
                     }

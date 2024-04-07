@@ -8,10 +8,11 @@
     using Recipit.Pagination;
     using Recipit.Pagination.Contracts;
     using Recipit.ViewModels.Product;
-    using System.Drawing.Printing;
     using System.Linq;
 
-    public class ProductService(RecipitDbContext context, IMapper mapper, ILogger<ProductService> logger) : IProductService
+    public class ProductService
+        (RecipitDbContext context, IMapper mapper, ILogger<ProductService> logger) 
+        : IProductService
     {
         private readonly RecipitDbContext _context = context;
         private readonly IMapper _mapper = mapper;
@@ -30,7 +31,7 @@
             return products.OrderBy(a => a.IsInRecipe!.Value);
         }
 
-        public async Task<IEnumerable<ProductViewModel>> SearchProducts(string searchText)
+        public async Task<IEnumerable<ProductViewModel>> Search(string searchText)
         {
             var products = await _context.Products.AsNoTracking().ToListAsync();
             products = products.Where(a => a.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -52,14 +53,10 @@
                 throw new ArgumentException(nameof(product.Photo));
             else if (product.Calories < 0)
                 throw new ArgumentException(nameof(product.Calories));
-
             if (await _context.Products.AnyAsync(a => a.Name == product.Name))
-            {
                 throw new ArgumentException("Product already exists!");
-            }
 
             _context.Products.Add(product);
-
             await _context.SaveChangesAsync();
 
             return _mapper.Map<ProductViewModel>(product);
@@ -77,6 +74,7 @@
                 {
                     _context.Products.Remove(product);
                     await _context.SaveChangesAsync();
+
                     return product.Name;
                 }
             }
@@ -88,27 +86,28 @@
         {
             var product = await _context.Products.FirstOrDefaultAsync(a => a.Id == model.Id);
 
-            if (product != null)
-            {
-                product.Name = model.Name;
+            if (product is null)
+                throw new ArgumentException(nameof(product));
+            else if (string.IsNullOrEmpty(model.Name))
+                throw new ArgumentException(nameof(model.Name));
+            else if (string.IsNullOrEmpty(model.Photo))
+                throw new ArgumentException(nameof(model.Photo));
+            else if (model.Calories < 0)
+                throw new ArgumentException(nameof(model.Calories));
+            else if (await _context.Products.AnyAsync(a => a.Name == model.Name))
+                throw new ArgumentException("Product already exists!");
 
-                if (model.Photo != null)
-                {
-                    product.Photo = model.Photo;
-                }
+            product.Name = model.Name;
+            product.Photo = model.Photo;
+            product.Calories = model.Calories;
 
-                product.Calories = model.Calories;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
 
-                _context.Products.Update(product);
-                await _context.SaveChangesAsync();
-
-                return product.Name;
-            }
-
-            throw new ArgumentException("not updated");
+            return product.Name;
         }
 
-        public async Task<IPage<ProductViewModel>> GetPaginated(int pageIndex, string? name)
+        public async Task<IPage<ProductViewModel>> AllPaginated(int pageIndex, string? name)
         {
             if (pageIndex == 0) pageIndex = 1;
             var pageSize = 40;
@@ -120,7 +119,7 @@
                 .Take(pageSize)
                 .ToListAsync();
 
-            if(name is not null)
+            if (name is not null)
                 productsRaw = await _context.Products
                 .Include(a => a.ProductRecipes)
                 .OrderBy(a => a.ProductRecipes.Count)

@@ -111,7 +111,7 @@
                 }
                 @if (TempData["messageDanger"] != null)
                 {
-                    <div id="notification-popup error-box" class="notification-popup">
+                    <div id="error-box" class="notification-popup">
                         <div class="notification-image">
                             <img src="~/images/recipcho.png" alt="Image here." />
                         </div>
@@ -122,8 +122,20 @@
                         </div>
                     </div>
                 }
+
                 @RenderBody()
                 <script src="https://kit.fontawesome.com/90737a6dc1.js" crossorigin="anonymous"></script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var popups = document.querySelectorAll('.notification-popup');
+
+                        popups.forEach(function (box) {
+                            setTimeout(function () {
+                                box.remove();
+                            }, 5000);
+                        });
+                    });
+                </script>
             </main>
         </div>
     </div>

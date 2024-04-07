@@ -12,6 +12,6 @@ namespace Recipit.Areas.Home.Controllers
         public async Task<IActionResult> All() => View(await _productService.All());
 
         [HttpGet]
-        public async Task<IActionResult> Search(string searchTerm) => Json(await _productService.SearchProducts(searchTerm));
+        public async Task<IActionResult> Search(string searchTerm) => Json(await _productService.Search(searchTerm));
     }
 }

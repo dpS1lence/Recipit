@@ -15,28 +15,33 @@
             <p>Повече от 15,000 рецепти!</p>
         </div>
         <form method="post" class="login-form" asp-area="" asp-controller="Account" asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div> <!-- Display validation summary -->
             <div class="input-container">
                 <i class="fa-solid fa-user"></i>
                 <input required asp-for="@Model.Username" type="text" placeholder="Потребителско име">
+                <span asp-validation-for="@Model.Username" class="text-danger"></span> <!-- Display validation error for Username -->
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-address-book"></i>
                 <input required asp-for="@Model.FirstName" type="text" placeholder="Собствено име">
+                <span asp-validation-for="@Model.FirstName" class="text-danger"></span> <!-- Display validation error for FirstName -->
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-address-book"></i>
                 <input required asp-for="@Model.LastName" type="text" placeholder="Фамилно име">
+                <span asp-validation-for="@Model.LastName" class="text-danger"></span> <!-- Display validation error for LastName -->
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-envelope"></i>
                 <input required asp-for="@Model.Email" type="email" placeholder="Имейл адрес">
+                <span asp-validation-for="@Model.Email" class="text-danger"></span> <!-- Display validation error for Email -->
             </div>
             <div class="input-container">
                 <i class="fa-solid fa-lock"></i>
                 <input required asp-for="@Model.Password" type="password" placeholder="Парола">
+                <span asp-validation-for="@Model.Password" class="text-danger"></span> <!-- Display validation error for Password -->
             </div>
             <button type="submit" class="login-btn">Регистрация</button>
-            @* <a class="google-login"><img class="google-image" src="~/images/google-icon.png" alt="google-image">Продължи с Google</a> *@
             <a class="register-btn-span" asp-area="Home" asp-controller="Account" asp-action="Login">Търсите вход?</a>
         </form>
     </div>

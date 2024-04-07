@@ -288,6 +288,10 @@
     font-size: 16px;
 }
 
+.invalid-input {
+    border-color: #e14949;
+}
+
 .post-content-image-container {
     margin-bottom: 10px;
     height: 300px;

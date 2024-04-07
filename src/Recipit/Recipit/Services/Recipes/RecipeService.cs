@@ -20,7 +20,12 @@
     using RecipeDb = Infrastructure.Data.Models.Recipe;
 
     public class RecipeService
-        (RecipitDbContext context, UserManager<RecipitUser> userManager, HttpClient httpClient, ILogger<RecipeService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        (RecipitDbContext context
+        , UserManager<RecipitUser> userManager
+        , HttpClient httpClient
+        , ILogger<RecipeService> logger
+        , IMapper mapper
+        , IHttpContextAccessor httpContextAccessor)
         : IRecipeService
     {
         private readonly RecipitDbContext _context = context;
@@ -32,24 +37,15 @@
 
         public async Task<string> Create(RecipeViewModel model)
         {
-            Validate.Model(model, _logger);
+            ValidateRecipeModel(model);
 
             var dict = new Dictionary<string, string>();
 
-            ArgumentException.ThrowIfNullOrEmpty(model.Name, ExceptionMessages.Recipe.NameIsNullOrEmpty);
-            ArgumentException.ThrowIfNullOrEmpty(model.Description, ExceptionMessages.Recipe.DescriptionIsNullOrEmpty);
-
             if (!string.IsNullOrEmpty(model.Products))
+            {
                 dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(model.Products);
-            ArgumentNullException.ThrowIfNull(dict, ExceptionMessages.Recipe.ProductListIsNull);
-            if (dict.Count == 0)
-                throw new ArgumentException(ExceptionMessages.Recipe.ProductListIsEmpty);
-            else if (model.Photo == null || model.Photo == default)
-                throw new ArgumentException(ExceptionMessages.Recipe.PhotoIsInvalid);
-            else if (model.Calories < 0)
-                throw new ArgumentException(ExceptionMessages.Recipe.CaloriesIsNullOrEmpty);
-            else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
-                throw new ArgumentException(ExceptionMessages.Recipe.CategoryIsNullOrEmpty);
+                ArgumentNullException.ThrowIfNull(dict, ExceptionMessages.Recipe.ProductListIsNull);
+            }
             else if (await _context.Recipes.FirstOrDefaultAsync(a => a.Name == model.Name) != null)
                 throw new ArgumentException(ExceptionMessages.Recipe.AlreadyExists);
 
@@ -63,12 +59,12 @@
             _context.Recipes.Add(recipe);
             await _context.SaveChangesAsync();
 
-            foreach (var item in dict!)
+            foreach (var item in dict)
             {
                 var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == item.Key);
 
                 ArgumentNullException.ThrowIfNull(product, ExceptionMessages.Recipe.ProductDoesNotExist);
-                ArgumentException.ThrowIfNullOrEmpty(item.Value, ExceptionMessages.Recipe.ProductMustHaveValue);
+                ArgumentNullException.ThrowIfNull(item.Value, ExceptionMessages.Recipe.ProductMustHaveValue);
 
                 recipe.NutritionalValue += product.Calories;
 
@@ -91,40 +87,36 @@
 
         public async Task Edit(RecipeViewModel recipeViewModel)
         {
-            var existingRecipe = await _context.Recipes
+            var recipeDbo = await _context.Recipes
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
                 .FirstOrDefaultAsync(a => a.Id == recipeViewModel.Id);
 
-            ArgumentNullException.ThrowIfNull(existingRecipe);
+            ArgumentNullException.ThrowIfNull(recipeDbo);
 
-            if (existingRecipe!.UserId != GetUser.Id(_httpContextAccessor))
-            {
-                throw new ArgumentException(nameof(existingRecipe.UserId));
-            }
+            if (recipeDbo!.UserId != GetUser.Id(_httpContextAccessor))
+                throw new ArgumentException(nameof(recipeDbo.UserId));
 
-            existingRecipe.Name = recipeViewModel.Name;
-            existingRecipe.Description = recipeViewModel.Description;
+            recipeDbo.Name = recipeViewModel.Name;
+            recipeDbo.Description = recipeViewModel.Description;
 
             if (recipeViewModel.Photo is not null)
-            {
-                existingRecipe.Photo = await UploadImage.ToImgur(recipeViewModel.Photo, _httpClient);
-            }
+                recipeDbo.Photo = await UploadImage.ToImgur(recipeViewModel.Photo, _httpClient);
 
-            existingRecipe.Calories = recipeViewModel.Calories;
-            existingRecipe.Category = recipeViewModel.Category;
+            recipeDbo.Calories = recipeViewModel.Calories;
+            recipeDbo.Category = recipeViewModel.Category;
 
             var newProductsDict = string.IsNullOrEmpty(recipeViewModel.Products) ? []
             : JsonConvert.DeserializeObject<Dictionary<string, string>>(recipeViewModel.Products);
 
-            ArgumentNullException.ThrowIfNull(newProductsDict);
+            ArgumentNullException.ThrowIfNull(newProductsDict, ExceptionMessages.Recipe.ProductListIsNull);
 
-            existingRecipe.ProductRecipes = existingRecipe.ProductRecipes
+            recipeDbo.ProductRecipes = recipeDbo.ProductRecipes
                 .Where(pr => newProductsDict.ContainsKey(pr.Product.Name)).ToList();
 
             foreach (var item in newProductsDict)
             {
-                var productRecipe = existingRecipe.ProductRecipes
+                var productRecipe = recipeDbo.ProductRecipes
                     .FirstOrDefault(pr => pr.Product.Name == item.Key);
 
                 if (productRecipe is null)
@@ -132,13 +124,13 @@
                     var product = await _context.Products.FirstOrDefaultAsync(p => p.Name == item.Key);
                     ArgumentNullException.ThrowIfNull(product, nameof(product));
 
-                    existingRecipe.ProductRecipes.Add(new ProductRecipe
+                    recipeDbo.ProductRecipes.Add(new ProductRecipe
                     {
                         Product = product,
                         ProductId = product.Id,
                         QuantityDetails = item.Value,
-                        Recipe = existingRecipe,
-                        RecipeId = existingRecipe.Id
+                        Recipe = recipeDbo,
+                        RecipeId = recipeDbo.Id
                     });
                 }
                 else
@@ -147,10 +139,24 @@
                 }
             }
 
-            _context.Recipes.Update(existingRecipe);
+            _context.Recipes.Update(recipeDbo);
             await _context.SaveChangesAsync();
         }
 
+        private void ValidateRecipeModel(RecipeViewModel model)
+        {
+            Validate.Model(model, _logger);
+
+            ArgumentException.ThrowIfNullOrEmpty(model.Name, ExceptionMessages.Recipe.NameIsNullOrEmpty);
+            ArgumentException.ThrowIfNullOrEmpty(model.Description, ExceptionMessages.Recipe.DescriptionIsNullOrEmpty);
+
+            if (model.Photo == null || model.Photo == default)
+                throw new ArgumentException(ExceptionMessages.Recipe.PhotoIsInvalid);
+            else if (model.Calories < 0)
+                throw new ArgumentException(ExceptionMessages.Recipe.CaloriesIsNullOrEmpty);
+            else if (string.IsNullOrEmpty(model.Category) || !Category.HasCategory(model.Category))
+                throw new ArgumentException(ExceptionMessages.Recipe.CategoryIsNullOrEmpty);
+        }
 
         public async Task<string> Delete(int recipeId)
         {
@@ -210,12 +216,18 @@
 
             if (!string.IsNullOrEmpty(model.Name))
             {
-                recipes = recipes.Where(r => r.Name.Contains(model.Name, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                recipes = recipes
+                    .Where(r => r.Name
+                        .Contains(model.Name, StringComparison.CurrentCultureIgnoreCase))
+                    .ToList();
             }
 
             if (!string.IsNullOrEmpty(model.Category))
             {
-                recipes = recipes.Where(r => r.Category.Contains(model.Category, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                recipes = recipes
+                    .Where(r => r.Category
+                        .Contains(model.Category, StringComparison.CurrentCultureIgnoreCase))
+                    .ToList();
             }
 
             if (!string.IsNullOrEmpty(model.Author))
@@ -228,16 +240,12 @@
             }
 
             if (model.AverageRating == SortDirection.Ascending)
-            {
                 recipes = [.. recipes.OrderBy(r => r.AverageRating)];
-            }
             else if (model.AverageRating == SortDirection.Descending)
                 recipes = [.. recipes.OrderByDescending(r => r.AverageRating)];
 
             if (model.NutritionalValue == SortDirection.Ascending)
-            {
                 recipes = [.. recipes.OrderBy(r => r.Calories)];
-            }
             else if (model.NutritionalValue == SortDirection.Descending)
                 recipes = [.. recipes.OrderByDescending(r => r.Calories)];
 
@@ -260,23 +268,23 @@
                 .Where(a => a.Id == id)
                 .Include(a => a.User)
                 .Include(a => a.Comments)
-                .ThenInclude(a => a.User)
+                    .ThenInclude(a => a.User)
                 .Include(a => a.Ratings)
-                .ThenInclude(a => a.User)
+                    .ThenInclude(a => a.User)
                 .Include(a => a.ProductRecipes)
-                .ThenInclude(a => a.Product)
+                    .ThenInclude(a => a.Product)
                 .FirstOrDefaultAsync();
 
             var map = _mapper.Map<RecipeDisplayModel>(recipe);
 
             if (isUserAuthenticated)
             {
-                var userRating = await _context.Ratings.FirstOrDefaultAsync(a => a.UserId == GetUser.Id(_httpContextAccessor) && a.RecipeId == id);
+                var userRating = await _context.Ratings
+                    .FirstOrDefaultAsync(a => 
+                        a.UserId == GetUser.Id(_httpContextAccessor) && a.RecipeId == id);
 
                 if (userRating != null)
-                {
                     map.UserRating = (int)userRating.Value;
-                }
             }
 
             return map;

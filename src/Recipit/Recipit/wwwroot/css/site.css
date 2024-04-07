@@ -219,7 +219,11 @@ h1 {
     font-size: 22px;
     color: var(--text-color);
 }
-
+.text-danger {
+    color: red;
+    font-size: 13px;
+    filter: opacity(60%);
+}
 .create-recipie-container {
     display: flex;
     justify-content: center;

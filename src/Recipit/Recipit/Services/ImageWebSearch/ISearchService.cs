@@ -2,6 +2,6 @@
 {
     public interface ISearchService
     {
-        Task<string> ImageUrlByName(string searchQuery);
+        Task<string> GetImageUrlByName(string searchQuery);
     }
 }

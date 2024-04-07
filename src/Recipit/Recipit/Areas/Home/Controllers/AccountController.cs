@@ -28,8 +28,9 @@
         private readonly IMapper _mapper = mapper;
         private readonly RecipitDbContext _context = context;
         private readonly IAccountService _accountService = accountService;
-        private readonly IConfiguration _configuration = configuration;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+
+        public IConfiguration Configuration => configuration;
 
         [HttpGet("/login")]
         public IActionResult Login() => GetView();
@@ -65,7 +66,7 @@
                 return View(model);
             }
 
-            user.Photo = configuration.GetSection("UserSettings").Get<UserSettings>()!.Photo;
+            user.Photo = Configuration.GetSection("UserSettings").Get<UserSettings>()!.Photo;
 
             var result = await _userManager.CreateAsync(user, model.Password);
 

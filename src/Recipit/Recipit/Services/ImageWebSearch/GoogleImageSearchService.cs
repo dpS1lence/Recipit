@@ -11,7 +11,7 @@ namespace Recipit.Services.ImageWebSearch
         private readonly HttpClient _httpClient = new();
         private readonly IConfiguration _configuration = configuration;
 
-        public async Task<string> ImageUrlByName(string searchQuery)
+        public async Task<string> GetImageUrlByName(string searchQuery)
         {
             var googleSearchApi = _configuration.GetSection(nameof(GoogleSearchApi)).Get<GoogleSearchApi>();
 
