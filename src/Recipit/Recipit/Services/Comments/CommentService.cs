@@ -11,11 +11,11 @@
     using Recipit.ViewModels.Comments;
     using Comment = Infrastructure.Data.Models.Comment;
 
-    public class CommentService(RecipitDbContext context, UserManager<Comment> userManager, ILogger<CommentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) 
+    public class CommentService(RecipitDbContext context, UserManager<RecipitUser> userManager, ILogger<CommentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) 
         : ICommentService
     {
         private readonly RecipitDbContext _context = context;
-        private readonly UserManager<Comment> _userManager = userManager;
+        private readonly UserManager<RecipitUser> _userManager = userManager;
         private readonly ILogger _logger = logger;
         private readonly IMapper _mapper = mapper;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;

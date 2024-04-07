@@ -7,9 +7,9 @@
     using Recipit.Services.Account;
     using Recipit.ViewModels.Account;
 
-    public class ProfileController(IAccountService accountService, SignInManager<Infrastructure.Data.Models.Comment> signInManager) : FollowerController
+    public class ProfileController(IAccountService accountService, SignInManager<RecipitUser> signInManager) : FollowerController
     {
-        private readonly SignInManager<Infrastructure.Data.Models.Comment> _signInManager = signInManager;
+        private readonly SignInManager<RecipitUser> _signInManager = signInManager;
         private readonly IAccountService _accountService = accountService;
 
         [HttpGet("/profile")]

@@ -6,7 +6,7 @@ using Recipit.ViewModels.Recipe;
 
 namespace Recipit.ViewModels.Account
 {
-    public class UserViewModel : IMapFrom<Comment>
+    public class UserViewModel : IMapFrom<RecipitUser>
     {
         public string Id { get; set; } = default!;
         public string Email { get; set; } = default!;
@@ -19,7 +19,7 @@ namespace Recipit.ViewModels.Account
 
         public void Mapping(Profile map)
         {
-            map.CreateMap<UserViewModel, Comment>()
+            map.CreateMap<UserViewModel, RecipitUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username))

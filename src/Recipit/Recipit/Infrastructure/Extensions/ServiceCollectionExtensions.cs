@@ -65,7 +65,7 @@
                 options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
             });
 
-            builder.Services.AddIdentity<Comment, IdentityRole>(cfg =>
+            builder.Services.AddIdentity<RecipitUser, IdentityRole>(cfg =>
             {
                 cfg.Password.RequireUppercase = false;
                 cfg.User.RequireUniqueEmail = true;

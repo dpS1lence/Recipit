@@ -6,7 +6,7 @@ namespace Recipit.Contracts.Helpers
 {
     public static class GetUser
     {
-        public static async Task<Comment> Data(UserManager<Comment> userManager, IHttpContextAccessor httpContextAccessor)
+        public static async Task<RecipitUser> Data(UserManager<RecipitUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             var uId = httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 ?? throw new ArgumentNullException(nameof(httpContextAccessor));

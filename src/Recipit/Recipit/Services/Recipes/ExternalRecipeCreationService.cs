@@ -14,14 +14,14 @@
 
     public partial class ExternalRecipeCreationService
         (RecipitDbContext context
-        , UserManager<Comment> userManager
+        , UserManager<RecipitUser> userManager
         , ILogger<RecipeService> logger
         , IHttpContextAccessor httpContextAccessor
         , ISearchService searchService)
         : IExternalRecipeCreationService
     {
         private readonly RecipitDbContext _context = context;
-        private readonly UserManager<Comment> _userManager = userManager;
+        private readonly UserManager<RecipitUser> _userManager = userManager;
         private readonly ILogger _logger = logger;
         private readonly ISearchService _searchService = searchService;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;

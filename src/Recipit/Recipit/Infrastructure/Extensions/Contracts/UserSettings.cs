@@ -5,7 +5,7 @@ using Recipit.Models.Account;
 
 namespace Recipit.Infrastructure.Extensions.Contracts
 {
-    public class UserSettings : IMapFrom<Comment>
+    public class UserSettings : IMapFrom<RecipitUser>
     {
         public string UserName { get; set; } = default!;
         public string FirstName { get; set; } = default!;
@@ -17,7 +17,7 @@ namespace Recipit.Infrastructure.Extensions.Contracts
 
         public void Mapping(Profile map)
         {
-            map.CreateMap<UserSettings, Comment>()
+            map.CreateMap<UserSettings, RecipitUser>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))

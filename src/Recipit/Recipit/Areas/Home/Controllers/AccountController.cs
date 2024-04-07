@@ -15,16 +15,16 @@
     [AllowAnonymous]
     [Area("Home")]
     public class AccountController
-        (UserManager<Infrastructure.Data.Models.Comment> userManager,
-        SignInManager<Infrastructure.Data.Models.Comment> signInManager,
+        (UserManager<RecipitUser> userManager,
+        SignInManager<RecipitUser> signInManager,
         IMapper mapper,
         RecipitDbContext context,
         IAccountService accountService,
         IConfiguration configuration,
         RoleManager<IdentityRole> roleManager) : Controller
     {
-        private readonly UserManager<Infrastructure.Data.Models.Comment> _userManager = userManager;
-        private readonly SignInManager<Infrastructure.Data.Models.Comment> _signInManager = signInManager;
+        private readonly UserManager<RecipitUser> _userManager = userManager;
+        private readonly SignInManager<RecipitUser> _signInManager = signInManager;
         private readonly IMapper _mapper = mapper;
         private readonly RecipitDbContext _context = context;
         private readonly IAccountService _accountService = accountService;
@@ -57,7 +57,7 @@
                 return View(model);
             }
 
-            var user = _mapper.Map<Infrastructure.Data.Models.Comment>(model);
+            var user = _mapper.Map<RecipitUser>(model);
 
             if (user is null || user.UserName is null || (await _userManager.FindByNameAsync(user.UserName)) is not null)
             {

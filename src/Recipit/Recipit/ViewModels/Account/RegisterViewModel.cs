@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Recipit.Models.Account
 {
-    public class RegisterViewModel : IMapFrom<Comment>
+    public class RegisterViewModel : IMapFrom<RecipitUser>
     {
         public string Email { get; set; } = default!;
 
@@ -19,7 +19,7 @@ namespace Recipit.Models.Account
 
         public void Mapping(Profile map)
         {
-            map.CreateMap<RegisterViewModel, Comment>()
+            map.CreateMap<RegisterViewModel, RecipitUser>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))

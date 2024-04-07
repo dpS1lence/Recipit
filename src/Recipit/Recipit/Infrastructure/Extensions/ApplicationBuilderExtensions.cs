@@ -12,7 +12,7 @@
         {
             using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
-            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<Data.Models.Comment>>();
+            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<RecipitUser>>();
             var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var mapper = serviceScope.ServiceProvider.GetRequiredService<IMapper>();
 
@@ -28,7 +28,7 @@
 
             if (administratorUser == null)
             {
-                var adminUser = mapper.Map<Data.Models.Comment>(adminSettings);
+                var adminUser = mapper.Map<RecipitUser>(adminSettings);
 
                 var result = userManager.CreateAsync(adminUser, adminSettings.Password).Result;
 

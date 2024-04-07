@@ -21,7 +21,7 @@
 
     public class RecipeService
         (RecipitDbContext context
-        , UserManager<Infrastructure.Data.Models.Comment> userManager
+        , UserManager<RecipitUser> userManager
         , HttpClient httpClient
         , ILogger<RecipeService> logger
         , IMapper mapper
@@ -29,7 +29,7 @@
         : IRecipeService
     {
         private readonly RecipitDbContext _context = context;
-        private readonly UserManager<Infrastructure.Data.Models.Comment> _userManager = userManager;
+        private readonly UserManager<RecipitUser> _userManager = userManager;
         private readonly HttpClient _httpClient = httpClient;
         private readonly ILogger _logger = logger;
         private readonly IMapper _mapper = mapper;
@@ -87,8 +87,6 @@
 
         public async Task Edit(RecipeViewModel recipeViewModel)
         {
-            ValidateRecipeModel(recipeViewModel);
-
             var recipeDbo = await _context.Recipes
                 .Include(a => a.ProductRecipes)
                 .ThenInclude(a => a.Product)
