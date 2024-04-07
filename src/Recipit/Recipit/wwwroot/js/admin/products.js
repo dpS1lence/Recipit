@@ -1,14 +1,10 @@
 ﻿$(function () {
-    // Attach event handlers using .on()
-
-    // Edit Button
     $(document).on('click', '.edit-btn', function () {
         var container = $(this).closest(".product-item");
         container.find(".view-mode").hide();
         container.find(".edit-mode").show();
     });
 
-    // Cancel Button
     $(document).on('click', '.cancel-btn', function () {
         var container = $(this).closest(".product-item");
         container.find(".edit-mode").hide();
@@ -16,13 +12,11 @@
     });
 
     $(document).on('click', '.edit-btn-inrecipe', function () {
-        console.log('kurwa');
         var container = $(this).closest(".product-item");
         container.find(".view-mode").hide();
         container.find(".edit-mode").show();
     });
 
-    // Save Button
     $(document).on('click', '.save-btn', function () {
         var container = $(this).closest(".product-item");
         var id = container.data("product-id");
@@ -52,7 +46,6 @@
         });
     });
 
-    // Delete Button
     $(document).on('click', '.delete-btn', function () {
         var container = $(this).closest(".product-item");
         var name = container.find(".edit-name").val();
@@ -63,7 +56,7 @@
                 url: '/administrator/product/delete?id=' + encodeURIComponent(id),
                 type: 'DELETE',
                 success: function (response) {
-                    container.remove();
+                    location.reload();
                 },
                 error: function () {
                 }

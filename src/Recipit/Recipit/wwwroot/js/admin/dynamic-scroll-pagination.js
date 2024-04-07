@@ -65,7 +65,6 @@
                         container.find(".edit-mode").show();
                     });
 
-                    // Cancel Button
                     $(document).on('click', '.cancel-btn', function () {
                         var container = $(this).closest(".product-item");
                         container.find(".edit-mode").hide();
@@ -79,7 +78,6 @@
                         container.find(".edit-mode").show();
                     });
 
-                    // Save Button
                     $(document).on('click', '.save-btn', function () {
                         var container = $(this).closest(".product-item");
                         var id = container.data("product-id");
