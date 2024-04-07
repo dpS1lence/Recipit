@@ -39,11 +39,23 @@
         [HttpPost]
         public async Task<IActionResult> CreateExternaly(string url)
         {
-            var resultId = await _externalRecipeService.Create(url);
+            try
+            {
+                var resultId = await _externalRecipeService.Create(url);
 
-            TempData["message"] = $"Успешно създадохте рецепта от gotvach.bg!";
+                TempData["message"] = $"Успешно създадохте рецепта от gotvach.bg!";
 
-            return RedirectToAction("ViewRecipe", "Recipe", new { id = resultId, area = "Home" });
+                return RedirectToAction("ViewRecipe", "Recipe", new { id = resultId, area = "Home" });
+            }
+            catch (ArgumentException ex)
+            {
+                if (ex.ParamName is not null)
+                    TempData["messageDanger"] = ex.ParamName;
+                else
+                    TempData["messageDanger"] = ex.Message;
+
+                return BadRequest();
+            }
         }
 
         [HttpPost]
